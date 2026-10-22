@@ -1,0 +1,16 @@
+{
+  "name": "Séville 2027",
+  "short_name": "Séville",
+  "description": "Notre voyage : vols, logement, programme, activités et budget.",
+  "lang": "fr",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#F6F2ED",
+  "theme_color": "#B3202E",
+  "icons": [
+    { "src": "icon-192.png", "sizes": "192x192", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png" },
+    { "src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}
