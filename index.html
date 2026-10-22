@@ -253,6 +253,12 @@ fieldset.champ{border:0;padding:0;margin:0}
 .spacer{flex:1}
 .etat{font-size:14.5px}
 .etat--ok{color:var(--verde);font-weight:600} .etat--ko{color:var(--alerta);font-weight:600}
+.boutons{display:flex;gap:8px;flex-wrap:wrap}
+.scan-apercu{display:grid;grid-template-columns:76px 1fr;gap:12px;align-items:center;background:var(--fondo);border-radius:14px;padding:8px}
+.scan-apercu img{width:76px;height:96px;object-fit:cover;border-radius:10px;background:var(--cal)}
+.scan-apercu p{font-size:14.5px}
+.scan-apercu .manque{color:var(--alerta);font-weight:600}
+progress{width:100%;height:10px;accent-color:var(--rojo)}
 
 .toast{position:fixed;left:50%;bottom:max(20px, env(safe-area-inset-bottom));transform:translate(-50%,16px);opacity:0;background:var(--tinta);color:var(--cal);padding:11px 18px;border-radius:14px;transition:opacity .2s,transform .2s;pointer-events:none;z-index:60;max-width:calc(100vw - 32px);font-weight:600;font-size:15px}
 .toast.on{opacity:1;transform:translate(-50%,0)}
@@ -272,6 +278,7 @@ fieldset.champ{border:0;padding:0;margin:0}
   <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
   <symbol id="i-ext" viewBox="0 0 24 24"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></symbol>
   <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></symbol>
+  <symbol id="i-camera" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></symbol>
 </svg>
 
 <header class="fachada" id="hero"></header>
@@ -1012,7 +1019,7 @@ function computeBudget(d) {
 function viewBudget(d) {
   const b = computeBudget(d);
   const n = d.travelers.length || 1;
-  const head = `<div class="tete"><h2>Budget</h2>${canEdit() ? `<button type="button" class="btn btn--primary" data-act="add-expense">${icon('plus')} Ajouter une dépense</button>` : ''}</div>`;
+  const head = `<div class="tete"><h2>Budget</h2>${canEdit() ? `<div class="boutons"><button type="button" class="btn" data-act="scan-receipt">${icon('camera')} Scanner un ticket</button><button type="button" class="btn btn--primary" data-act="add-expense">${icon('plus')} Ajouter une dépense</button></div>` : ''}</div>`;
   if (!b.lines.length) return head + `<div class="vide-bloc"><p>Aucun montant pour l’instant. Les prix des vols, du logement et des activités s’additionnent ici, avec les dépenses sur place.</p></div>`;
   const eur = c => money(c / 100);
   const signed = c => c === 0 ? '0 €' : (c > 0 ? '+' : '−') + eur(Math.abs(c));
@@ -1082,10 +1089,10 @@ function readForm(form, fields) {
   }
   return v;
 }
-function openForm({ title, fields, values = {}, onSubmit, onDelete, deleteLabel = 'Supprimer' }) {
+function openForm({ title, fields, values = {}, onSubmit, onDelete, deleteLabel = 'Supprimer', intro = '' }) {
   dlg.innerHTML = `<form class="form" novalidate>
     <header><h2>${esc(title)}</h2><button type="button" class="icon-btn" data-close aria-label="Fermer">${icon('x')}</button></header>
-    <div class="champs">${fields.map(f => fieldHtml(f, values[f.name])).join('')}</div>
+    <div class="champs">${intro}${fields.map(f => fieldHtml(f, values[f.name])).join('')}</div>
     <footer>${onDelete ? `<button type="button" class="btn btn--danger" data-delete>${esc(deleteLabel)}</button>` : ''}<span class="spacer"></span><button type="button" class="btn" data-close>Annuler</button><button type="submit" class="btn btn--primary">Enregistrer</button></footer>
   </form>`;
   const form = dlg.querySelector('form');
@@ -1215,15 +1222,16 @@ function activityForm(id, presetDate) {
     onDelete: a ? () => commit(`supprime « ${a.title} »`, dd => removeById(dd.activities, a.id)) : null
   });
 }
-function expenseForm(id) {
+function expenseForm(id, preset, intro) {
   const d = S.data;
   const e = id ? d.expenses.find(x => x.id === id) : null;
   if (id && !e) return;
   const mine = me();
   const today = todayYmd();
-  const v = e ? e : { paidBy: mine ? mine.id : (d.travelers[0] || {}).id, date: tripDays(d).includes(today) ? today : '', split: d.travelers.map(t => t.id) };
+  const v = e ? e : Object.assign({ paidBy: mine ? mine.id : (d.travelers[0] || {}).id, date: tripDays(d).includes(today) ? today : '', split: d.travelers.map(t => t.id) }, preset || {});
   openForm({
     title: e ? 'Modifier la dépense' : 'Ajouter une dépense',
+    intro,
     values: v,
     fields: [
       { name: 'label', label: 'Quoi', required: true, placeholder: 'ex. Tapas, taxi, courses…' },
@@ -1239,6 +1247,137 @@ function expenseForm(id) {
     },
     onDelete: e ? () => commit(`supprime la dépense « ${e.label} »`, dd => removeById(dd.expenses, e.id)) : null
   });
+}
+
+/* ---------- Ticket de caisse ----------
+   Lecture du texte (OCR) dans le navigateur avec Tesseract.js, chargé seulement au premier scan.
+   On en tire le total, le commerce et la date, puis le formulaire de dépense s'ouvre pré-rempli :
+   la personne vérifie avant d'enregistrer. La photo du ticket n'est pas conservée. */
+const OCR_SRC = 'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js';
+let ocrLib = null;
+function loadOcr() {
+  if (window.Tesseract) return Promise.resolve();
+  if (!ocrLib) ocrLib = new Promise((ok, ko) => {
+    const s = document.createElement('script');
+    s.src = OCR_SRC;
+    s.onload = ok;
+    s.onerror = () => { ocrLib = null; ko(new Error('Outil de lecture indisponible : vérifie ta connexion.')); };
+    document.head.appendChild(s);
+  });
+  return ocrLib;
+}
+/* Réduit et passe en niveaux de gris : plus rapide et souvent plus lisible pour l'OCR */
+async function receiptCanvas(file) {
+  const url = URL.createObjectURL(file);
+  try {
+    const img = await new Promise((ok, ko) => { const im = new Image(); im.onload = () => ok(im); im.onerror = () => ko(new Error('Image illisible (essaie en JPEG ou PNG).')); im.src = url; });
+    const k = Math.min(1, 2000 / Math.max(img.naturalWidth, img.naturalHeight));
+    const c = document.createElement('canvas');
+    c.width = Math.round(img.naturalWidth * k);
+    c.height = Math.round(img.naturalHeight * k);
+    const ctx = c.getContext('2d');
+    ctx.filter = 'grayscale(1) contrast(1.4)';
+    ctx.drawImage(img, 0, 0, c.width, c.height);
+    return c;
+  } finally {
+    URL.revokeObjectURL(url);
+  }
+}
+const plainUp = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase();
+function amountsIn(line) {
+  const out = [];
+  const re = /(\d{1,3}(?:[.\s]\d{3})+|\d+)\s?[,.]\s?(\d{2})(?!\d)/g;
+  let m;
+  while ((m = re.exec(line))) { const v = parseFloat(m[1].replace(/[.\s]/g, '') + '.' + m[2]); if (v > 0 && v < 100000) out.push(v); }
+  return out;
+}
+function parseReceipt(text) {
+  const lines = text.split(/\r?\n/).map(l => l.replace(/\s+/g, ' ').trim()).filter(Boolean);
+  const up = lines.map(plainUp);
+  const exclu = /SUB ?TOTAL|BASE IMP|TOTAL I\.?V\.?A|TOTAL T\.?V\.?A|CUOTA|CAMBIO|ENTREGAD|EFECTIVO|DEVUELT|A DEVOLVER|RENDU|ESPECES|DESCUENTO|AHORRO|REMISE|PUNTOS/;
+  const totalRe = /TOTAL|IMPORTE|A PAGAR|MONTANT|A PAYER/;
+  const carteRe = /TARJETA|VISA|MASTERCARD|CARTE|CREDITO|DEBITO|\bCB\b/;
+  const dateRe = /\b\d{1,2}[\/.-]\d{1,2}[\/.-]\d{2,4}\b|\b\d{1,2}:\d{2}\b/;
+  const pick = re => {
+    const found = [];
+    up.forEach((l, i) => {
+      if (!re.test(l) || exclu.test(l)) return;
+      let a = amountsIn(lines[i]);
+      if (!a.length && lines[i + 1] && !dateRe.test(lines[i + 1])) a = amountsIn(lines[i + 1]);
+      found.push(...a);
+    });
+    return found.length ? Math.max(...found) : null;
+  };
+  let amount = pick(totalRe) ?? pick(carteRe);
+  if (amount === null) {
+    const all = lines.filter((l, i) => !exclu.test(up[i]) && !dateRe.test(l)).flatMap(amountsIn);
+    amount = all.length ? Math.max(...all) : null;
+  }
+  const bruit = /CIF|NIF|N\.I\.F|TEL|TLF|WWW|HTTP|@|C\/|CALLE|AVDA|AVENIDA|FACTURA|TICKET|SIRET|TVA|IVA|\d{4,}/;
+  const nom = lines.slice(0, 6).find((l, i) => (l.match(/[A-Za-zÀ-ÿ]/g) || []).length >= 3 && !bruit.test(up[i]));
+  let date = '';
+  const dm = text.match(/\b(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4}|\d{2})\b/);
+  if (dm) {
+    const day = +dm[1], mon = +dm[2], y = dm[3].length === 2 ? 2000 + +dm[3] : +dm[3];
+    if (day >= 1 && day <= 31 && mon >= 1 && mon <= 12) date = `${y}-${pad(mon)}-${pad(day)}`;
+  }
+  const label = nom ? nom.toLowerCase()
+    .replace(/[^\p{L}\p{N}' &.-]+/gu, ' ')
+    .replace(/(^|\s)(s\.?a\.?u?|s\.?l\.?u?|sas|sarl)\.?(?=\s|$)/g, ' ')
+    .replace(/\s+/g, ' ').trim()
+    .replace(/(^|\s)\p{L}/gu, c => c.toUpperCase()) : '';
+  return { amount, date, label };
+}
+function scanReceipt() {
+  const input = document.createElement('input');
+  input.type = 'file';
+  input.accept = 'image/*';
+  input.style.display = 'none';
+  document.body.appendChild(input);
+  input.addEventListener('change', () => { const f = input.files && input.files[0]; input.remove(); if (f) readReceipt(f); });
+  input.click();
+}
+async function readReceipt(file) {
+  dlg.innerHTML = `<div class="form"><header><h2>Lecture du ticket</h2><button type="button" class="icon-btn" data-close aria-label="Annuler">${icon('x')}</button></header>
+    <div class="champs"><div class="champ"><p id="scanEtat">Préparation de la photo…</p><progress id="scanProg" max="1" value="0"></progress>
+    <span class="aide">La première fois, l'outil de lecture se télécharge (quelques secondes).</span></div></div></div>`;
+  dlg.showModal();
+  let worker = null, annule = false;
+  const onClose = () => { annule = true; if (worker) worker.terminate(); };
+  dlg.addEventListener('close', onClose, { once: true });
+  const etat = (txt, p) => { const e = $('#scanEtat'), g = $('#scanProg'); if (e) e.textContent = txt; if (g && p !== undefined) g.value = p; };
+  try {
+    const canvas = await receiptCanvas(file);
+    etat('Chargement de l’outil de lecture…');
+    await loadOcr();
+    if (annule) return;
+    worker = await Tesseract.createWorker('spa+fra', 1, {
+      logger: m => { if (m.status === 'recognizing text') etat('Lecture du ticket…', m.progress); else if (/load/.test(m.status)) etat('Chargement de l’outil de lecture…', m.progress); }
+    });
+    if (annule) { worker.terminate(); return; }
+    const { data } = await worker.recognize(canvas);
+    worker.terminate();
+    worker = null;
+    if (annule) return;
+    const r = parseReceipt(data.text || '');
+    const d = S.data;
+    const preset = { label: r.label ? `Ticket ${r.label}` : 'Ticket de caisse' };
+    if (r.amount) preset.amount = r.amount.toFixed(2);
+    if (r.date && tripDays(d).includes(r.date)) preset.date = r.date;
+    const apercu = canvas.toDataURL('image/jpeg', 0.6);
+    const msg = r.amount
+      ? `<p>Montant lu : <strong>${esc(money(r.amount))}</strong>. Vérifie-le avec le ticket avant d’enregistrer.</p>`
+      : `<p class="manque">Montant introuvable sur le ticket : saisis-le.</p>`;
+    dlg.removeEventListener('close', onClose);
+    dlg.close();
+    expenseForm(null, preset, `<div class="champ scan-apercu"><img src="${apercu}" alt="Photo du ticket">${msg}</div>`);
+  } catch (e) {
+    console.error(e);
+    if (annule) return;
+    dlg.removeEventListener('close', onClose);
+    if (dlg.open) dlg.close();
+    toast(e && e.message && !/^\d/.test(e.message) ? e.message : 'Lecture du ticket impossible.', 'err');
+  }
 }
 
 /* ---------- Réglages ---------- */
@@ -1432,6 +1571,7 @@ const ACTIONS = {
   'add-activity': b => activityForm(null, b.dataset.date),
   'edit-activity': b => activityForm(b.dataset.id),
   'add-expense': () => expenseForm(),
+  'scan-receipt': () => scanReceipt(),
   'edit-expense': b => expenseForm(b.dataset.id)
 };
 document.addEventListener('click', e => {
