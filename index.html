@@ -279,7 +279,31 @@ progress{width:100%;height:10px;accent-color:var(--rojo)}
 .toast.on{opacity:1;transform:translate(-50%,0)}
 .toast.err{background:#B3202E;color:#FFFFFF}
 @media (prefers-reduced-motion:reduce){*,*::before{transition:none!important;animation:none!important}}
-@media print{.onglets,.barre,.ajout-jour,.actions,.btn{display:none!important}}
+@media print{.onglets,.barre,.ajout-jour,.actions,.btn,#parade{display:none!important}}
+
+/* Parade : danseuses de flamenco et corrida qui traversent l'écran au premier plan */
+#parade{position:fixed;left:0;right:0;bottom:0;height:clamp(130px,24vh,230px);pointer-events:none;z-index:50;overflow:hidden}
+.passant{position:absolute;left:0;bottom:env(safe-area-inset-bottom,0px);height:100%;will-change:transform}
+.passant .flip,.passant .tour{height:100%}
+.passant svg{display:block;height:100%;width:100%;overflow:visible;filter:drop-shadow(0 8px 10px rgba(40,10,10,.22))}
+.ole{position:absolute;left:30%;top:-4%;font-family:var(--font-d);font-variation-settings:"SOFT" 100;font-weight:800;font-size:clamp(26px,5vh,40px);color:var(--rojo);text-shadow:0 2px 0 #FFFFFF,0 0 14px #FFFFFF;opacity:0;white-space:nowrap}
+.p-danse{animation:p-bob .42s ease-in-out infinite alternate}
+.p-jupe{transform-box:fill-box;transform-origin:50% 0;animation:p-jupe .84s ease-in-out infinite}
+.p-bras-a{transform-box:view-box;transform-origin:62px 58px;animation:p-bras 1.7s ease-in-out infinite}
+.p-bras-b{transform-box:view-box;transform-origin:78px 58px;animation:p-bras 1.7s ease-in-out infinite reverse}
+.p-toro{animation:p-bob .3s ease-in-out infinite alternate}
+.p-patte{transform-box:fill-box;transform-origin:50% 6%;animation:p-galop .3s ease-in-out infinite alternate}
+.p-patte.b{animation-direction:alternate-reverse}
+.p-queue{transform-box:fill-box;transform-origin:100% 0;animation:p-queue .6s ease-in-out infinite alternate}
+.p-capa{transform-box:view-box;transform-origin:243px 89px;animation:p-capa .75s ease-in-out infinite alternate}
+.p-torero{animation:p-bob .5s ease-in-out infinite alternate}
+@keyframes p-bob{to{transform:translateY(-4px)}}
+@keyframes p-jupe{0%,100%{transform:rotate(-6deg) skewX(5deg)}50%{transform:rotate(7deg) skewX(-6deg)}}
+@keyframes p-bras{0%,100%{transform:rotate(-9deg)}50%{transform:rotate(11deg)}}
+@keyframes p-galop{from{transform:rotate(-24deg)}to{transform:rotate(22deg)}}
+@keyframes p-queue{from{transform:rotate(-12deg)}to{transform:rotate(16deg)}}
+@keyframes p-capa{from{transform:rotate(-14deg) skewX(8deg)}to{transform:rotate(12deg) skewX(-8deg)}}
+@media (prefers-reduced-motion:reduce){#parade{display:none}}
 </style>
 </head>
 <body>
@@ -302,6 +326,7 @@ progress{width:100%;height:10px;accent-color:var(--rojo)}
 <main id="main" tabindex="-1"></main>
 <footer class="pied" id="pied"></footer>
 <div class="friso friso--bas" aria-hidden="true"></div>
+<div id="parade" aria-hidden="true"></div>
 <dialog id="dlg"></dialog>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
@@ -1625,6 +1650,7 @@ function openSettings() {
         <div class="champ"><div class="rang"><button type="button" class="btn btn--petit" id="addTrav">${icon('plus')} Ajouter un voyageur</button></div></div>` : ''}
       <h3 class="sous">Toi</h3>
       <div class="champ"><label for="moiSel">Tu es</label><select id="moiSel"><option value="">Choisir…</option>${d.travelers.map(t => `<option value="${esc(t.id)}"${t.id === moi ? ' selected' : ''}>${esc(t.name)}</option>`).join('')}</select><span class="aide">Sert à signer tes modifications.</span></div>
+      <div class="champ"><div class="coches"><label><input type="checkbox" id="animChk"${animOn() ? ' checked' : ''}>Danseuses et corrida qui traversent l’écran</label></div><span class="aide">Réglage propre à cet appareil.</span></div>
       ${access}
       ${code}
       <h3 class="sous">Données</h3>
@@ -1636,6 +1662,10 @@ function openSettings() {
   const on = (sel, fn) => { const el = form.querySelector(sel); if (el) el.addEventListener('click', fn); };
 
   form.querySelector('#moiSel').addEventListener('change', e => { store.set('moi', e.target.value); toast('C’est noté.'); });
+  form.querySelector('#animChk').addEventListener('change', e => {
+    store.set('anim', e.target.checked ? '1' : '0');
+    if (e.target.checked) { planParade(1200); toast('¡Olé! Ça arrive.'); } else { stopParade(); toast('Animations coupées.'); }
+  });
   on('#addTrav', () => {
     const list = form.querySelector('#travList');
     list.insertAdjacentHTML('beforeend', travRow({ id: uid('t'), name: '' }, list.children.length));
@@ -1783,6 +1813,144 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden && MO
 window.addEventListener('online', () => { if (MODE === 'github') poll(); });
 window.addEventListener('beforeunload', e => { if (S.pending.length) { e.preventDefault(); e.returnValue = ''; } });
 
+/* ================= Parade : danseuses et corrida ================= */
+/* De temps en temps, une ou deux bailaoras ou un taureau chargeant la muleta d'un torero
+   traversent le bas de l'écran, devant le contenu. Jamais cliquables, coupables dans Réglages. */
+const mvtReduit = window.matchMedia('(prefers-reduced-motion: reduce)');
+const animOn = () => { const v = store.get('anim'); return v === null ? !mvtReduit.matches : v === '1'; };
+const ROBES = [
+  { robe: '#B3202E', pois: '#FBF7F0', fleur: '#E2A93B' },
+  { robe: '#1D4E9E', pois: '#FBF7F0', fleur: '#B3202E' },
+  { robe: '#E2A93B', pois: '#B3202E', fleur: '#B3202E' },
+  { robe: '#2E7D57', pois: '#FBF7F0', fleur: '#E2A93B' },
+  { robe: '#7D1520', pois: '#E2A93B', fleur: '#FBF7F0' }
+];
+let paradeT = 0, paradeN = 0;
+
+function bailaoraSvg(c) {
+  const id = 'pois' + (++paradeN);
+  const peau = '#D9A27A', cheveux = '#1B1212';
+  /* Volant de jupe : haut étroit, bas évasé et festonné, avec la traîne vers l'arrière */
+  const volant = (yt, yb, wt, wb, traine, n) => {
+    const x1 = 70 + wb, x0 = 70 - wb - traine, pas = (x1 - x0) / n;
+    let d = `M${70 - wt} ${yt} L${70 + wt} ${yt} L${x1} ${yb}`;
+    for (let i = 0; i < n; i++) { const xa = x1 - pas * i, xb = xa - pas; d += ` Q${(xa + xb) / 2} ${yb + 10} ${xb} ${yb}`; }
+    return d + ' Z';
+  };
+  const vol = d => `<path d="${d}" fill="${c.robe}"/><path d="${d}" fill="url(#${id})" stroke="rgba(0,0,0,.14)" stroke-width="1.2"/>`;
+  return `<svg viewBox="0 0 140 220" xmlns="http://www.w3.org/2000/svg">
+    <defs><pattern id="${id}" width="12" height="12" patternUnits="userSpaceOnUse"><circle cx="3" cy="3" r="1.9" fill="${c.pois}"/><circle cx="9" cy="9" r="1.9" fill="${c.pois}"/></pattern></defs>
+    <ellipse cx="66" cy="214" rx="56" ry="5" fill="rgba(40,10,10,.16)"/>
+    <g class="p-danse">
+      <ellipse cx="88" cy="210" rx="8" ry="3.4" fill="${cheveux}"/>
+      <g class="p-jupe">${vol(volant(150, 204, 30, 60, 24, 9))}${vol(volant(124, 170, 20, 43, 10, 7))}${vol(volant(98, 140, 11, 28, 0, 5))}</g>
+      <g class="p-bras-a"><path d="M62 58 Q44 48 46 28 Q47 20 53 15" fill="none" stroke="${peau}" stroke-width="5" stroke-linecap="round"/><circle cx="53" cy="14" r="3.4" fill="${peau}"/></g>
+      <path d="M60 56 Q70 51 80 56 L78 101 L62 101 Z" fill="${c.robe}"/><path d="M60 56 Q70 51 80 56 L78 101 L62 101 Z" fill="url(#${id})"/>
+      <circle cx="61" cy="58" r="6" fill="${c.robe}"/>
+      <rect x="66" y="43" width="8" height="12" rx="3" fill="${peau}"/>
+      <circle cx="70" cy="35" r="12" fill="${peau}"/>
+      <path d="M58 37 C55 22 70 17 81 23 C85 27 85 31 83 34 C77 28 67 28 61 41 Z" fill="${cheveux}"/>
+      <circle cx="56" cy="33" r="7.5" fill="${cheveux}"/>
+      <circle cx="64" cy="21" r="5.5" fill="${c.fleur}"/><circle cx="60" cy="24" r="3.6" fill="${c.fleur}"/><circle cx="68" cy="24" r="3.6" fill="${c.fleur}"/><circle cx="64" cy="22" r="1.8" fill="#FBF7F0"/>
+      <circle cx="78" cy="43" r="2.2" fill="#E2A93B"/>
+      <g class="p-bras-b"><circle cx="79" cy="58" r="6" fill="${c.robe}"/><path d="M78 58 Q98 46 94 24 Q92 16 86 11" fill="none" stroke="${peau}" stroke-width="5" stroke-linecap="round"/><circle cx="86" cy="10" r="3.4" fill="${peau}"/></g>
+    </g>
+  </svg>`;
+}
+
+function corridaSvg() {
+  const noir = '#1E1515', loin = '#120C0C', corne = '#F2E6D0', peau = '#D9A27A', or = '#E2A93B', bleu = '#1D4E9E', rouge = '#B3202E';
+  const patte = (x, cls, fill) => `<rect class="p-patte ${cls}" x="${x}" y="108" width="11" height="76" rx="5" fill="${fill}"/>`;
+  return `<svg viewBox="0 0 380 210" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="118" cy="192" rx="96" ry="6" fill="rgba(40,10,10,.16)"/>
+    <ellipse cx="298" cy="192" rx="40" ry="5" fill="rgba(40,10,10,.16)"/>
+    <g class="p-toro">
+      ${patte(72, 'b', loin)}${patte(160, 'a', loin)}
+      <path class="p-queue" d="M44 92 C30 98 24 112 26 130" fill="none" stroke="${noir}" stroke-width="3.5" stroke-linecap="round"/>
+      <circle cx="26" cy="132" r="4.5" fill="${noir}"/>
+      <path d="M40 100 C35 70 60 58 95 60 C125 62 150 50 172 64 C188 74 192 92 186 108 C178 124 150 126 120 124 L70 124 C52 124 42 116 40 100 Z" fill="${noir}"/>
+      <path d="M172 70 C190 72 204 86 209 104 C211 114 205 121 196 119 C188 117 182 106 175 98 Z" fill="${noir}"/>
+      <path d="M190 80 C198 70 208 66 217 71" fill="none" stroke="${corne}" stroke-width="5" stroke-linecap="round"/>
+      <path d="M183 77 C187 65 195 59 204 60" fill="none" stroke="#D8C9AE" stroke-width="4.5" stroke-linecap="round"/>
+      <circle cx="194" cy="92" r="2" fill="#4A3836"/>
+      ${patte(58, 'a', noir)}${patte(146, 'b', noir)}
+    </g>
+    <g class="p-torero">
+      <path d="M294 140 L287 188" stroke="#E7A0B4" stroke-width="7" stroke-linecap="round"/>
+      <path d="M303 140 L312 186" stroke="#E7A0B4" stroke-width="7" stroke-linecap="round"/>
+      <ellipse cx="285" cy="191" rx="7" ry="3.4" fill="${noir}"/><ellipse cx="315" cy="189" rx="7" ry="3.4" fill="${noir}"/>
+      <path d="M285 104 L309 104 L311 147 L300 147 L298 124 L295 147 L283 147 Z" fill="${or}"/>
+      <path d="M311 72 L315 98" stroke="${bleu}" stroke-width="7" stroke-linecap="round"/>
+      <path d="M282 68 Q297 62 312 68 L310 106 L284 106 Z" fill="${bleu}"/>
+      <path d="M284 74 L285 104 M310 74 L309 104 M297 66 L297 104" stroke="${or}" stroke-width="2.2"/>
+      <rect x="284" y="101" width="26" height="6" rx="2" fill="${rouge}"/>
+      <circle cx="283" cy="70" r="5.5" fill="${or}"/><circle cx="311" cy="70" r="5.5" fill="${or}"/>
+      <rect x="293" y="57" width="8" height="9" rx="3" fill="${peau}"/>
+      <circle cx="297" cy="51" r="10.5" fill="${peau}"/>
+      <circle cx="307" cy="58" r="3.2" fill="${noir}"/>
+      <path d="M283 50 C279 38 290 33 297 40 C304 33 315 38 311 50 Z" fill="#1B1212"/>
+      <path d="M284 72 Q262 78 244 88" fill="none" stroke="${bleu}" stroke-width="7" stroke-linecap="round"/>
+      <g class="p-capa">
+        <path d="M243 86 C230 84 212 86 198 92 C194 118 196 142 202 164 Q214 157 224 166 Q235 157 246 161 C250 136 248 110 243 86 Z" fill="${rouge}"/>
+        <path d="M214 92 C211 118 212 140 214 160 M230 90 C229 116 231 140 234 160" fill="none" stroke="#7D1520" stroke-width="1.6" opacity=".6"/>
+        <path d="M236 87 L256 85" stroke="#6B4A2A" stroke-width="3" stroke-linecap="round"/>
+      </g>
+      <circle cx="243" cy="89" r="4.2" fill="${peau}"/>
+    </g>
+  </svg>`;
+}
+
+/* Fait traverser un élément : ratio = largeur/hauteur du dessin, dir 1 = vers la droite */
+function passant(html, ratio, o) {
+  const zone = $('#parade');
+  const H = zone.clientHeight, W = window.innerWidth, w = H * ratio;
+  if (!H) return;
+  const el = document.createElement('div');
+  el.className = 'passant';
+  el.style.width = w + 'px';
+  el.innerHTML = `<div class="flip"${o.dir < 0 ? ' style="transform:scaleX(-1)"' : ''}><div class="tour">${html}</div></div>${o.ole ? '<span class="ole">¡Olé!</span>' : ''}`;
+  zone.appendChild(el);
+  const from = o.dir > 0 ? -w - 30 : W + 30, to = o.dir > 0 ? W + 30 : -w - 30;
+  const at = f => `translateX(${from + (to - from) * f}px)`;
+  const dur = Math.min(o.max, Math.max(o.min, (W + w) / o.vitesse * 1000));
+  const delay = o.retard || 0;
+  const kf = o.tour
+    ? [{ transform: at(0) }, { transform: at(.46), offset: .44 }, { transform: at(.52), offset: .6 }, { transform: at(1) }]
+    : [{ transform: at(0) }, { transform: at(1) }];
+  const a = el.animate(kf, { duration: dur, delay, easing: 'linear', fill: 'both' });
+  if (o.tour) {
+    /* La vuelta : la danseuse tourne deux fois sur elle-même au milieu de l'écran */
+    el.querySelector('.tour').animate(
+      [{ transform: 'scaleX(1)' }, { transform: 'scaleX(-1)' }, { transform: 'scaleX(1)' }, { transform: 'scaleX(-1)' }, { transform: 'scaleX(1)' }],
+      { duration: dur * .16, delay: delay + dur * .44, easing: 'ease-in-out', fill: 'both' });
+  }
+  if (o.ole) {
+    el.querySelector('.ole').animate(
+      [{ opacity: 0, transform: 'translateY(12px) scale(.6)' }, { opacity: 1, transform: 'translateY(0) scale(1.12)', offset: .2 }, { opacity: 1, transform: 'translateY(-4px) scale(1)', offset: .75 }, { opacity: 0, transform: 'translateY(-16px) scale(1)' }],
+      { duration: 1400, delay: delay + dur * .38, easing: 'ease-out', fill: 'both' });
+  }
+  a.finished.then(() => el.remove(), () => el.remove());
+}
+function passeBailaoras() {
+  const dir = Math.random() < .5 ? 1 : -1;
+  const robes = [...ROBES].sort(() => Math.random() - .5);
+  const n = Math.random() < .45 ? 2 : 1;
+  for (let i = 0; i < n; i++) passant(bailaoraSvg(robes[i]), 140 / 220, { dir, vitesse: 95, min: 7000, max: 13000, tour: true, retard: i * 1300 });
+}
+function passeCorrida() {
+  passant(corridaSvg(), 380 / 210, { dir: Math.random() < .5 ? 1 : -1, vitesse: 230, min: 4500, max: 8000, ole: true });
+}
+function planParade(delai) {
+  clearTimeout(paradeT);
+  if (!animOn()) return;
+  paradeT = setTimeout(() => {
+    if (document.hidden || dlg.open) { planParade(1500); return; } /* on attend que l'écran soit libre */
+    (Math.random() < .55 ? passeBailaoras : passeCorrida)();
+    planParade();
+  }, delai ?? 20000 + Math.random() * 25000);
+}
+function stopParade() { clearTimeout(paradeT); $('#parade').innerHTML = ''; }
+
 /* ================= Démarrage ================= */
 function readHash() {
   if (!location.hash || location.hash.length < 2) return;
@@ -1818,6 +1986,7 @@ async function boot() {
   if (S.justKeyed && S.data && !me()) { S.justKeyed = false; openWelcome(); }
 }
 boot();
+planParade(5000);
 
 if ('serviceWorker' in navigator && location.protocol === 'https:') {
   window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
