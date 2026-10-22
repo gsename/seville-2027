@@ -141,7 +141,9 @@
     "tapas": {
       "t1": 15
     },
-    "compas": {},
+    "compas": {
+      "t1": 60
+    },
     "trouvailles": {},
     "cache": {
       "cible": "jour-2027-02-11",
@@ -153,6 +155,6 @@
     "salt": "SoEwdsmB8Gbd9JpN3HVRyg==",
     "check": "v1:1MN2Fi/SJi6mWdK/:6ve3PYstgINffV+xJz6d7kG1"
   },
-  "updatedAt": "2026-10-22T14:39:32.635Z",
+  "updatedAt": "2026-10-22T14:40:22.534Z",
   "updatedBy": "Grégoire"
 }
