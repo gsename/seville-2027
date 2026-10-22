@@ -134,10 +134,21 @@
     }
   ],
   "expenses": [],
+  "jeux": {
+    "oles": {},
+    "tapas": {},
+    "compas": {},
+    "trouvailles": {},
+    "cache": {
+      "cible": "jour-2027-02-11",
+      "depuis": "2026-10-22T14:36:52.532Z",
+      "dernier": null
+    }
+  },
   "privacy": {
     "salt": "SoEwdsmB8Gbd9JpN3HVRyg==",
     "check": "v1:1MN2Fi/SJi6mWdK/:6ve3PYstgINffV+xJz6d7kG1"
   },
-  "updatedAt": "2026-10-22T12:04:32.939Z",
+  "updatedAt": "2026-10-22T14:36:52.532Z",
   "updatedBy": "Grégoire"
 }
