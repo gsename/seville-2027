@@ -25,7 +25,29 @@
       "name": "CESAAAAAAAAR"
     }
   ],
-  "flights": [],
+  "flights": [
+    {
+      "direction": "aller",
+      "airline": "Transavia",
+      "number": "XX12456",
+      "from": "Paris",
+      "to": "Séville (SVQ)",
+      "depart": "2027-02-11T08:00",
+      "arrive": "2026-12-12T06:50",
+      "passengers": [
+        "t1",
+        "t2",
+        "t3",
+        "t4"
+      ],
+      "price": 150,
+      "paidBy": "t1",
+      "url": "",
+      "notes": "",
+      "secret": "v1:XD5UY1ECMkP+pHWI:CYO212BNYSzJ+noYpwtWg4Y7eNbyGdLl90jlMcVN",
+      "id": "fjohocp2vm"
+    }
+  ],
   "stays": [],
   "activities": [
     {
@@ -138,6 +160,6 @@
     "salt": "SoEwdsmB8Gbd9JpN3HVRyg==",
     "check": "v1:1MN2Fi/SJi6mWdK/:6ve3PYstgINffV+xJz6d7kG1"
   },
-  "updatedAt": "2026-10-22T11:55:37.690Z",
+  "updatedAt": "2026-10-22T11:56:31.558Z",
   "updatedBy": "Grégoire"
 }
