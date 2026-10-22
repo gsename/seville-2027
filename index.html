@@ -305,6 +305,55 @@ progress{width:100%;height:10px;accent-color:var(--rojo)}
 .fuite .p-jupe{animation-duration:.34s}
 .fuite .p-bras-a,.fuite .p-bras-b{animation-duration:.45s}
 @keyframes p-pas{from{transform:rotate(-16deg)}to{transform:rotate(16deg)}}
+/* Torero renversé : assis par terre, muleta envolée */
+.assis .tour{transform:translateY(21%)}
+.assis .p-jambe-a{transform:rotate(78deg)}
+.assis .p-jambe-b{transform:rotate(92deg)}
+.sans-capa .p-capa{display:none}
+/* Taureau sonné : étoiles qui tournent, il vacille, puis repart au trot */
+.p-toro{transform-box:view-box;transform-origin:118px 184px}
+.p-etoiles{display:none}
+.etourdi .p-etoiles{display:inline}
+.etourdi .p-toro{animation:p-vacille .7s ease-in-out infinite alternate}
+.etourdi .p-patte,.etourdi .p-queue{animation:none}
+.p-plateau{transform-box:view-box;transform-origin:126px 30px;animation:p-plateau 1.1s ease-in-out infinite alternate}
+@keyframes p-plateau{from{transform:rotate(-4deg)}to{transform:rotate(4deg)}}
+.trot .p-patte{animation-duration:.55s}
+.trot .p-toro{animation-duration:.55s}
+@keyframes p-vacille{from{transform:rotate(-5deg)}to{transform:rotate(4deg)}}
+/* La page tremble quand le taureau percute le bord de l'écran */
+body.tremble > header,body.tremble > nav,body.tremble > main,body.tremble > .friso,body.tremble > footer{animation:p-tremble .55s cubic-bezier(.36,.07,.19,.97)}
+@keyframes p-tremble{10%,90%{transform:translate(-2px,1px)}20%,80%{transform:translate(4px,-2px)}30%,50%,70%{transform:translate(-8px,2px) rotate(-.4deg)}40%,60%{transform:translate(8px,-2px) rotate(.4deg)}}
+
+/* Arène plein écran : le taureau qui suit la muleta (souris) */
+#arene{position:fixed;inset:0;pointer-events:none;z-index:55;overflow:hidden}
+.taureau-libre{position:absolute;left:0;top:0;will-change:transform}
+.taureau-libre .tour{height:100%}
+.taureau-libre svg{display:block;width:100%;height:100%;overflow:visible;filter:drop-shadow(0 8px 10px rgba(40,10,10,.22))}
+#arene .bulle{top:0}
+.record{font-size:clamp(20px,3.4vh,28px);color:var(--cobalto)}
+/* Curseur muleta, seulement avec une souris et les animations actives */
+@media (pointer:fine){
+  html.muleta,html.muleta body{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M4 3V30' stroke='%236B4A2A' stroke-width='2.6' stroke-linecap='round'/%3E%3Cpath d='M5 4C12 1 18 7 27 4C25 11 27 16 28 21C20 24 13 18 5 22Z' fill='%23B3202E' stroke='%237D1520' stroke-width='1.2'/%3E%3C/svg%3E") 4 3,auto}
+  html.muleta a,html.muleta button,html.muleta select,html.muleta label,html.muleta summary,html.muleta [data-act]{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M4 3V30' stroke='%236B4A2A' stroke-width='2.6' stroke-linecap='round'/%3E%3Cpath d='M5 4C12 1 18 7 27 4C25 11 27 16 28 21C20 24 13 18 5 22Z' fill='%23E2A93B' stroke='%23A06D0E' stroke-width='1.2'/%3E%3C/svg%3E") 4 3,pointer}
+  html.muleta input:not([type=checkbox]):not([type=radio]),html.muleta textarea{cursor:text}
+}
+
+/* Entrée dans les arènes au chargement */
+#entree{position:fixed;inset:0;z-index:200;background:#0D0909;cursor:pointer;animation:entree-secours 0s linear 7s forwards}
+@keyframes entree-secours{to{visibility:hidden}}
+#entree svg{position:absolute;inset:0;width:100%;height:100%}
+.ar-zoom{transform-box:view-box;transform-origin:200px 178px}
+.ar-porte-g{transform-box:fill-box;transform-origin:0 50%}
+.ar-porte-d{transform-box:fill-box;transform-origin:100% 50%}
+.ar-etoile{animation:ar-scint 1.4s ease-in-out infinite alternate}
+.ar-etoile:nth-child(3n){animation-delay:-.6s}
+.ar-etoile:nth-child(3n+1){animation-delay:-1.1s}
+@keyframes ar-scint{from{opacity:.25}to{opacity:1}}
+.ar-drapeau{transform-box:fill-box;transform-origin:0 50%;animation:ar-flotte .9s ease-in-out infinite alternate}
+@keyframes ar-flotte{from{transform:skewY(-6deg) scaleX(1)}to{transform:skewY(6deg) scaleX(.9)}}
+.entree-passer{position:absolute;left:0;right:0;bottom:max(18px,env(safe-area-inset-bottom));margin:0;text-align:center;color:rgba(255,255,255,.55);font-size:13px;font-weight:600;letter-spacing:.04em}
+@media (prefers-reduced-motion:reduce){#entree{display:none}}
 .p-danse{animation:p-bob .42s ease-in-out infinite alternate}
 .p-jupe{transform-box:fill-box;transform-origin:50% 0;animation:p-jupe .84s ease-in-out infinite}
 .p-bras-a{transform-box:view-box;transform-origin:62px 58px;animation:p-bras 1.7s ease-in-out infinite}
@@ -325,6 +374,7 @@ progress{width:100%;height:10px;accent-color:var(--rojo)}
 </style>
 </head>
 <body>
+<div id="entree" aria-hidden="true"></div>
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
   <symbol id="i-plane" viewBox="0 0 24 24"><path d="M17.8 19.2 16 11l3.5-3.5C21 6 21.5 4 21 3c-1-.5-3 0-4.5 1.5L13 8 4.8 6.2c-.5-.1-.9.1-1.1.5l-.3.5c-.2.5-.1 1 .3 1.3L9 12l-2 3H4l-1 1 3 2 2 3 1-1v-3l3-2 3.5 5.3c.3.4.8.5 1.3.3l.5-.2c.4-.3.6-.7.5-1.2z"/></symbol>
   <symbol id="i-bed" viewBox="0 0 24 24"><path d="M2 4v16"/><path d="M2 8h18a2 2 0 0 1 2 2v10"/><path d="M2 17h20"/><path d="M6 8v9"/></symbol>
@@ -345,6 +395,7 @@ progress{width:100%;height:10px;accent-color:var(--rojo)}
 <footer class="pied" id="pied"></footer>
 <div class="friso friso--bas" aria-hidden="true"></div>
 <div id="parade" aria-hidden="true"></div>
+<div id="arene" aria-hidden="true"></div>
 <dialog id="dlg"></dialog>
 <div id="toast" class="toast" role="status" aria-live="polite"></div>
 
@@ -1682,6 +1733,7 @@ function openSettings() {
   form.querySelector('#moiSel').addEventListener('change', e => { store.set('moi', e.target.value); toast('C’est noté.'); });
   form.querySelector('#animChk').addEventListener('change', e => {
     store.set('anim', e.target.checked ? '1' : '0');
+    majCurseur();
     if (e.target.checked) { planParade(1200); toast('¡Olé! Ça arrive.'); } else { stopParade(); toast('Animations coupées.'); }
   });
   on('#addTrav', () => {
@@ -1877,6 +1929,14 @@ function bailaoraSvg(c) {
 }
 
 const NOIR = '#1E1515', PEAU = '#D9A27A';
+const etoile = (cx, cy, r) => {
+  let d = '';
+  for (let i = 0; i < 10; i++) {
+    const a = Math.PI / 5 * i - Math.PI / 2, rr = i % 2 ? r * .45 : r;
+    d += (i ? 'L' : 'M') + (cx + rr * Math.cos(a)).toFixed(1) + ' ' + (cy + rr * Math.sin(a)).toFixed(1);
+  }
+  return d + 'Z';
+};
 
 /* Taureau, tourné vers la droite (corps centré sur x = 118) */
 function toroSvg() {
@@ -1894,6 +1954,10 @@ function toroSvg() {
       <path d="M183 77 C187 65 195 59 204 60" fill="none" stroke="#D8C9AE" stroke-width="4.5" stroke-linecap="round"/>
       <circle cx="194" cy="92" r="2" fill="#4A3836"/>
       ${patte(58, 'a', NOIR)}${patte(146, 'b', NOIR)}
+      <g class="p-etoiles" transform="translate(196 44) scale(1 .45)"><g>
+        <animateTransform attributeName="transform" type="rotate" from="0" to="360" dur="1.1s" repeatCount="indefinite"/>
+        ${[0, 120, 240].map(a => `<path d="${etoile(26 * Math.cos(a * Math.PI / 180), 26 * Math.sin(a * Math.PI / 180), 11)}" fill="#E2A93B" stroke="#FBF7F0" stroke-width="1.5"/>`).join('')}
+      </g></g>
     </g>
   </svg>`;
 }
@@ -1925,6 +1989,52 @@ function toreroSvg() {
           <path d="M39 87 L59 85" stroke="#6B4A2A" stroke-width="3" stroke-linecap="round"/>
         </g>
         <circle cx="46" cy="89" r="4.2" fill="${PEAU}"/>
+      </g>
+    </g>
+  </svg>`;
+}
+
+/* La muleta seule, aux mêmes coordonnées que dans toreroSvg, pour s'envoler quand le torero est renversé */
+function capaSvg() {
+  return `<svg viewBox="0 0 200 210" xmlns="http://www.w3.org/2000/svg"><g class="p-capa">
+    <path d="M46 86 C33 84 15 86 1 92 C-3 118 -1 142 5 164 Q17 157 27 166 Q38 157 49 161 C53 136 51 110 46 86 Z" fill="#B3202E"/>
+    <path d="M17 92 C14 118 15 140 17 160 M33 90 C32 116 34 140 37 160" fill="none" stroke="#7D1520" stroke-width="1.6" opacity=".6"/>
+    <path d="M39 87 L59 85" stroke="#6B4A2A" stroke-width="3" stroke-linecap="round"/>
+  </g></svg>`;
+}
+
+/* Camarero sévillan, tourné vers la droite, le plateau de tapas levé à bout de bras :
+   jambon ibérique, cornet de pescaíto frito, olives et une caña. Mêmes hanches que le torero (classes de marche communes). */
+function camareroSvg() {
+  const blanc = '#FBF7F0', noir = '#1B1212';
+  return `<svg viewBox="0 0 200 210" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="101" cy="192" rx="40" ry="5" fill="rgba(40,10,10,.16)"/>
+    <g class="p-torero">
+      <g class="p-jambe-a"><path d="M97 140 L92 188" stroke="${noir}" stroke-width="8" stroke-linecap="round"/><ellipse cx="96" cy="191" rx="8" ry="3.4" fill="${noir}"/></g>
+      <g class="p-jambe-b"><path d="M106 140 L111 186" stroke="${noir}" stroke-width="8" stroke-linecap="round"/><ellipse cx="115" cy="189" rx="8" ry="3.4" fill="${noir}"/></g>
+      <path d="M86 102 L114 102 L118 166 L82 166 Z" fill="${blanc}" stroke="#E6DDD3" stroke-width="1.2"/>
+      <path d="M86 70 Q100 64 114 70 L113 106 L87 106 Z" fill="${blanc}"/>
+      <path d="M88 72 L94 104 L106 104 L112 72 Q100 80 88 72 Z" fill="${noir}"/>
+      <path d="M95 66 L100 70 L95 74 Z M105 66 L100 70 L105 74 Z" fill="#B3202E"/>
+      <path d="M88 74 Q80 88 84 104" fill="none" stroke="${blanc}" stroke-width="7" stroke-linecap="round"/><circle cx="85" cy="106" r="4" fill="${PEAU}"/>
+      <rect x="96" y="56" width="8" height="10" rx="3" fill="${PEAU}"/>
+      <circle cx="100" cy="49" r="10.5" fill="${PEAU}"/>
+      <path d="M89 47 C88 36 98 34 106 38 C111 40 112 44 111 47 C106 42 96 42 89 47 Z" fill="${noir}"/>
+      <path d="M101 54 Q106 51 111 54 Q106 56 101 54 Z" fill="${noir}"/>
+      <path d="M113 72 Q124 58 126 34" fill="none" stroke="${blanc}" stroke-width="7" stroke-linecap="round"/><circle cx="126" cy="31" r="4" fill="${PEAU}"/>
+      <g class="p-plateau">
+        <rect x="92" y="25" width="78" height="4" rx="2" fill="#C9CED6"/>
+        <ellipse cx="106" cy="24" rx="12" ry="3" fill="${blanc}" stroke="#D8D2C8"/>
+        <path d="M97 23 Q101 17 105 22 Q109 16 114 22 Q110 25 104 24 Q100 25 97 23 Z" fill="#C8506A"/>
+        <path d="M99 21 Q102 19 104 21 M107 20 Q110 18 112 21" fill="none" stroke="${blanc}" stroke-width="1"/>
+        <path d="M125 25 L132 2 L140 25 Z" fill="#F2E6D0" stroke="#D8C9AE"/>
+        <ellipse cx="129" cy="4" rx="2.6" ry="5" fill="#D9A03A" transform="rotate(-18 129 4)"/>
+        <ellipse cx="134" cy="3" rx="2.6" ry="5" fill="#E2B04A" transform="rotate(14 134 3)"/>
+        <ellipse cx="137" cy="7" rx="2.4" ry="4.6" fill="#C98A1B" transform="rotate(30 137 7)"/>
+        <path d="M144 25 Q144 18 151 18 Q158 18 158 25 Z" fill="#B5552E"/>
+        <circle cx="148" cy="17" r="2.6" fill="#6B8E23"/><circle cx="152" cy="16" r="2.6" fill="#7C9A2E"/><circle cx="155" cy="18" r="2.4" fill="#6B8E23"/>
+        <rect x="160" y="7" width="8" height="18" rx="1.5" fill="#E8B04A" stroke="rgba(255,255,255,.6)"/>
+        <rect x="159.5" y="4" width="9" height="5" rx="2.5" fill="${blanc}"/>
       </g>
     </g>
   </svg>`;
@@ -2067,17 +2177,271 @@ function scenePoursuite(s) {
   bulle(s, '¡Eh, toro!', W * .5, tT0 + (W * .5 - xTG) / vT - 400);
 }
 
+/* 5. Le choc : le taureau fonce dans le bord de l'écran, toute la page tremble, il reste sonné puis repart au trot */
+function tremble() {
+  document.body.classList.remove('tremble');
+  void document.body.offsetWidth;
+  document.body.classList.add('tremble');
+  setTimeout(() => document.body.classList.remove('tremble'), 650);
+  try { if (navigator.vibrate) navigator.vibrate(120); } catch { /* pas de vibreur */ }
+}
+function sceneChoc(s) {
+  const { W, k } = s, wB = largeur(s, 'toro'), v = vitTaureau(s) * 1.15, vTrot = v * .35;
+  const xBG = horsG(wB), xImpact = W - 96 * k, xRebond = xImpact - 34 * k;
+  const tI = (xImpact - xBG) / v, tE = tI + 2700, tFin = tE + 450 + (xRebond - xBG) / vTrot;
+  s.total = tFin + 50;
+  const toro = acteur(s, toroSvg(), 'toro',
+    [[0, xBG, 1], [tI, xImpact, 1, 'ease-out'], [tI + 280, xRebond, 1], [tE, xRebond, 1], [tE + 1, xRebond, -1], [tE + 450, xRebond, -1], [tFin, xBG, -1]], { z: 2 });
+  const tour = toro.querySelector('.tour');
+  tour.style.transformOrigin = '88% 60%';
+  at(s, tI, () => {
+    tremble();
+    tour.animate([{ transform: 'scaleX(1)' }, { transform: 'scaleX(.8) scaleY(1.06)', offset: .3 }, { transform: 'scaleX(1)' }], { duration: 380, easing: 'ease-out' });
+    toro.classList.add('etourdi');
+  });
+  bulle(s, '¡Bum!', W - 80 * k, tI - 60);
+  at(s, tE, () => { toro.classList.remove('etourdi'); toro.classList.add('trot'); });
+}
+
+/* 6. Le salto : le taureau ignore la muleta et percute le torero, qui fait un salto arrière,
+   retombe sur les fesses, se relève et s'enfuit de l'autre côté. Sa muleta s'envole et flotte jusqu'à sortir de l'écran. */
+function sceneSalto(s) {
+  const { W, k } = s, wB = largeur(s, 'toro'), wT = largeur(s, 'torero'), v = vitTaureau(s), vCapa = Math.max(.09, W / 9000);
+  const c = W * .5, xTD = horsD(s, wT), xTG = horsG(wT), xBG = horsG(wB), xBD = horsD(s, wB);
+  const tArr = 2000, t1s = 1700;
+  const tI = t1s + (c - 107 * k - xBG) / v, tB = t1s + (xBD - xBG) / v;
+  const xAtt = c + 130 * k, tAtt = tI + 750, tLeve = tAtt + 1400, tFuite = tLeve + 200 + (xAtt - xTG) / (v * .75);
+  const tCapa = tI + (xTD - c) / vCapa;
+  s.total = Math.max(tB, tFuite, tCapa) + 50;
+  acteur(s, toroSvg(), 'toro', [[t1s, xBG, 1], [tB, xBD, 1]], { z: 2 });
+  const tor = acteur(s, toreroSvg(), 'torero',
+    [[0, xTD, 1, 'ease-out'], [tArr, c, 1], [tI, c, 1, 'ease-out'], [tAtt, xAtt, 1], [tLeve + 200, xAtt, 1], [tFuite, xTG, 1]], { z: 3, cls: 'marche' });
+  const capa = acteur(s, capaSvg(), 'torero', [[tI, c, 1], [tCapa, xTD, 1]], { z: 4 });
+  capa.style.opacity = '0';
+  at(s, tArr, () => tor.classList.remove('marche'));
+  at(s, tI - 140, () => tor.classList.add('pase')); /* trop tard… */
+  at(s, tI, () => {
+    tor.classList.remove('pase');
+    tor.classList.add('sans-capa');
+    tor.querySelector('.tour').animate([
+      { transform: 'translateY(0) rotate(0deg)' },
+      { transform: 'translateY(-48%) rotate(190deg)', offset: .5 },
+      { transform: 'translateY(21%) rotate(360deg)' }
+    ], { duration: 750, easing: 'cubic-bezier(.3,.6,.45,1)' });
+    capa.style.opacity = '1';
+    const t = capa.querySelector('.tour');
+    t.style.transformOrigin = '13% 60%';
+    t.animate([{ transform: 'translateY(0) rotate(0deg)' }, { transform: 'translateY(-50%) rotate(-30deg)' }], { duration: 700, easing: 'ease-out', fill: 'forwards' });
+    capa.querySelector('svg').animate([
+      { transform: 'translateY(0) rotate(-8deg)' }, { transform: 'translateY(-14%) rotate(14deg)' }
+    ], { duration: 900, delay: 700, iterations: Infinity, direction: 'alternate', easing: 'ease-in-out' });
+  });
+  at(s, tAtt, () => tor.classList.add('assis'));
+  bulle(s, '¡Ay, ay, ay!', xAtt, tAtt + 150);
+  at(s, tLeve, () => { tor.classList.remove('assis'); tor.classList.add('court'); });
+}
+
+/* 7. El tapeo : un camarero traverse avec son plateau de tapas, la bande le suit de bar en bar.
+   Arrêt au milieu : ¡Marchando!, une vuelta, ¡Otra ronda!, et on repart vers le bar suivant. */
+function sceneTapeo(s) {
+  const { W, k } = s, wC = largeur(s, 'torero'), wD = largeur(s, 'bailaora'), v = Math.max(.12, W / 9000);
+  const gD = wC * .62 + wD * .1, gT = gD + wD * .55 + wC * .3;
+  const xC0 = horsG(wC), xStop = W * .62, xFin = horsD(s, wC) + gT;
+  const tStop = (xStop - xC0) / v, tRepart = tStop + 2300, tFin = tRepart + (xFin - xStop) / v;
+  s.total = tFin + 50;
+  const pts = g => [[0, xC0 - g, 1], [tStop, xStop - g, 1], [tRepart, xStop - g, 1], [tFin, xFin - g, 1]];
+  const cam = acteur(s, camareroSvg(), 'torero', pts(0), { z: 3, cls: 'marche' });
+  const dz = acteur(s, bailaoraSvg(melange(ROBES)[0]), 'bailaora', pts(gD), { z: 2 });
+  const tor = acteur(s, toreroSvg(), 'torero', pts(gT).map(p => [p[0], p[1], -1]), { z: 1, cls: 'marche' });
+  at(s, tStop, () => { cam.classList.remove('marche'); tor.classList.remove('marche'); });
+  bulle(s, '¡Marchando!', xStop, tStop + 100);
+  at(s, tStop + 700, () => dz.querySelector('.tour').animate(TOUR, { duration: 900, easing: 'ease-in-out' }));
+  bulle(s, '¡Otra ronda!', xStop - gT * .6, tStop + 1300);
+  at(s, tRepart, () => { cam.classList.add('marche'); tor.classList.add('marche'); });
+}
+
+/* 8. La muleta (souris) : sur ordinateur, le taureau suit le curseur en drapeau rouge.
+   Chaque passe frôlée compte un ¡Olé!, il finit par se lasser et sort. Record gardé sur l'appareil. */
+const souris = { x: -1, y: -1, t: 0, dedans: false };
+addEventListener('pointermove', e => { if (e.pointerType === 'mouse') { souris.x = e.clientX; souris.y = e.clientY; souris.t = performance.now(); souris.dedans = true; } }, { passive: true });
+document.documentElement.addEventListener('mouseleave', () => { souris.dedans = false; });
+const sourisActive = () => window.matchMedia('(pointer: fine)').matches && souris.dedans && performance.now() - souris.t < 10000;
+function bulleLibre(texte, x, y, cls = '') {
+  const b = document.createElement('span');
+  b.className = 'bulle' + (cls ? ' ' + cls : '');
+  b.textContent = texte;
+  b.style.left = Math.max(60, Math.min(window.innerWidth - 60, x)) + 'px';
+  b.style.top = Math.max(4, y) + 'px';
+  $('#arene').appendChild(b);
+  b.animate([
+    { opacity: 0, transform: 'translateX(-50%) translateY(10px) scale(.6)' },
+    { opacity: 1, transform: 'translateX(-50%) translateY(0) scale(1.12)', offset: .2 },
+    { opacity: 1, transform: 'translateX(-50%) translateY(-4px) scale(1)', offset: .75 },
+    { opacity: 0, transform: 'translateX(-50%) translateY(-16px) scale(1)' }
+  ], { duration: 1400, easing: 'ease-out', fill: 'both' }).finished.then(() => b.remove(), () => b.remove());
+}
+function sceneMuleta() {
+  const H = Math.max(90, Math.min(150, window.innerHeight * .2)), w = H * RATIO.toro, gen = paradeGen;
+  const el = document.createElement('div');
+  el.className = 'taureau-libre';
+  el.style.width = w + 'px';
+  el.style.height = H + 'px';
+  el.innerHTML = `<div class="tour">${toroSvg()}</div>`;
+  $('#arene').appendChild(el);
+  let x = souris.x < window.innerWidth / 2 ? window.innerWidth + w : -w;
+  let y = Math.max(H / 2, Math.min(window.innerHeight - H / 2, souris.y));
+  let vx = 0, vy = 0, face = x < 0 ? 1 : -1, passes = 0, proche = false, lasse = false, dernier = 0, prev = performance.now();
+  const debut = prev;
+  return new Promise(fin => {
+    const sortie = () => {
+      el.remove();
+      let rec = 0;
+      try { rec = Number(store.get('record-oles')) || 0; } catch { /* idem */ }
+      if (passes > rec && passes >= 2) { store.set('record-oles', String(passes)); bulleLibre(`¡Récord! ${passes} olés`, window.innerWidth / 2, window.innerHeight * .3, 'record'); }
+      fin();
+    };
+    function pas(now) {
+      if (gen !== paradeGen) { el.remove(); fin(); return; }
+      const dt = Math.min(40, now - prev) / 1000;
+      prev = now;
+      if (!lasse && (now - debut > 15000 || passes >= 8 || (!sourisActive() && now - debut > 3000))) {
+        lasse = true;
+        bulleLibre(passes ? 'Bof…' : '¿Y la muleta?', x, y - H * .9);
+      }
+      const tx = lasse ? (face > 0 ? window.innerWidth + w * 2 : -w * 2) : souris.x;
+      const ty = lasse ? y : souris.y;
+      const dx = tx - x, dy = ty - y, d = Math.hypot(dx, dy) || 1, acc = 1500;
+      vx = (vx + dx / d * acc * dt) * .996;
+      vy = (vy + dy / d * acc * dt * .8) * .996;
+      const vmax = lasse ? 360 : 640, sp = Math.hypot(vx, vy);
+      if (sp > vmax) { vx *= vmax / sp; vy *= vmax / sp; }
+      x += vx * dt;
+      y = Math.max(H * .4, Math.min(window.innerHeight - H * .4, y + vy * dt));
+      if (Math.abs(vx) > 40) face = vx > 0 ? 1 : -1;
+      /* Une passe : la tête du taureau frôle la muleta */
+      const hx = x + face * w * .39, pres = !lasse && Math.hypot(hx - souris.x, y - souris.y) < H * .55;
+      if (pres && !proche && now - dernier > 700) {
+        passes++;
+        dernier = now;
+        bulleLibre(passes > 1 ? `¡Olé! ×${passes}` : '¡Olé!', souris.x, souris.y - 70);
+      }
+      proche = pres;
+      el.style.transform = `translate(${(x - w / 2).toFixed(1)}px, ${(y - H / 2).toFixed(1)}px) scaleX(${face})`;
+      if (lasse && (x < -w * 1.5 || x > window.innerWidth + w * 1.5)) { sortie(); return; }
+      requestAnimationFrame(pas);
+    }
+    requestAnimationFrame(pas);
+  });
+}
+
+const SCENES = [[sceneBailaoras, 20], [scenePases, 18], [sceneTapeo, 16], [scenePoursuite, 12], [sceneChoc, 13], [sceneSalto, 13], [sceneCharge, 8]];
+function tirerScene() {
+  let r = Math.random() * SCENES.reduce((a, x) => a + x[1], 0);
+  for (const [fn, p] of SCENES) { if ((r -= p) < 0) return fn; }
+  return sceneBailaoras;
+}
 function planParade(delai) {
   clearTimeout(paradeT);
   if (!animOn()) return;
   paradeT = setTimeout(() => {
     if (document.hidden || dlg.open || !$('#parade').clientHeight) { planParade(1500); return; } /* on attend que l'écran soit libre */
-    const s = nouvelleScene(), r = Math.random();
-    (r < .32 ? sceneBailaoras : r < .62 ? scenePases : r < .8 ? scenePoursuite : sceneCharge)(s);
+    if (sourisActive() && Math.random() < .3) { sceneMuleta().then(() => planParade(5000 + Math.random() * 8000)); return; }
+    const s = nouvelleScene();
+    tirerScene()(s);
     planParade(s.total + 5000 + Math.random() * 8000);
   }, delai ?? 6000 + Math.random() * 8000);
 }
-function stopParade() { paradeGen++; clearTimeout(paradeT); $('#parade').innerHTML = ''; }
+function stopParade() { paradeGen++; clearTimeout(paradeT); $('#parade').innerHTML = ''; $('#arene').innerHTML = ''; }
+const majCurseur = () => document.documentElement.classList.toggle('muleta', animOn());
+
+/* ================= Entrée dans les arènes ================= */
+/* Au chargement : la façade des arènes sur fond noir, les portes s'ouvrent, on passe l'entrée
+   et le site apparaît derrière. Toucher l'écran pour passer. */
+function arenaSvg(nom) {
+  const cal = '#F3ECDF', ocre = '#D9A03A', ocreF = '#B07A22', brique = '#9C3B2A', rouge = '#B3202E';
+  let arcs = '';
+  for (let i = 0; i < 10; i++) {
+    const x = 8 + i * 39.4;
+    arcs += `<path d="M${x} 88 V71 A12 12 0 0 1 ${x + 24} 71 V88 Z" fill="#2A1B17" stroke="${ocre}" stroke-width="2"/>`;
+  }
+  let fenetres = '';
+  for (const x of [45, 95, 305, 355]) fenetres += `<path d="M${x - 8} 168 V140 A8 8 0 0 1 ${x + 8} 140 V168 Z" fill="#2A1B17" stroke="${ocre}" stroke-width="2.5"/>`;
+  let pilastres = '';
+  for (const x of [20, 70, 120, 280, 330, 380]) pilastres += `<rect x="${x - 5}" y="99" width="10" height="133" fill="${ocre}"/>`;
+  let foule = '';
+  const teintes = ['#F3ECDF', '#B3202E', '#1D4E9E', '#E2A93B', '#2E7D57', '#1B1212'];
+  for (let r = 0; r < 4; r++) for (let i = 0; i < 22; i++) foule += `<circle cx="${168 + i * 3.1 + (r % 2) * 1.5}" cy="${150 + r * 7}" r="1.4" fill="${teintes[(i * 7 + r * 3) % teintes.length]}"/>`;
+  let clous = '';
+  for (let yy = 150; yy < 230; yy += 14) for (const xx of [176, 190, 210, 224]) clous += `<circle cx="${xx}" cy="${yy}" r="1.3" fill="${ocre}"/>`;
+  let etoiles = '';
+  for (let i = 0; i < 26; i++) etoiles += `<circle class="ar-etoile" cx="${(i * 73) % 400}" cy="${(i * 37) % 30 + 4}" r="${i % 3 ? .8 : 1.3}" fill="#FBF7F0"/>`;
+  const taille = Math.min(9, 150 / Math.max(6, nom.length));
+  return `<svg viewBox="0 0 400 260" preserveAspectRatio="xMidYMid meet" xmlns="http://www.w3.org/2000/svg">
+    <defs>
+      <clipPath id="ar-ouv"><path d="M168 232 V140 A32 32 0 0 1 232 140 V232 Z"/></clipPath>
+      <linearGradient id="ar-ciel" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F6C46A"/><stop offset="1" stop-color="#F9E3A8"/></linearGradient>
+      <radialGradient id="ar-halo"><stop offset="0" stop-color="#FFD27A" stop-opacity=".75"/><stop offset="1" stop-color="#FFD27A" stop-opacity="0"/></radialGradient>
+    </defs>
+    <g>${etoiles}</g>
+    <g class="ar-zoom">
+      <rect x="-300" y="232" width="1000" height="60" fill="#1A1210"/>
+      <path d="M60 46 V20 M340 46 V20" stroke="#BFB6A8" stroke-width="1.6"/>
+      <path class="ar-drapeau" d="M60 20 h16 l-4 5 l4 5 h-16 Z" fill="${rouge}"/>
+      <path class="ar-drapeau" d="M340 20 h16 l-4 5 l4 5 h-16 Z" fill="${ocre}"/>
+      <path d="M-10 46 Q200 32 410 46 L410 53 Q200 39 -10 53 Z" fill="${brique}"/>
+      <path d="M-10 53 Q200 39 410 53 L410 92 L-10 92 Z" fill="${cal}"/>
+      ${arcs}
+      <rect x="-10" y="92" width="420" height="7" fill="${ocre}"/>
+      <rect x="-10" y="99" width="420" height="133" fill="${cal}"/>
+      ${pilastres}${fenetres}
+      <circle cx="136" cy="146" r="18" fill="url(#ar-halo)"/><circle cx="264" cy="146" r="18" fill="url(#ar-halo)"/>
+      <circle cx="136" cy="146" r="3.6" fill="#FFE2A0"/><circle cx="264" cy="146" r="3.6" fill="#FFE2A0"/>
+      <path d="M140 86 Q200 50 260 86 Z" fill="${ocre}"/>
+      <circle cx="200" cy="74" r="8.5" fill="${brique}" stroke="${ocreF}" stroke-width="2"/>
+      <path d="M148 232 V98 Q148 86 160 86 H240 Q252 86 252 98 V232 Z" fill="${ocre}"/>
+      <rect x="154" y="93" width="92" height="15" rx="2" fill="${brique}"/>
+      <text x="200" y="103.5" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-weight="700" font-size="${taille}" letter-spacing=".8" fill="#FBF7F0">${esc(nom)}</text>
+      <g clip-path="url(#ar-ouv)">
+        <rect x="160" y="100" width="80" height="140" fill="url(#ar-ciel)"/>
+        <rect x="160" y="144" width="80" height="34" fill="#8C2F25"/>
+        ${foule}
+        <rect x="160" y="178" width="80" height="11" fill="#7D1520"/>
+        <rect x="160" y="178" width="80" height="2" fill="${ocre}"/>
+        <rect x="160" y="189" width="80" height="50" fill="#E8B25C"/>
+      </g>
+      <g class="ar-porte-g"><path d="M168 232 V140 A32 32 0 0 1 200 108 V232 Z" fill="#5A2318"/><path d="M184 112 V232" stroke="#3E170F" stroke-width="1.5"/>${clous.split('/>').filter(c => /cx="(176|190)"/.test(c)).map(c => c + '/>').join('')}</g>
+      <g class="ar-porte-d"><path d="M232 232 V140 A32 32 0 0 0 200 108 V232 Z" fill="#5A2318"/><path d="M216 112 V232" stroke="#3E170F" stroke-width="1.5"/>${clous.split('/>').filter(c => /cx="(210|224)"/.test(c)).map(c => c + '/>').join('')}</g>
+      <ellipse class="ar-lueur" cx="200" cy="238" rx="80" ry="9" fill="#F6C46A" opacity="0"/>
+    </g>
+  </svg>`;
+}
+function entree() {
+  const el = $('#entree');
+  if (!el) return Promise.resolve();
+  if (!animOn() || mvtReduit.matches) { el.remove(); return Promise.resolve(); }
+  const t = S.data ? S.data.trip : SEED.trip;
+  const nom = `${t.title || 'Voyage'}${validYmd(t.start) ? ' ' + t.start.slice(0, 4) : ''}`.toUpperCase();
+  el.style.animation = 'none';
+  el.innerHTML = arenaSvg(nom) + '<p class="entree-passer">Toucher pour entrer</p>';
+  return new Promise(fin => {
+    let fini = false;
+    const terminer = () => {
+      if (fini) return;
+      fini = true;
+      el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 450, easing: 'ease-out', fill: 'forwards' }).finished.then(() => { el.remove(); fin(); });
+    };
+    el.addEventListener('click', terminer);
+    addEventListener('keydown', terminer, { once: true });
+    const zoom = el.querySelector('.ar-zoom');
+    zoom.animate([{ opacity: 0, transform: 'scale(.94)' }, { opacity: 1, transform: 'scale(1)' }], { duration: 750, easing: 'ease-out', fill: 'backwards' });
+    const ouvre = { duration: 750, delay: 950, easing: 'cubic-bezier(.5,0,.3,1)', fill: 'forwards' };
+    el.querySelector('.ar-porte-g').animate([{ transform: 'scaleX(1)' }, { transform: 'scaleX(.06)' }], ouvre);
+    el.querySelector('.ar-porte-d').animate([{ transform: 'scaleX(1)' }, { transform: 'scaleX(.06)' }], ouvre);
+    el.querySelector('.ar-lueur').animate([{ opacity: 0 }, { opacity: .9 }], ouvre);
+    zoom.animate([{ transform: 'scale(1)' }, { transform: 'scale(16)' }], { duration: 1300, delay: 1550, easing: 'cubic-bezier(.55,0,.85,.45)', fill: 'forwards' })
+      .finished.then(terminer, terminer);
+  });
+}
 
 /* ================= Démarrage ================= */
 function readHash() {
@@ -2114,7 +2478,8 @@ async function boot() {
   if (S.justKeyed && S.data && !me()) { S.justKeyed = false; openWelcome(); }
 }
 boot();
-planParade(4000);
+majCurseur();
+entree().then(() => planParade(3500));
 
 if ('serviceWorker' in navigator && location.protocol === 'https:') {
   window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
