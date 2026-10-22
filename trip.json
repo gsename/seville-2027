@@ -135,7 +135,9 @@
   ],
   "expenses": [],
   "jeux": {
-    "oles": {},
+    "oles": {
+      "t1": 8
+    },
     "tapas": {},
     "compas": {},
     "trouvailles": {},
@@ -149,6 +151,6 @@
     "salt": "SoEwdsmB8Gbd9JpN3HVRyg==",
     "check": "v1:1MN2Fi/SJi6mWdK/:6ve3PYstgINffV+xJz6d7kG1"
   },
-  "updatedAt": "2026-10-22T14:42:06.324Z",
+  "updatedAt": "2026-10-22T16:09:00.879Z",
   "updatedBy": "Grégoire"
 }
