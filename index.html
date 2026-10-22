@@ -354,6 +354,75 @@ body.tremble > header,body.tremble > nav,body.tremble > main,body.tremble > .fri
 @keyframes ar-flotte{from{transform:skewY(-6deg) scaleX(1)}to{transform:skewY(6deg) scaleX(.9)}}
 .entree-passer{position:absolute;left:0;right:0;bottom:max(18px,env(safe-area-inset-bottom));margin:0;text-align:center;color:rgba(255,255,255,.55);font-size:13px;font-weight:600;letter-spacing:.04em}
 @media (prefers-reduced-motion:reduce){#entree{display:none}}
+
+/* Jeux plein écran */
+html.en-jeu{overflow:hidden}
+.jeu{position:absolute;inset:0;pointer-events:auto;touch-action:none;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;background:rgba(24,10,12,.62)}
+.jeu--clair{background:rgba(246,242,237,.35)}
+.jeu-hud{position:absolute;left:0;right:0;top:0;display:flex;align-items:center;gap:14px;padding:max(10px,env(safe-area-inset-top)) max(14px,env(safe-area-inset-right)) 10px max(14px,env(safe-area-inset-left));background:var(--cal);box-shadow:0 2px 12px rgba(40,10,10,.15);z-index:5}
+.jeu-hud b{font-family:var(--font-d);font-variation-settings:"SOFT" 100;font-size:20px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.jeu-score{font-weight:800;font-size:20px;color:var(--rojo);font-variant-numeric:tabular-nums}
+.jeu-temps{font-weight:700;color:var(--tinta-2);font-variant-numeric:tabular-nums;min-width:3ch;text-align:right}
+.jeu-x{border:0;background:var(--fondo);border-radius:50%;width:40px;height:40px;display:grid;place-items:center;cursor:pointer;color:var(--tinta)}
+.jeu-aide{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 56px);transform:translateX(-50%);width:min(440px,calc(100% - 32px));margin:0;padding:12px 16px;border-radius:14px;background:var(--cal);color:var(--tinta);font-weight:600;text-align:center;box-shadow:var(--sombra);animation:jeu-aide 5s ease forwards;pointer-events:none}
+@keyframes jeu-aide{0%,80%{opacity:1}100%{opacity:0}}
+.jeu-fin{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(360px,calc(100% - 32px));background:var(--cal);border-radius:24px;padding:22px 20px;text-align:center;display:grid;gap:8px;box-shadow:0 24px 70px rgba(40,10,10,.35);z-index:6}
+.jeu-fin::before{content:"";display:block;height:20px;margin:-22px -20px 6px;border-radius:24px 24px 0 0;background:var(--tile) 0 0/20px 20px repeat-x;border-bottom:3px solid var(--rojo)}
+.jeu-fin-titre{font-family:var(--font-d);font-variation-settings:"SOFT" 100;font-weight:800;font-size:34px;color:var(--rojo)}
+.jeu-fin-score{font-size:22px;font-weight:800}
+.jeu-fin .boutons{justify-content:center;margin-top:6px}
+.acteur-libre{position:absolute;left:0;top:0;will-change:transform}
+.acteur-libre .tour{height:100%}
+.acteur-libre svg,.muleta-doigt svg,.tapa svg,.eventail svg{display:block;width:100%;height:auto;overflow:visible}
+.acteur-libre svg{height:100%;filter:drop-shadow(0 8px 10px rgba(40,10,10,.25))}
+.muleta-doigt{position:absolute;left:0;top:0;width:68px;pointer-events:none;filter:drop-shadow(0 6px 8px rgba(40,10,10,.3))}
+.sans-tapas .p-plateau > :not(:first-child){display:none}
+.tapa{position:absolute;left:0;top:0;will-change:transform;filter:drop-shadow(0 4px 5px rgba(0,0,0,.3))}
+.jeu-sol{position:absolute;left:0;right:0;bottom:0;height:34px;background:#E8B25C;border-top:4px solid #C98A1B}
+.bulle.plus{font-size:26px;color:var(--verde)}
+.bulle.plaf{font-size:20px;color:#7D1520}
+.bulle.grande{font-size:clamp(34px,7vh,58px)}
+.compas-anneau{position:absolute;left:50%;top:calc(max(10px,env(safe-area-inset-top)) + 84px);width:74px;height:74px;border-radius:50%;border:6px solid var(--albero);transform:translateX(-50%);opacity:.55}
+.compas-anneau.fort{border-color:var(--rojo)}
+.compas-retour{position:absolute;left:50%;top:calc(max(10px,env(safe-area-inset-top)) + 170px);margin:0;transform:translateX(-50%);font-family:var(--font-d);font-variation-settings:"SOFT" 100;font-weight:800;font-size:40px;opacity:0;text-shadow:0 2px 0 #FFFFFF}
+.compas-retour.ok{color:var(--verde)} .compas-retour.ko{color:var(--rojo)}
+.eventail{position:absolute;top:0;will-change:transform;filter:drop-shadow(0 4px 6px rgba(40,10,10,.25))}
+
+/* Onglet Fiesta */
+.intro-fiesta{color:var(--tinta-2);margin:-6px 0 4px;max-width:62ch}
+.podium{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:end;gap:10px;max-width:480px}
+.podium-place{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;min-width:0}
+.podium-place b{font-size:14.5px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.podium-place span{font-size:13px;color:var(--tinta-2);font-weight:600}
+.podium-bloc{width:100%;margin-top:4px;border-radius:12px 12px 0 0;display:grid;place-items:start center;padding-top:8px;font-family:var(--font-d);font-weight:800;font-size:24px;color:#FFFFFF}
+.p1 .podium-bloc{height:96px;background:var(--albero)}
+.p2 .podium-bloc{height:72px;background:#9AA3AE}
+.p3 .podium-bloc{height:54px;background:#B5552E}
+.jeux-grille{display:grid;grid-template-columns:repeat(auto-fill,minmax(min(100%,260px),1fr));gap:14px}
+.jeu-carte{background:var(--cal);border:1px solid var(--linea);box-shadow:var(--sombra);border-radius:22px;padding:0 18px 18px;display:flex;flex-direction:column;gap:10px;overflow:hidden}
+.jeu-carte::before{content:"";display:block;height:20px;margin:0 -18px 4px;background:var(--tile) 0 0/20px 20px repeat-x;border-bottom:3px solid var(--rojo)}
+.jeu-carte h3{font-size:22px}
+.jeu-carte p{font-size:14.5px}
+.jeu-carte .btn{margin-top:auto;align-self:flex-start}
+.mini-classement{list-style:none;margin:0;padding:0;display:grid;gap:6px;counter-reset:rang}
+.mini-classement li{display:flex;align-items:center;gap:8px;font-size:14.5px;counter-increment:rang}
+.mini-classement li::before{content:counter(rang);font-weight:800;color:var(--tinta-2);width:1.2em}
+.mini-classement li > span:not(.ini){flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.secrets{margin:0;padding-left:20px;display:grid;gap:8px;font-size:15px}
+.secrets .btn{margin-left:6px}
+.bandeau--ole{border-color:var(--albero);background:color-mix(in srgb,var(--albero) 14%,var(--cal))}
+.bandeau--ole b{color:var(--rojo)}
+
+/* Taureau caché derrière une carte */
+.cache-ici{position:relative;overflow:visible}
+.jour.cache-ici::before,.fiche.cache-ici::before{border-radius:21px 21px 0 0}
+.liste:has(.cache-ici){overflow:visible}
+li.cache-ici{overflow:hidden}
+.taureau-cache{position:absolute;right:26px;bottom:calc(100% - 6px);width:56px;height:41px;padding:0;border:0;background:none;cursor:pointer;z-index:-1;animation:coucou 7s ease-in-out infinite}
+.taureau-cache svg{display:block;width:100%;height:auto}
+.taureau-cache--ligne{z-index:1;right:auto;left:46%;bottom:-6px;height:36px;width:50px;animation-name:coucou-ligne}
+@keyframes coucou{0%,62%,100%{transform:translateY(62%)}70%,86%{transform:translateY(4%)}75%{transform:translateY(4%) rotate(-6deg)}81%{transform:translateY(4%) rotate(6deg)}}
+@keyframes coucou-ligne{0%,62%,100%{transform:translateY(78%)}70%,86%{transform:translateY(18%)}}
 .p-danse{animation:p-bob .42s ease-in-out infinite alternate}
 .p-jupe{transform-box:fill-box;transform-origin:50% 0;animation:p-jupe .84s ease-in-out infinite}
 .p-bras-a{transform-box:view-box;transform-origin:62px 58px;animation:p-bras 1.7s ease-in-out infinite}
@@ -549,6 +618,7 @@ function normalize(d) {
         .map(i => ({ label: String(i.label || ''), amount: num(i.amount), split: Array.isArray(i.split) ? i.split.filter(s => typeof s === 'string') : [] })) : [];
       return o;
     }),
+    jeux: normJeux(d.jeux),
     privacy: d.privacy && d.privacy.salt && d.privacy.check ? d.privacy : null,
     updatedAt: d.updatedAt || null,
     updatedBy: d.updatedBy || null
@@ -588,6 +658,7 @@ function recompute() {
   if (S.data && salt !== S.keySalt) { S.keySalt = salt; S.keyPromise = initKey(); }
   else decryptAll();
   render();
+  recompenses();
 }
 function commit(label, fn) {
   const who = me();
@@ -802,7 +873,7 @@ function privateHtml(x) {
 }
 
 /* ================= Rendu ================= */
-const TABS = [['programme', 'Programme'], ['vols', 'Vols'], ['logement', 'Logement'], ['activites', 'Activités'], ['budget', 'Budget']];
+const TABS = [['programme', 'Programme'], ['vols', 'Vols'], ['logement', 'Logement'], ['activites', 'Activités'], ['budget', 'Budget'], ['fiesta', 'Fiesta']];
 function render() { renderHero(); renderTabs(); renderMain(); renderFoot(); }
 
 function pillText() {
@@ -898,8 +969,9 @@ function renderMain() {
   main.setAttribute('aria-labelledby', `tab-${S.tab}`);
   const banner = MODE === 'local'
     ? `<p class="bandeau">Mode local : les modifications restent dans ce navigateur. Une fois la page publiée sur GitHub Pages, elles seront partagées avec tout le groupe.</p>` : '';
-  const views = { programme: viewProgramme, vols: viewVols, logement: viewLogement, activites: viewActivites, budget: viewBudget };
+  const views = { programme: viewProgramme, vols: viewVols, logement: viewLogement, activites: viewActivites, budget: viewBudget, fiesta: viewFiesta };
   main.innerHTML = banner + views[S.tab](d);
+  placerTaureauCache();
 }
 
 function renderFoot() {
@@ -959,7 +1031,7 @@ function dayCard(d, day, isLast, idx, total) {
   const nightLine = isLast ? '' : night
     ? `<p class="nuit">${icon('moon')}<span>Nuit : ${esc(night.name || 'logement')}</span></p>`
     : `<p class="nuit nuit--manque">${icon('moon')}<span>Pas encore de logement pour cette nuit</span></p>`;
-  return `<section class="jour${day === todayYmd() ? ' jour--auj' : ''}" aria-label="${esc(cap(fmtLong(day)))}">
+  return `<section class="jour${day === todayYmd() ? ' jour--auj' : ''}" data-cache="jour-${day}" aria-label="${esc(cap(fmtLong(day)))}">
     <header class="jour-tete"><span class="jour-num" aria-hidden="true"><b>${dt.getDate()}</b><i>${esc(dt.toLocaleDateString('fr-FR', { month: 'short' }))}</i></span><span><h3 class="jour-nom">${esc(cap(dt.toLocaleDateString('fr-FR', { weekday: 'long' })))}</h3><span class="jour-sous">${day === todayYmd() ? 'Aujourd’hui, j' : 'J'}our ${idx + 1} sur ${total}</span></span></header>
     ${evs.length ? `<ol class="evts">${evs.map(eventHtml).join('')}</ol>` : `<p class="vide">Rien de prévu pour l’instant.</p>`}
     ${nightLine}
@@ -976,7 +1048,8 @@ function viewProgramme(d) {
   const pts = openPoints(d);
   const ideas = d.activities.filter(a => !a.date);
   const outside = d.activities.filter(a => a.date && !days.includes(a.date));
-  const todo = `<section class="reste" aria-labelledby="reste-t"><h2 id="reste-t">Reste à caler</h2>${pts.length
+  const trouve = bandeauTaureau(d);
+  const todo = trouve + `<section class="reste" aria-labelledby="reste-t"><h2 id="reste-t">Reste à caler</h2>${pts.length
     ? `<ul>${pts.map(p => `<li><button type="button" data-act="tab" data-tab="${p.tab}">${esc(p.txt)}</button></li>`).join('')}</ul>`
     : `<p class="cale">Tout est calé.</p>`}</section>`;
   const grid = days.length
@@ -987,7 +1060,7 @@ function viewProgramme(d) {
   return todo + grid + idHtml + outHtml;
 }
 function ideaRow(d, a) {
-  return `<li><div class="ligne ligne--sans-h"><div><b>${esc(a.title)}</b>${a.notes ? `<p class="note">${esc(a.notes)}</p>` : ''}</div></div>
+  return `<li data-cache="${esc(a.id)}"><div class="ligne ligne--sans-h"><div><b>${esc(a.title)}</b>${a.notes ? `<p class="note">${esc(a.notes)}</p>` : ''}</div></div>
     <div class="cote">${a.booking !== 'non' ? `<span class="badge badge--${a.booking}">${BOOKING[a.booking]}</span>` : ''}${planSelect(d, a)}</div></li>`;
 }
 
@@ -1010,7 +1083,7 @@ function flightCard(d, f) {
     price ? ['Prix', `${money(price)}${per && pax.length > 1 ? ` (${money(per)} par personne)` : ''}`] : null,
     f.paidBy && price ? ['Payé par', tName(d, f.paidBy)] : null
   ].filter(Boolean);
-  return `<article class="fiche fiche--vol">
+  return `<article class="fiche fiche--vol" data-cache="${esc(f.id)}">
     <div class="fiche-tete"><span class="etiquette">${DIR[f.direction] || 'Vol'}</span><span class="muet">${esc([f.airline, f.number].filter(Boolean).join(' '))}</span></div>
     <div class="trajet">
       <div><span class="heure">${esc(timePart(f.depart) || '--:--')}</span><span class="lieu">${esc(f.from)}</span></div>
@@ -1043,7 +1116,7 @@ function stayCard(d, s) {
     price ? ['Prix', `${money(price)} (${money(price / n)} par personne)`] : null,
     s.paidBy && price ? ['Payé par', tName(d, s.paidBy)] : null
   ].filter(Boolean);
-  return `<article class="fiche fiche--logement">
+  return `<article class="fiche fiche--logement" data-cache="${esc(s.id)}">
     <h3>${esc(s.name || 'Logement')}</h3>
     ${s.address ? `<a class="lieu-lien" href="${esc(mapsUrl(s.address))}" target="_blank" rel="noopener">${icon('pin')}${esc(s.address)}</a>` : ''}
     <dl class="details">${rows.map(([k, v]) => `<dt>${k}</dt><dd>${esc(v)}</dd>`).join('')}</dl>
@@ -1074,7 +1147,7 @@ function activityRow(d, a, showDate) {
   const price = num(a.price);
   const url = safeUrl(a.url);
   const when = showDate ? `${cap(fmtShort(a.date))}${a.time ? ', ' + a.time : ''}` : '';
-  return `<li>
+  return `<li data-cache="${esc(a.id)}">
     <div class="ligne${a.date && !showDate ? '' : ' ligne--sans-h'}">
       ${a.date && !showDate ? `<span class="h">${esc(a.time || '')}</span>` : ''}
       <div>
@@ -1854,6 +1927,12 @@ const ACTIONS = {
   'edit-activity': b => activityForm(b.dataset.id),
   'add-expense': () => expenseForm(),
   'scan-receipt': () => scanReceipt(),
+  'jeu-muleta': () => jeuMuleta(),
+  'jeu-tapas': () => jeuTapas(),
+  'jeu-compas': () => jeuCompas(),
+  'taureau-cache': b => attraperTaureau(b),
+  'secousse-ios': () => activerSecousse(),
+  fiesta: () => fiesta('¡Fiesta!'),
   'edit-expense': b => expenseForm(b.dataset.id)
 };
 document.addEventListener('click', e => {
@@ -1861,7 +1940,7 @@ document.addEventListener('click', e => {
   const b = e.target.closest('[data-act]');
   if (!b || b.tagName === 'SELECT') return;
   const fn = ACTIONS[b.dataset.act];
-  if (fn && (canEdit() || ['settings', 'photo', 'tab', 'retry'].includes(b.dataset.act))) fn(b);
+  if (fn && (canEdit() || ['settings', 'photo', 'tab', 'retry', 'jeu-muleta', 'jeu-tapas', 'jeu-compas', 'taureau-cache', 'secousse-ios', 'fiesta'].includes(b.dataset.act))) fn(b);
 });
 document.addEventListener('keydown', e => {
   const row = e.target.closest && e.target.closest('tr[data-act]');
@@ -2100,8 +2179,8 @@ function bulle(s, texte, x, ms) {
 }
 
 /* 1. Une ou deux bailaoras traversent en dansant, avec une vuelta au milieu */
-function sceneBailaoras(s) {
-  const wD = largeur(s, 'bailaora'), n = Math.random() < .45 ? 2 : 1, ecart = 1300;
+function sceneBailaoras(s, { n: nForce, texte } = {}) {
+  const wD = largeur(s, 'bailaora'), n = nForce || (Math.random() < .45 ? 2 : 1), ecart = 1300;
   const x0 = horsG(wD), x1 = horsD(s, wD), dist = x1 - x0, dur = dist / vitDanse(s);
   s.total = dur + ecart * (n - 1);
   melange(ROBES).slice(0, n).forEach((robe, i) => {
@@ -2110,6 +2189,7 @@ function sceneBailaoras(s) {
       [[t0, x0, 1], [t0 + dur * .44, x0 + dist * .46, 1], [t0 + dur * .6, x0 + dist * .52, 1], [t0 + dur, x1, 1]], { z: 3 + i });
     at(s, t0 + dur * .44, () => el.querySelector('.tour').animate(TOUR, { duration: dur * .16, easing: 'ease-in-out' }));
   });
+  if (texte) bulle(s, texte, x0 + dist * .48, dur * .44);
 }
 
 /* 2. Le taureau charge la muleta d'un torero qui recule en courant */
@@ -2260,17 +2340,17 @@ function sceneTapeo(s) {
   at(s, tRepart, () => { cam.classList.add('marche'); tor.classList.add('marche'); });
 }
 
-/* 8. La muleta (souris) : sur ordinateur, le taureau suit le curseur en drapeau rouge.
-   Chaque passe frôlée compte un ¡Olé!, il finit par se lasser et sort. Record gardé sur l'appareil. */
-const souris = { x: -1, y: -1, t: 0, dedans: false };
-addEventListener('pointermove', e => { if (e.pointerType === 'mouse') { souris.x = e.clientX; souris.y = e.clientY; souris.t = performance.now(); souris.dedans = true; } }, { passive: true });
+/* 8. La muleta : sur ordinateur, le curseur est un drapeau rouge que le taureau suit quand il passe.
+   Dans l'onglet Fiesta, le jeu « Toréer » marche aussi au doigt. Chaque passe frôlée compte un ¡Olé!. */
+const souris = { x: -1, y: -1, t: 0, dedans: false, appui: false, type: 'mouse' };
+addEventListener('pointermove', e => { if (e.pointerType === 'mouse') { souris.x = e.clientX; souris.y = e.clientY; souris.t = performance.now(); souris.dedans = true; souris.type = 'mouse'; } }, { passive: true });
 document.documentElement.addEventListener('mouseleave', () => { souris.dedans = false; });
 const sourisActive = () => window.matchMedia('(pointer: fine)').matches && souris.dedans && performance.now() - souris.t < 10000;
 function bulleLibre(texte, x, y, cls = '') {
   const b = document.createElement('span');
   b.className = 'bulle' + (cls ? ' ' + cls : '');
   b.textContent = texte;
-  b.style.left = Math.max(60, Math.min(window.innerWidth - 60, x)) + 'px';
+  b.style.left = Math.max(70, Math.min(window.innerWidth - 70, x)) + 'px';
   b.style.top = Math.max(4, y) + 'px';
   $('#arene').appendChild(b);
   b.animate([
@@ -2278,38 +2358,43 @@ function bulleLibre(texte, x, y, cls = '') {
     { opacity: 1, transform: 'translateX(-50%) translateY(0) scale(1.12)', offset: .2 },
     { opacity: 1, transform: 'translateX(-50%) translateY(-4px) scale(1)', offset: .75 },
     { opacity: 0, transform: 'translateX(-50%) translateY(-16px) scale(1)' }
-  ], { duration: 1400, easing: 'ease-out', fill: 'both' }).finished.then(() => b.remove(), () => b.remove());
+  ], { duration: cls.includes('grande') ? 2200 : 1400, easing: 'ease-out', fill: 'both' }).finished.then(() => b.remove(), () => b.remove());
 }
-function sceneMuleta() {
-  const H = Math.max(90, Math.min(150, window.innerHeight * .2)), w = H * RATIO.toro, gen = paradeGen;
+function sceneMuleta(j) {
+  const H = j ? Math.max(110, Math.min(180, window.innerHeight * .24)) : Math.max(90, Math.min(150, window.innerHeight * .2));
+  const w = H * RATIO.toro, gen = paradeGen;
   const el = document.createElement('div');
   el.className = 'taureau-libre';
   el.style.width = w + 'px';
   el.style.height = H + 'px';
   el.innerHTML = `<div class="tour">${toroSvg()}</div>`;
-  $('#arene').appendChild(el);
-  let x = souris.x < window.innerWidth / 2 ? window.innerWidth + w : -w;
-  let y = Math.max(H / 2, Math.min(window.innerHeight - H / 2, souris.y));
+  (j ? j.el : $('#arene')).appendChild(el);
+  let x = souris.x >= 0 && souris.x < window.innerWidth / 2 ? window.innerWidth + w : -w;
+  let y = souris.y >= 0 ? Math.max(H / 2, Math.min(window.innerHeight - H / 2, souris.y)) : window.innerHeight * .6;
   let vx = 0, vy = 0, face = x < 0 ? 1 : -1, passes = 0, proche = false, lasse = false, dernier = 0, prev = performance.now();
   const debut = prev;
+  let dernierActif = prev;
+  const actif = () => j ? (souris.appui || (souris.type === 'mouse' && souris.dedans && performance.now() - souris.t < 2500)) : sourisActive();
   return new Promise(fin => {
     const sortie = () => {
       el.remove();
-      let rec = 0;
-      try { rec = Number(store.get('record-oles')) || 0; } catch { /* idem */ }
-      if (passes > rec && passes >= 2) { store.set('record-oles', String(passes)); bulleLibre(`¡Récord! ${passes} olés`, window.innerWidth / 2, window.innerHeight * .3, 'record'); }
+      if (j) { j.resultat(passes, 'olés', 'oles', jeuMuleta); fin(); return; }
+      const r = enregistrerScore('oles', passes);
+      if (r.record && passes >= 2) bulleLibre(`¡Récord! ${passes} olés`, window.innerWidth / 2, window.innerHeight * .3, 'record');
       fin();
     };
     function pas(now) {
-      if (gen !== paradeGen) { el.remove(); fin(); return; }
+      if (gen !== paradeGen || (j && !j.actif)) { el.remove(); fin(); return; }
       const dt = Math.min(40, now - prev) / 1000;
       prev = now;
-      if (!lasse && (now - debut > 15000 || passes >= 8 || (!sourisActive() && now - debut > 3000))) {
+      if (actif()) dernierActif = now;
+      const ennui = j ? (now - debut > 25000 || now - dernierActif > 4500) : (now - debut > 15000 || passes >= 8 || (!actif() && now - debut > 3000));
+      if (!lasse && ennui) {
         lasse = true;
         bulleLibre(passes ? 'Bof…' : '¿Y la muleta?', x, y - H * .9);
       }
-      const tx = lasse ? (face > 0 ? window.innerWidth + w * 2 : -w * 2) : souris.x;
-      const ty = lasse ? y : souris.y;
+      const tx = lasse ? (face > 0 ? window.innerWidth + w * 2 : -w * 2) : (souris.x >= 0 ? souris.x : window.innerWidth / 2);
+      const ty = lasse ? y : (souris.y >= 0 ? souris.y : y);
       const dx = tx - x, dy = ty - y, d = Math.hypot(dx, dy) || 1, acc = 1500;
       vx = (vx + dx / d * acc * dt) * .996;
       vy = (vy + dy / d * acc * dt * .8) * .996;
@@ -2319,11 +2404,12 @@ function sceneMuleta() {
       y = Math.max(H * .4, Math.min(window.innerHeight - H * .4, y + vy * dt));
       if (Math.abs(vx) > 40) face = vx > 0 ? 1 : -1;
       /* Une passe : la tête du taureau frôle la muleta */
-      const hx = x + face * w * .39, pres = !lasse && Math.hypot(hx - souris.x, y - souris.y) < H * .55;
+      const hx = x + face * w * .39, pres = !lasse && actif() && Math.hypot(hx - souris.x, y - souris.y) < H * .55;
       if (pres && !proche && now - dernier > 700) {
         passes++;
         dernier = now;
-        bulleLibre(passes > 1 ? `¡Olé! ×${passes}` : '¡Olé!', souris.x, souris.y - 70);
+        if (j) j.score(passes);
+        bulleLibre(passes > 1 ? `¡Olé! ×${passes}` : '¡Olé!', souris.x, souris.y - 80);
       }
       proche = pres;
       el.style.transform = `translate(${(x - w / 2).toFixed(1)}px, ${(y - H / 2).toFixed(1)}px) scaleX(${face})`;
@@ -2344,15 +2430,598 @@ function planParade(delai) {
   clearTimeout(paradeT);
   if (!animOn()) return;
   paradeT = setTimeout(() => {
-    if (document.hidden || dlg.open || !$('#parade').clientHeight) { planParade(1500); return; } /* on attend que l'écran soit libre */
+    if (document.hidden || dlg.open || jeuActif || !$('#parade').clientHeight) { planParade(1500); return; } /* on attend que l'écran soit libre */
     if (sourisActive() && Math.random() < .3) { sceneMuleta().then(() => planParade(5000 + Math.random() * 8000)); return; }
     const s = nouvelleScene();
     tirerScene()(s);
     planParade(s.total + 5000 + Math.random() * 8000);
   }, delai ?? 6000 + Math.random() * 8000);
 }
-function stopParade() { paradeGen++; clearTimeout(paradeT); $('#parade').innerHTML = ''; $('#arene').innerHTML = ''; }
+function stopParade() { paradeGen++; clearTimeout(paradeT); $('#parade').innerHTML = ''; [...$('#arene').children].forEach(c => { if (!c.classList.contains('jeu')) c.remove(); }); }
 const majCurseur = () => document.documentElement.classList.toggle('muleta', animOn());
+/* Lance une scène tout de suite (récompenses, fiesta, secousse), en plus de la parade habituelle */
+function lanceScene(fn, opts) {
+  if (!animOn() || !$('#parade').clientHeight) return null;
+  const s = nouvelleScene();
+  fn(s, opts);
+  return s;
+}
+
+/* ================= Jeux ================= */
+const UNITES = { oles: 'olés', tapas: 'points', compas: 'points' };
+const NOMS_JEUX = { oles: 'Toréer', tapas: 'Attrape la tapa', compas: 'Castañuelas' };
+const scoresPropres = o => Object.fromEntries(Object.entries(o && typeof o === 'object' ? o : {})
+  .filter(([, v]) => Number.isFinite(+v) && +v > 0).map(([k, v]) => [k, Math.round(+v)]));
+function normJeux(j) {
+  j = j && typeof j === 'object' ? j : {};
+  const c = j.cache && typeof j.cache === 'object' && typeof j.cache.cible === 'string' ? j.cache : null;
+  return {
+    oles: scoresPropres(j.oles), tapas: scoresPropres(j.tapas), compas: scoresPropres(j.compas), trouvailles: scoresPropres(j.trouvailles),
+    cache: c ? { cible: c.cible, depuis: String(c.depuis || ''), dernier: c.dernier && typeof c.dernier === 'object' ? { par: String(c.dernier.par || ''), le: String(c.dernier.le || '') } : null } : null
+  };
+}
+function meilleurScore(jeu) {
+  const moi = me();
+  const local = Number(store.get('best-' + jeu)) || 0;
+  const partage = moi && S.data ? (S.data.jeux[jeu][moi.id] || 0) : 0;
+  return Math.max(local, partage);
+}
+/* Garde le record sur l'appareil, et au classement du groupe si on a la clé d'édition et un prénom */
+function enregistrerScore(jeu, score) {
+  const avant = meilleurScore(jeu);
+  if (!(score > 0)) return { record: false, avant };
+  if (score > (Number(store.get('best-' + jeu)) || 0)) store.set('best-' + jeu, String(score));
+  const moi = me();
+  if (moi && canEdit() && S.data && score > (S.data.jeux[jeu][moi.id] || 0)) {
+    commit(`bat son record à « ${NOMS_JEUX[jeu]} » : ${score} ${UNITES[jeu]}`, d => { if (score > (d.jeux[jeu][moi.id] || 0)) d.jeux[jeu][moi.id] = score; });
+  }
+  return { record: score > avant, avant };
+}
+
+/* Son : castagnettes et palmas synthétisées (aucun fichier à charger) */
+let audioCtx = null, bruitBuf = null;
+function audio() {
+  try {
+    if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+    if (audioCtx.state === 'suspended') audioCtx.resume();
+    if (!bruitBuf) {
+      bruitBuf = audioCtx.createBuffer(1, Math.floor(audioCtx.sampleRate * .15), audioCtx.sampleRate);
+      const ch = bruitBuf.getChannelData(0);
+      for (let i = 0; i < ch.length; i++) ch[i] = Math.random() * 2 - 1;
+    }
+    return audioCtx;
+  } catch { return null; }
+}
+function son(type) {
+  const ctx = audioCtx && audioCtx.state === 'running' ? audioCtx : null;
+  if (!ctx) return;
+  const t = ctx.currentTime;
+  const reglages = { clac: [2900, 5, .9, .055], palma: [1250, 1.1, .32, .09], acc: [1100, 1, .55, .12] }[type];
+  const src = ctx.createBufferSource();
+  src.buffer = bruitBuf;
+  const f = ctx.createBiquadFilter();
+  f.type = 'bandpass';
+  f.frequency.value = reglages[0];
+  f.Q.value = reglages[1];
+  const g = ctx.createGain();
+  g.gain.setValueAtTime(reglages[2], t);
+  g.gain.exponentialRampToValueAtTime(.001, t + reglages[3]);
+  src.connect(f).connect(g).connect(ctx.destination);
+  src.start(t);
+  src.stop(t + .15);
+  if (type === 'clac') {
+    const o = ctx.createOscillator(), og = ctx.createGain();
+    o.frequency.value = 1900;
+    og.gain.setValueAtTime(.22, t);
+    og.gain.exponentialRampToValueAtTime(.001, t + .03);
+    o.connect(og).connect(ctx.destination);
+    o.start(t);
+    o.stop(t + .04);
+  }
+}
+
+/* Cadre commun des jeux : calque plein écran, score, temps, bouton pour quitter, écran de fin */
+let jeuActif = null;
+function ouvrirJeu(titre, aide, { clair = false } = {}) {
+  if (jeuActif) jeuActif.fermer();
+  const el = document.createElement('div');
+  el.className = 'jeu' + (clair ? ' jeu--clair' : '');
+  el.innerHTML = `<div class="jeu-hud"><b>${esc(titre)}</b><span class="jeu-score">0</span><span class="jeu-temps"></span><button type="button" class="jeu-x" aria-label="Quitter le jeu">${icon('x')}</button></div><p class="jeu-aide">${esc(aide)}</p>`;
+  $('#arene').appendChild(el);
+  const nettoyages = [];
+  const touche = e => { if (e.key === 'Escape') j.fermer(); };
+  const j = {
+    el, actif: true,
+    score: v => { el.querySelector('.jeu-score').textContent = v; },
+    temps: ms => { el.querySelector('.jeu-temps').textContent = ms > 0 ? Math.ceil(ms / 1000) + ' s' : ''; },
+    nettoyer: fn => nettoyages.push(fn),
+    fermer() {
+      if (!j.actif) return;
+      j.actif = false;
+      nettoyages.forEach(fn => { try { fn(); } catch { /* rien */ } });
+      removeEventListener('keydown', touche);
+      el.remove();
+      if (jeuActif === j) jeuActif = null;
+      document.documentElement.classList.remove('en-jeu');
+    },
+    resultat(score, unite, jeu, rejouer) {
+      if (!j.actif) return;
+      const r = enregistrerScore(jeu, score);
+      const moi = me();
+      const note = !moi ? 'Choisis ton prénom dans Réglages pour entrer au classement.'
+        : !canEdit() ? 'Score gardé sur cet appareil : il faut le lien d’édition pour le classement du groupe.' : '';
+      const meilleur = Math.max(r.avant, score);
+      const p = document.createElement('div');
+      p.className = 'jeu-fin';
+      p.innerHTML = `<p class="jeu-fin-titre">${score > 0 ? (r.record ? '¡Récord!' : '¡Olé!') : '¡Ay!'}</p>
+        <p class="jeu-fin-score">${score} ${esc(unite)}</p>
+        ${meilleur ? `<p class="muet">Ton meilleur score : ${meilleur} ${esc(unite)}</p>` : ''}
+        ${note ? `<p class="aide">${esc(note)}</p>` : ''}
+        <div class="boutons"><button type="button" class="btn" data-fin="fermer">Fermer</button><button type="button" class="btn btn--primary" data-fin="rejouer">Rejouer</button></div>`;
+      el.appendChild(p);
+      p.addEventListener('pointerdown', e => e.stopPropagation());
+      p.addEventListener('click', e => {
+        const b = e.target.closest('[data-fin]');
+        if (!b) return;
+        j.fermer();
+        if (b.dataset.fin === 'rejouer') rejouer();
+      });
+    }
+  };
+  const x = el.querySelector('.jeu-x');
+  x.addEventListener('pointerdown', e => e.stopPropagation());
+  x.addEventListener('click', () => j.fermer());
+  addEventListener('keydown', touche);
+  document.documentElement.classList.add('en-jeu');
+  jeuActif = j;
+  return j;
+}
+const acteurLibre = (html, w, h, cls = '') => {
+  const el = document.createElement('div');
+  el.className = 'acteur-libre' + (cls ? ' ' + cls : '');
+  el.style.width = w + 'px';
+  el.style.height = h + 'px';
+  el.innerHTML = `<div class="tour">${html}</div>`;
+  return el;
+};
+
+/* --- Jeu 1 : Toréer (muleta au doigt ou à la souris) --- */
+function capaMiniSvg() {
+  return `<svg viewBox="-4 82 66 88" xmlns="http://www.w3.org/2000/svg"><g class="p-capa">
+    <path d="M46 86 C33 84 15 86 1 92 C-3 118 -1 142 5 164 Q17 157 27 166 Q38 157 49 161 C53 136 51 110 46 86 Z" fill="#B3202E"/>
+    <path d="M17 92 C14 118 15 140 17 160 M33 90 C32 116 34 140 37 160" fill="none" stroke="#7D1520" stroke-width="1.6" opacity=".6"/>
+    <path d="M39 87 L59 85" stroke="#6B4A2A" stroke-width="3" stroke-linecap="round"/></g></svg>`;
+}
+function jeuMuleta() {
+  if (!S.data) return;
+  const j = ouvrirJeu('Toréer', 'Garde le doigt sur l’écran (ou bouge la souris) : le taureau suit ta muleta. Chaque passe frôlée = un ¡Olé!', { clair: true });
+  const mul = document.createElement('div');
+  mul.className = 'muleta-doigt';
+  mul.innerHTML = capaMiniSvg();
+  mul.hidden = true;
+  j.el.appendChild(mul);
+  const maj = e => {
+    souris.x = e.clientX; souris.y = e.clientY; souris.t = performance.now(); souris.dedans = true; souris.type = e.pointerType;
+    if (e.pointerType !== 'mouse') { mul.hidden = !souris.appui; mul.style.transform = `translate(${e.clientX - 34}px, ${e.clientY - 96}px)`; }
+  };
+  j.el.addEventListener('pointerdown', e => { souris.appui = true; maj(e); });
+  j.el.addEventListener('pointermove', maj);
+  const leve = () => { souris.appui = false; mul.hidden = true; };
+  j.el.addEventListener('pointerup', leve);
+  j.el.addEventListener('pointercancel', leve);
+  j.nettoyer(leve);
+  sceneMuleta(j);
+}
+
+/* --- Jeu 2 : Attrape la tapa --- */
+const TAPAS = {
+  jamon: { pts: 3, taille: 60, g: 1.15, svg: '<svg viewBox="0 0 60 40" xmlns="http://www.w3.org/2000/svg"><ellipse cx="30" cy="28" rx="27" ry="9" fill="#FBF7F0" stroke="#D8D2C8" stroke-width="1.5"/><path d="M8 26 Q14 12 22 22 Q28 10 36 22 Q44 11 52 25 Q44 31 30 30 Q16 31 8 26 Z" fill="#C8506A"/><path d="M13 22 Q17 18 20 22 M26 19 Q30 15 33 20 M40 20 Q44 17 47 22" fill="none" stroke="#FBF7F0" stroke-width="1.6"/></svg>' },
+  pescaito: { pts: 2, taille: 52, g: 1, svg: '<svg viewBox="0 0 40 50" xmlns="http://www.w3.org/2000/svg"><ellipse cx="14" cy="15" rx="4.5" ry="10" fill="#D9A03A" transform="rotate(-22 14 15)"/><ellipse cx="20" cy="11" rx="4.5" ry="11" fill="#E2B04A"/><ellipse cx="26" cy="15" rx="4.5" ry="10" fill="#C98A1B" transform="rotate(22 26 15)"/><path d="M7 19 L20 48 L33 19 Z" fill="#F2E6D0" stroke="#D8C9AE" stroke-width="1.5"/><path d="M11 25 H29" stroke="#B3202E" stroke-width="2"/></svg>' },
+  aceituna: { pts: 1, taille: 36, g: .9, svg: '<svg viewBox="0 0 30 30" xmlns="http://www.w3.org/2000/svg"><ellipse cx="15" cy="15" rx="10" ry="13" fill="#6B8E23" stroke="#4E6B17" stroke-width="1.5" transform="rotate(-25 15 15)"/><circle cx="18" cy="8" r="3.4" fill="#B3202E"/><ellipse cx="11" cy="16" rx="2.4" ry="5" fill="#9CBF4A" opacity=".6" transform="rotate(-25 11 16)"/></svg>' }
+};
+function jeuTapas() {
+  if (!S.data) return;
+  audio();
+  const j = ouvrirJeu('Attrape la tapa', 'Le camarero va trébucher : touche les tapas avant qu’elles tombent par terre. Jamón 3 pts, pescaíto 2, aceituna 1.');
+  const W = window.innerWidth, Hh = window.innerHeight, sol = Hh - 34, duree = 30000;
+  const hC = Math.max(120, Math.min(190, Hh * .22)), wC = hC * RATIO.torero, yC = Math.max(64, Hh * .14);
+  const grav = 900 * Math.max(.7, Hh / 800);
+  j.el.insertAdjacentHTML('beforeend', '<div class="jeu-sol"></div>');
+  let score = 0, items = [], cam = null, fini = false;
+  const debut = performance.now();
+  let prochain = debut + 700, prev = debut, finA = 0;
+  function nouveauCamarero(now) {
+    const dir = Math.random() < .5 ? 1 : -1;
+    const el = acteurLibre(camareroSvg(), wC, hC, 'marche');
+    j.el.appendChild(el);
+    const avance = (now - debut) / duree;
+    cam = { el, dir, x: dir > 0 ? -wC : W + wC, xTrip: W * (.22 + Math.random() * .56), v: Math.max(.16, W / 5000) * (1 + avance * .7), etat: 'marche' };
+  }
+  function trebuche(now) {
+    cam.etat = 'chute';
+    cam.el.classList.add('sans-tapas');
+    cam.el.classList.remove('marche');
+    cam.el.querySelector('.tour').animate([{ transform: 'rotate(0)' }, { transform: 'rotate(26deg)', offset: .35 }, { transform: 'rotate(-6deg)', offset: .7 }, { transform: 'rotate(0)' }], { duration: 900, easing: 'ease-out' });
+    bulleLibre('¡Ay!', cam.x, yC - 34);
+    const tx = cam.x + cam.dir * (30 / 200) * wC, ty = yC + (22 / 210) * hC;
+    const n = 3 + Math.floor(Math.random() * 3) + Math.floor((now - debut) / 12000);
+    for (let i = 0; i < n; i++) {
+      const r = Math.random(), type = r < .25 ? 'jamon' : r < .6 ? 'pescaito' : 'aceituna', T = TAPAS[type];
+      const el = document.createElement('div');
+      el.className = 'tapa';
+      el.style.width = T.taille + 'px';
+      el.innerHTML = T.svg;
+      j.el.appendChild(el);
+      items.push({ el, type, x: tx, y: ty, vx: cam.dir * (60 + Math.random() * 200) + (Math.random() - .5) * 160, vy: -(240 + Math.random() * 220), rot: 0, vr: (Math.random() - .5) * 600 });
+    }
+    const c = cam;
+    setTimeout(() => { if (c === cam) { c.etat = 'repart'; c.el.classList.add('marche'); } }, 900);
+  }
+  j.el.addEventListener('pointerdown', e => {
+    let best = null, bd = Infinity;
+    for (const it of items) {
+      if (it.mort) continue;
+      const d = Math.hypot(e.clientX - it.x, e.clientY - it.y);
+      if (d < TAPAS[it.type].taille * .75 + 16 && d < bd) { best = it; bd = d; }
+    }
+    if (!best) return;
+    best.mort = true;
+    score += TAPAS[best.type].pts;
+    j.score(score);
+    son('clac');
+    bulleLibre('+' + TAPAS[best.type].pts, best.x, best.y - 50, 'plus');
+    best.el.animate([{ transform: best.el.style.transform + ' scale(1)', opacity: 1 }, { transform: best.el.style.transform + ' scale(1.6)', opacity: 0 }], { duration: 260, easing: 'ease-out' })
+      .finished.then(() => best.el.remove(), () => best.el.remove());
+  });
+  function pas(now) {
+    if (!j.actif) return;
+    const dt = Math.min(40, now - prev) / 1000;
+    prev = now;
+    const reste = duree - (now - debut);
+    j.temps(reste);
+    if (reste <= 0 && !fini) { fini = true; finA = now; }
+    if (!cam && !fini && now >= prochain) nouveauCamarero(now);
+    if (cam) {
+      if (cam.etat !== 'chute') cam.x += cam.dir * cam.v * dt * 1000;
+      if (cam.etat === 'marche' && (cam.dir > 0 ? cam.x >= cam.xTrip : cam.x <= cam.xTrip)) trebuche(now);
+      cam.el.style.transform = `translate(${(cam.x - wC / 2).toFixed(1)}px, ${yC.toFixed(1)}px) scaleX(${cam.dir})`;
+      if (cam.x < -wC * 1.2 || cam.x > W + wC * 1.2) { cam.el.remove(); cam = null; prochain = now + 400 + Math.random() * 700; }
+    }
+    for (const it of items) {
+      if (it.mort) continue;
+      it.vy += grav * TAPAS[it.type].g * dt;
+      it.x += it.vx * dt;
+      it.y += it.vy * dt;
+      it.rot += it.vr * dt;
+      if (it.x < 20 || it.x > W - 20) { it.vx *= -.6; it.x = Math.max(20, Math.min(W - 20, it.x)); }
+      const T = TAPAS[it.type];
+      if (it.y >= sol - T.taille * .3) {
+        it.mort = true;
+        it.y = sol - T.taille * .3;
+        if (it.type === 'jamon') bulleLibre('¡Plaf!', it.x, sol - 70, 'plaf');
+        it.el.animate([{ opacity: 1 }, { opacity: 0 }], { duration: 700, delay: 300, fill: 'forwards' }).finished.then(() => it.el.remove(), () => it.el.remove());
+      }
+      it.el.style.transform = `translate(${(it.x - T.taille / 2).toFixed(1)}px, ${(it.y - T.taille / 2).toFixed(1)}px) rotate(${it.rot.toFixed(0)}deg)`;
+    }
+    items = items.filter(it => !it.mort || it.el.isConnected);
+    if (fini && !cam && (items.every(it => it.mort) || now - finA > 3000)) { j.resultat(score, 'points', 'tapas', jeuTapas); return; }
+    if (fini && cam && cam.etat === 'marche') { cam.etat = 'repart'; }
+    requestAnimationFrame(pas);
+  }
+  requestAnimationFrame(pas);
+}
+
+/* --- Jeu 3 : Castañuelas (tenir le compás) --- */
+function jeuCompas() {
+  if (!S.data) return;
+  audio();
+  const j = ouvrirJeu('Castañuelas', 'Tape sur l’écran en même temps que les palmas. Tiens le compás : la bailaora danse de plus en plus vite.');
+  const W = window.innerWidth, Hh = window.innerHeight;
+  const hD = Math.min(Hh * .46, 340), wD = hD * RATIO.bailaora;
+  j.el.insertAdjacentHTML('beforeend', '<div class="compas-anneau"></div><p class="compas-retour"></p>');
+  const dz = acteurLibre(bailaoraSvg(melange(ROBES)[0]), wD, hD, 'compas-danseuse');
+  dz.style.transform = `translate(${(W / 2 - wD / 2).toFixed(1)}px, ${(Hh * .56 - hD / 2).toFixed(1)}px)`;
+  j.el.appendChild(dz);
+  const anneau = j.el.querySelector('.compas-anneau'), retour = j.el.querySelector('.compas-retour');
+  const parts = { jupe: [dz.querySelector('.p-jupe'), .84], danse: [dz.querySelector('.p-danse'), .42], a: [dz.querySelector('.p-bras-a'), 1.7], b: [dz.querySelector('.p-bras-b'), 1.7] };
+  const debut = performance.now(), duree = 30000;
+  let bpm = 88, beatMs = 60000 / bpm, prochainBeat = debut + 900, dernierBeat = -1e9, indexBeat = 0, combo = 0, score = 0;
+  const notes = new Set();
+  const vitesse = () => {
+    const f = 1 + Math.min(combo, 24) * .07;
+    for (const [el, base] of Object.values(parts)) if (el) el.style.animationDuration = (base / f).toFixed(3) + 's';
+  };
+  const montre = (txt, cls) => {
+    retour.textContent = txt;
+    retour.className = 'compas-retour ' + cls;
+    retour.animate([{ transform: 'translateX(-50%) scale(.7)', opacity: 0 }, { transform: 'translateX(-50%) scale(1.1)', opacity: 1, offset: .3 }, { transform: 'translateX(-50%) scale(1)', opacity: 0 }], { duration: 650, easing: 'ease-out' });
+  };
+  j.el.addEventListener('pointerdown', () => {
+    const now = performance.now();
+    son('clac');
+    if (now - debut > duree) return;
+    const dPrev = now - dernierBeat, dNext = prochainBeat - now;
+    const proche = dPrev <= dNext ? { i: indexBeat, d: dPrev } : { i: indexBeat + 1, d: dNext };
+    if (proche.d <= 120 && !notes.has(proche.i)) {
+      notes.add(proche.i);
+      combo++;
+      const parfait = proche.d <= 55;
+      score += parfait ? 2 : 1;
+      j.score(score);
+      montre(parfait ? '¡Olé!' : '¡Bien!', 'ok');
+      if (combo % 8 === 0) {
+        dz.querySelector('.tour').animate(TOUR, { duration: 700, easing: 'ease-in-out' });
+        bpm = Math.min(152, bpm + 8);
+        beatMs = 60000 / bpm;
+      }
+    } else {
+      combo = 0;
+      montre('¡Uy!', 'ko');
+      dz.querySelector('.tour').animate([{ transform: 'rotate(0)' }, { transform: 'rotate(-9deg) translateX(-4%)' }, { transform: 'rotate(6deg)' }, { transform: 'rotate(0)' }], { duration: 500, easing: 'ease-out' });
+      bpm = Math.max(84, bpm - 4);
+      beatMs = 60000 / bpm;
+    }
+    vitesse();
+  });
+  function pas(now) {
+    if (!j.actif) return;
+    const reste = duree - (now - debut);
+    j.temps(reste);
+    if (reste <= 0) { j.resultat(score, 'points', 'compas', jeuCompas); return; }
+    while (now >= prochainBeat) {
+      indexBeat++;
+      dernierBeat = prochainBeat;
+      const fort = indexBeat % 4 === 1;
+      son(fort ? 'acc' : 'palma');
+      anneau.classList.toggle('fort', fort);
+      anneau.animate([{ transform: 'translateX(-50%) scale(1.35)', opacity: 1 }, { transform: 'translateX(-50%) scale(1)', opacity: .55 }], { duration: Math.min(380, beatMs * .8), easing: 'ease-out' });
+      prochainBeat += beatMs;
+    }
+    requestAnimationFrame(pas);
+  }
+  requestAnimationFrame(pas);
+}
+
+/* ================= Taureau caché ================= */
+/* Un petit taureau se cache derrière une carte (un jour, un vol, un logement, une activité).
+   Le premier qui le touche gagne un ¡Olé! affiché à tout le groupe ; il se recache ailleurs 4 h plus tard. */
+const cibles = d => [...tripDays(d).map(x => 'jour-' + x), ...d.flights.map(f => f.id), ...d.stays.map(s => s.id), ...d.activities.map(a => a.id)];
+const auHasard = l => l[Math.floor(Math.random() * l.length)];
+function miniToroSvg() {
+  return `<svg viewBox="0 0 60 44" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17 24 C9 20 5 11 8 3" fill="none" stroke="#F2E6D0" stroke-width="4.5" stroke-linecap="round"/>
+    <path d="M43 24 C51 20 55 11 52 3" fill="none" stroke="#F2E6D0" stroke-width="4.5" stroke-linecap="round"/>
+    <ellipse cx="11" cy="27" rx="7" ry="3.6" fill="#1E1515" transform="rotate(-20 11 27)"/>
+    <ellipse cx="49" cy="27" rx="7" ry="3.6" fill="#1E1515" transform="rotate(20 49 27)"/>
+    <path d="M14 46 C12 30 18 18 30 18 C42 18 48 30 46 46 Z" fill="#1E1515"/>
+    <circle cx="24" cy="30" r="4.2" fill="#FBF7F0"/><circle cx="36" cy="30" r="4.2" fill="#FBF7F0"/>
+    <circle cx="25.5" cy="30.5" r="2.1" fill="#1E1515"/><circle cx="37.5" cy="30.5" r="2.1" fill="#1E1515"/>
+    <ellipse cx="30" cy="41" rx="9" ry="5" fill="#3A2A28"/>
+  </svg>`;
+}
+function placerTaureauCache() {
+  const d = S.data;
+  if (!d) return;
+  const c = d.jeux.cache;
+  if (!c) {
+    if (canEdit() && !S.cacheDemande && cibles(d).length) {
+      S.cacheDemande = true;
+      setTimeout(() => commit('cache un taureau dans le site', dd => {
+        if (!dd.jeux.cache) dd.jeux.cache = { cible: auHasard(cibles(dd)), depuis: new Date().toISOString(), dernier: null };
+      }), 0);
+    }
+    return;
+  }
+  if (c.depuis && new Date(c.depuis) > new Date()) return;
+  const l = cibles(d);
+  const cible = l.includes(c.cible) ? c.cible : l[0];
+  if (!cible) return;
+  const hote = $(`#main [data-cache="${CSS.escape(cible)}"]`);
+  if (!hote) return;
+  const ligne = hote.tagName === 'LI';
+  hote.classList.add('cache-ici');
+  hote.insertAdjacentHTML('beforeend', `<button type="button" class="taureau-cache${ligne ? ' taureau-cache--ligne' : ''}" data-act="taureau-cache" aria-label="Un taureau se cache ici !">${miniToroSvg()}</button>`);
+}
+function attraperTaureau(btn) {
+  const d = S.data, c = d && d.jeux.cache;
+  if (!c) return;
+  const r = btn.getBoundingClientRect();
+  bulleLibre('¡Olé!', r.left + r.width / 2, r.top - 60, 'grande');
+  son('clac');
+  btn.remove();
+  pluieEventails(10);
+  const moi = me();
+  if (!canEdit()) { toast('¡Olé! Pour inscrire ton nom, il faut le lien d’édition.'); return; }
+  if (!moi) { toast('¡Olé! Choisis ton prénom dans Réglages pour que le groupe le sache.'); return; }
+  const cibleTrouvee = c.cible;
+  commit('a trouvé le taureau caché', dd => {
+    const cc = dd.jeux.cache;
+    if (!cc || cc.cible !== cibleTrouvee || (cc.depuis && new Date(cc.depuis) > new Date())) return dd; /* quelqu’un l’a eu avant */
+    dd.jeux.trouvailles[moi.id] = (dd.jeux.trouvailles[moi.id] || 0) + 1;
+    const autres = cibles(dd).filter(x => x !== cibleTrouvee);
+    dd.jeux.cache = { cible: autres.length ? auHasard(autres) : cibleTrouvee, depuis: new Date(Date.now() + 4 * 3600000).toISOString(), dernier: { par: moi.id, le: new Date().toISOString() } };
+    return dd;
+  });
+}
+function bandeauTaureau(d) {
+  const c = d.jeux.cache;
+  if (!c || !c.dernier || !c.dernier.par) return '';
+  const le = new Date(c.dernier.le);
+  if (isNaN(le) || Date.now() - le > 2 * 86400000) return '';
+  const dans = c.depuis ? Math.ceil((new Date(c.depuis) - Date.now()) / 3600000) : 0;
+  return `<p class="bandeau bandeau--ole"><b>¡Olé!</b> ${esc(tName(d, c.dernier.par) || 'Quelqu’un')} a trouvé le taureau caché. ${dans > 0 ? `Il revient se cacher dans ${dans} h.` : 'Il s’est déjà recaché ailleurs…'}</p>`;
+}
+
+/* ================= Fiesta, récompenses, secousse, mot magique ================= */
+function eventailSvg(c) {
+  let cotes = '';
+  for (let a = 215; a <= 325; a += 22) cotes += `<path d="M30 36 L${(30 + 31 * Math.cos(a * Math.PI / 180)).toFixed(1)} ${(36 + 31 * Math.sin(a * Math.PI / 180)).toFixed(1)}" stroke="rgba(0,0,0,.18)" stroke-width="1"/>`;
+  return `<svg viewBox="0 0 60 44" xmlns="http://www.w3.org/2000/svg"><path d="M30 36 L0 25 A32 32 0 0 1 60 25 Z" fill="${c.robe}"/>${cotes}
+    <circle cx="16" cy="18" r="2.2" fill="${c.pois}"/><circle cx="30" cy="11" r="2.2" fill="${c.pois}"/><circle cx="44" cy="18" r="2.2" fill="${c.pois}"/><circle cx="23" cy="25" r="2" fill="${c.pois}"/><circle cx="37" cy="25" r="2" fill="${c.pois}"/>
+    <rect x="27.5" y="34" width="5" height="9" rx="2" fill="#6B4A2A"/></svg>`;
+}
+function pluieEventails(n) {
+  if (!animOn()) return;
+  const W = window.innerWidth, H = window.innerHeight;
+  for (let i = 0; i < n; i++) {
+    const e = document.createElement('span');
+    e.className = 'eventail';
+    const taille = 36 + Math.random() * 36;
+    e.style.width = taille + 'px';
+    e.style.left = (Math.random() * (W - taille)) + 'px';
+    e.innerHTML = eventailSvg(auHasard(ROBES));
+    $('#arene').appendChild(e);
+    const s = 20 + Math.random() * 50, r0 = Math.random() * 360, sens = Math.random() < .5 ? 1 : -1;
+    e.animate([
+      { transform: `translate(0,-90px) rotate(${r0}deg)` },
+      { transform: `translate(${s}px,${H * .33}px) rotate(${r0 + 140 * sens}deg)` },
+      { transform: `translate(${-s}px,${H * .66}px) rotate(${r0 + 260 * sens}deg)` },
+      { transform: `translate(${s * .5}px,${H + 90}px) rotate(${r0 + 380 * sens}deg)` }
+    ], { duration: 3000 + Math.random() * 2200, delay: Math.random() * 1800, easing: 'linear', fill: 'both' }).finished.then(() => e.remove(), () => e.remove());
+  }
+}
+/* Toute la troupe défile : camarero en tête, trois bailaoras, le torero ferme la marche */
+function sceneFiesta(s) {
+  const { W } = s, wC = largeur(s, 'torero'), wD = largeur(s, 'bailaora'), v = Math.max(.13, W / 8000);
+  const membres = [{ t: 'cam', w: wC }, ...melange(ROBES).slice(0, 3).map(robe => ({ t: 'dz', w: wD, robe })), { t: 'tor', w: wC }];
+  let off = 0;
+  membres.forEach(m => { m.off = off; off += m.w * .72; });
+  const x0 = horsG(wC), dist = W + wC + 60 + off;
+  s.total = dist / v;
+  membres.forEach((m, i) => {
+    const a = x0 - m.off, f = m.t === 'tor' ? -1 : 1;
+    const html = m.t === 'cam' ? camareroSvg() : m.t === 'tor' ? toreroSvg() : bailaoraSvg(m.robe);
+    const el = acteur(s, html, m.t === 'dz' ? 'bailaora' : 'torero', [[0, a, f], [s.total, a + dist, f]], { z: 9 - i, cls: m.t === 'dz' ? '' : 'marche' });
+    if (m.t === 'dz') at(s, (W / 2 - a) / v - 400, () => el.querySelector('.tour').animate(TOUR, { duration: 900, easing: 'ease-in-out' }));
+  });
+}
+let fiestaT = 0;
+function fiesta(texte) {
+  if (Date.now() - fiestaT < 6000) return;
+  fiestaT = Date.now();
+  if (!animOn()) { toast('¡Olé! Active les animations dans Réglages pour la fiesta.'); return; }
+  audio();
+  [0, 140, 280, 560, 700].forEach(t => setTimeout(() => son('clac'), t));
+  pluieEventails(28);
+  lanceScene(sceneFiesta);
+  bulleLibre(texte, window.innerWidth / 2, window.innerHeight * .26, 'grande');
+}
+/* Récompenses : un point de « Reste à caler » réglé = tour d'honneur ; tout calé = grande parade.
+   Et quand quelqu'un trouve le taureau caché, tout le groupe le voit. */
+function recompenses() {
+  const d = S.data;
+  if (!d) return;
+  const nb = openPoints(d).length;
+  const dern = d.jeux.cache && d.jeux.cache.dernier ? d.jeux.cache.dernier.le : '';
+  if (S.nbReste !== undefined && animOn()) {
+    if (nb === 0 && S.nbReste > 0) {
+      pluieEventails(34);
+      lanceScene(sceneFiesta);
+      bulleLibre('¡Todo listo!', window.innerWidth / 2, window.innerHeight * .26, 'grande');
+    } else if (nb < S.nbReste) {
+      lanceScene(sceneBailaoras, { n: 1, texte: '¡Bien hecho!' });
+    }
+    if (dern && dern !== S.dernierTrouve) {
+      const qui = tName(d, d.jeux.cache.dernier.par);
+      if (qui) setTimeout(() => bulleLibre(`¡Olé, ${qui}!`, window.innerWidth / 2, window.innerHeight * .3, 'grande'), 600);
+    }
+  }
+  S.nbReste = nb;
+  S.dernierTrouve = dern;
+}
+/* Secouer le téléphone : le taureau charge à travers l'écran */
+function sceneTaureauFou(s) {
+  const wB = largeur(s, 'toro'), v = vitTaureau(s) * 1.5, a = horsG(wB), b = horsD(s, wB);
+  s.total = (b - a) / v;
+  acteur(s, toroSvg(), 'toro', [[0, a, 1], [s.total, b, 1]], { z: 8 });
+  bulle(s, '¡Toro!', s.W * .5, s.total * .3);
+}
+let pics = [], derniereSecousse = 0;
+addEventListener('devicemotion', e => {
+  const a = e.acceleration && e.acceleration.x !== null ? e.acceleration : null;
+  const g = e.accelerationIncludingGravity;
+  const m = a ? Math.hypot(a.x || 0, a.y || 0, a.z || 0) : g ? Math.abs(Math.hypot(g.x || 0, g.y || 0, g.z || 0) - 9.81) : 0;
+  if (m < 14) return;
+  const now = Date.now();
+  pics = pics.filter(t => now - t < 800);
+  pics.push(now);
+  if (pics.length >= 3 && now - derniereSecousse > 4000 && animOn() && !jeuActif) {
+    derniereSecousse = now;
+    pics = [];
+    tremble();
+    lanceScene(sceneTaureauFou);
+  }
+});
+const secousseIOS = () => typeof DeviceMotionEvent !== 'undefined' && typeof DeviceMotionEvent.requestPermission === 'function';
+async function activerSecousse() {
+  try {
+    const r = await DeviceMotionEvent.requestPermission();
+    if (r === 'granted') { store.set('secousse', '1'); toast('Secoue ton téléphone… ¡Toro!'); renderMain(); }
+    else toast('Mouvements refusés : réactive-les dans les réglages de Safari.', 'err');
+  } catch { toast('Impossible d’activer les mouvements sur ce téléphone.', 'err'); }
+}
+/* Mot magique : taper « olé » (hors des champs de saisie), ou toucher trois fois le titre */
+let tampon = '', tapsTitre = [];
+document.addEventListener('keydown', e => {
+  if (e.target && e.target.closest && e.target.closest('input, textarea, select, [contenteditable]')) return;
+  if (!e.key || e.key.length !== 1) return;
+  tampon = (tampon + e.key).slice(-6);
+  if (plainUp(tampon).endsWith('OLE')) { tampon = ''; fiesta('¡Olé!'); }
+});
+document.addEventListener('click', e => {
+  if (!e.target.closest || !e.target.closest('.fachada h1')) return;
+  const now = Date.now();
+  tapsTitre = tapsTitre.filter(t => now - t < 900);
+  tapsTitre.push(now);
+  if (tapsTitre.length >= 3) { tapsTitre = []; fiesta('¡Fiesta!'); }
+});
+
+/* ---------- Onglet Fiesta ---------- */
+function classement(d, jeu) {
+  return d.travelers.map((t, i) => ({ t, i, v: d.jeux[jeu][t.id] || 0 })).filter(x => x.v > 0).sort((a, b) => b.v - a.v);
+}
+function podiumHtml(l, unite) {
+  if (!l.length) return '<p class="muet">Personne n’a encore toréé. À toi de jouer !</p>';
+  const ordre = [[l[1], 2], [l[0], 1], [l[2], 3]];
+  return `<div class="podium">${ordre.map(([x, rang]) => x
+    ? `<div class="podium-place p${rang}">${avatarHtml(x.t, x.i, 'ini--grand')}<b>${esc(x.t.name)}</b><span>${x.v} ${unite}</span><div class="podium-bloc">${rang}</div></div>`
+    : '<div class="podium-place p-vide"></div>').join('')}</div>`;
+}
+function viewFiesta(d) {
+  const carte = (jeu, titre, texte, act) => {
+    const l = classement(d, jeu), mien = meilleurScore(jeu);
+    return `<article class="jeu-carte">
+      <h3>${titre}</h3><p>${texte}</p>
+      ${l.length ? `<ol class="mini-classement">${l.slice(0, 3).map(x => `<li>${avatarHtml(x.t, x.i, 'ini--petit')}<span>${esc(x.t.name)}</span><b>${x.v}</b></li>`).join('')}</ol>` : '<p class="muet">Pas encore de score.</p>'}
+      ${mien ? `<p class="aide">Ton meilleur : ${mien} ${UNITES[jeu]}</p>` : ''}
+      <button type="button" class="btn btn--primary" data-act="${act}">Jouer</button>
+    </article>`;
+  };
+  const c = d.jeux.cache;
+  const dans = c && c.depuis ? Math.ceil((new Date(c.depuis) - Date.now()) / 3600000) : 0;
+  const etatCache = !c ? 'Le taureau cherche encore une cachette…'
+    : dans > 0 ? `Trouvé${c.dernier ? ' par ' + esc(tName(d, c.dernier.par) || 'quelqu’un') : ''}. Il revient se cacher dans ${dans} h.`
+    : 'Un petit taureau se cache derrière une carte du site : un jour du programme, un vol, un logement ou une activité. Le premier qui le touche gagne un ¡Olé! que tout le groupe verra.';
+  const trouv = classement(d, 'trouvailles');
+  const secousse = secousseIOS() && store.get('secousse') !== '1'
+    ? '<button type="button" class="btn btn--petit" data-act="secousse-ios">Activer sur cet iPhone</button>' : '';
+  return `<div class="tete"><h2>Fiesta</h2><button type="button" class="btn" data-act="fiesta">¡Fiesta!</button></div>
+    <p class="intro-fiesta">Des petits jeux pour patienter jusqu’au départ. Les records entrent au classement du groupe avec ton prénom (Réglages → Toi).</p>
+    <section class="section"><h2>Mejor torero</h2><p class="intro">Record de passes avec la muleta.</p>${podiumHtml(classement(d, 'oles'), 'olés')}</section>
+    <section class="section"><h2>Les jeux</h2><div class="jeux-grille">
+      ${carte('oles', 'Toréer', 'Garde le doigt sur l’écran (ou la souris) : le taureau suit ta muleta. Chaque passe frôlée vaut un ¡Olé!', 'jeu-muleta')}
+      ${carte('tapas', 'Attrape la tapa', 'Le camarero trébuche et les tapas volent. Touche-les avant qu’elles tombent : jamón 3 pts, pescaíto 2, aceituna 1.', 'jeu-tapas')}
+      ${carte('compas', 'Castañuelas', 'Tape en rythme avec les palmas. Si tu tiens le compás, la bailaora danse de plus en plus vite.', 'jeu-compas')}
+    </div></section>
+    <section class="section"><h2>Le taureau caché</h2><p class="intro">${etatCache}</p>
+      ${trouv.length ? `<ol class="mini-classement">${trouv.map(x => `<li>${avatarHtml(x.t, x.i, 'ini--petit')}<span>${esc(x.t.name)}</span><b>${x.v} fois</b></li>`).join('')}</ol>` : ''}</section>
+    <section class="section"><h2>Secrets</h2><ul class="secrets">
+      <li><b>Secoue ton téléphone</b> : le taureau charge à travers l’écran. ${secousse}</li>
+      <li><b>Tape « olé »</b> au clavier, ou touche trois fois le titre en haut : fiesta !</li>
+      <li><b>Sur ordinateur</b>, ta souris est une muleta : quand le taureau passe, attire-le.</li>
+      <li><b>Coche ce qui reste à caler</b> : une bailaora vient faire un tour d’honneur. Quand tout est calé, grande parade.</li>
+    </ul></section>`;
+}
 
 /* ================= Entrée dans les arènes ================= */
 /* Au chargement : la façade des arènes sur fond noir, les portes s'ouvrent, on passe l'entrée
