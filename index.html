@@ -282,11 +282,29 @@ progress{width:100%;height:10px;accent-color:var(--rojo)}
 @media print{.onglets,.barre,.ajout-jour,.actions,.btn,#parade{display:none!important}}
 
 /* Parade : danseuses de flamenco et corrida qui traversent l'écran au premier plan */
-#parade{position:fixed;left:0;right:0;bottom:0;height:clamp(130px,24vh,230px);pointer-events:none;z-index:50;overflow:hidden}
-.passant{position:absolute;left:0;bottom:env(safe-area-inset-bottom,0px);height:100%;will-change:transform}
-.passant .flip,.passant .tour{height:100%}
-.passant svg{display:block;height:100%;width:100%;overflow:visible;filter:drop-shadow(0 8px 10px rgba(40,10,10,.22))}
-.ole{position:absolute;left:30%;top:-4%;font-family:var(--font-d);font-variation-settings:"SOFT" 100;font-weight:800;font-size:clamp(26px,5vh,40px);color:var(--rojo);text-shadow:0 2px 0 #FFFFFF,0 0 14px #FFFFFF;opacity:0;white-space:nowrap}
+/* La zone est plus haute que les personnages (×1.55) pour laisser la place à la muleta levée et aux ¡Olé! */
+#parade{position:fixed;left:0;right:0;bottom:0;height:calc(clamp(130px,24vh,230px) * 1.55);pointer-events:none;z-index:50;overflow:hidden}
+.acteur{position:absolute;left:0;bottom:env(safe-area-inset-bottom,0px);height:calc(100% / 1.55);will-change:transform}
+.acteur .tour{height:100%}
+.acteur svg{display:block;height:100%;width:100%;overflow:visible;filter:drop-shadow(0 8px 10px rgba(40,10,10,.22))}
+.bulle{position:absolute;top:8%;left:0;z-index:9;font-family:var(--font-d);font-variation-settings:"SOFT" 100;font-weight:800;font-size:clamp(26px,5vh,40px);color:var(--rojo);text-shadow:0 2px 0 #FFFFFF,0 0 14px #FFFFFF;opacity:0;white-space:nowrap}
+/* Torero : jambes, muleta levée (pase), bras levé (desplante) */
+.p-jambe-a{transform-box:view-box;transform-origin:97px 138px}
+.p-jambe-b{transform-box:view-box;transform-origin:106px 138px}
+.marche .p-jambe-a{animation:p-pas .5s ease-in-out infinite alternate}
+.marche .p-jambe-b{animation:p-pas .5s ease-in-out infinite alternate-reverse}
+.court .p-jambe-a{animation:p-pas .22s ease-in-out infinite alternate}
+.court .p-jambe-b{animation:p-pas .22s ease-in-out infinite alternate-reverse}
+.court .p-torero{animation-duration:.2s}
+.p-bras-capa{transform-box:view-box;transform-origin:87px 72px;transition:transform .4s cubic-bezier(.3,.7,.3,1)}
+.pase .p-bras-capa{transform:rotate(105deg)}
+.p-bras-libre{transform-box:view-box;transform-origin:114px 72px;transition:transform .35s ease-out}
+.desplante .p-bras-libre{transform:rotate(-165deg)}
+/* Bailaoras qui s'enfuient : tout s'accélère */
+.fuite .p-danse{animation-duration:.16s}
+.fuite .p-jupe{animation-duration:.34s}
+.fuite .p-bras-a,.fuite .p-bras-b{animation-duration:.45s}
+@keyframes p-pas{from{transform:rotate(-16deg)}to{transform:rotate(16deg)}}
 .p-danse{animation:p-bob .42s ease-in-out infinite alternate}
 .p-jupe{transform-box:fill-box;transform-origin:50% 0;animation:p-jupe .84s ease-in-out infinite}
 .p-bras-a{transform-box:view-box;transform-origin:62px 58px;animation:p-bras 1.7s ease-in-out infinite}
@@ -295,7 +313,7 @@ progress{width:100%;height:10px;accent-color:var(--rojo)}
 .p-patte{transform-box:fill-box;transform-origin:50% 6%;animation:p-galop .3s ease-in-out infinite alternate}
 .p-patte.b{animation-direction:alternate-reverse}
 .p-queue{transform-box:fill-box;transform-origin:100% 0;animation:p-queue .6s ease-in-out infinite alternate}
-.p-capa{transform-box:view-box;transform-origin:243px 89px;animation:p-capa .75s ease-in-out infinite alternate}
+.p-capa{transform-box:view-box;transform-origin:46px 89px;animation:p-capa .75s ease-in-out infinite alternate}
 .p-torero{animation:p-bob .5s ease-in-out infinite alternate}
 @keyframes p-bob{to{transform:translateY(-4px)}}
 @keyframes p-jupe{0%,100%{transform:rotate(-6deg) skewX(5deg)}50%{transform:rotate(7deg) skewX(-6deg)}}
@@ -1858,98 +1876,208 @@ function bailaoraSvg(c) {
   </svg>`;
 }
 
-function corridaSvg() {
-  const noir = '#1E1515', loin = '#120C0C', corne = '#F2E6D0', peau = '#D9A27A', or = '#E2A93B', bleu = '#1D4E9E', rouge = '#B3202E';
+const NOIR = '#1E1515', PEAU = '#D9A27A';
+
+/* Taureau, tourné vers la droite (corps centré sur x = 118) */
+function toroSvg() {
+  const loin = '#120C0C', corne = '#F2E6D0';
   const patte = (x, cls, fill) => `<rect class="p-patte ${cls}" x="${x}" y="108" width="11" height="76" rx="5" fill="${fill}"/>`;
-  return `<svg viewBox="0 0 380 210" xmlns="http://www.w3.org/2000/svg">
+  return `<svg viewBox="0 0 236 210" xmlns="http://www.w3.org/2000/svg">
     <ellipse cx="118" cy="192" rx="96" ry="6" fill="rgba(40,10,10,.16)"/>
-    <ellipse cx="298" cy="192" rx="40" ry="5" fill="rgba(40,10,10,.16)"/>
     <g class="p-toro">
       ${patte(72, 'b', loin)}${patte(160, 'a', loin)}
-      <path class="p-queue" d="M44 92 C30 98 24 112 26 130" fill="none" stroke="${noir}" stroke-width="3.5" stroke-linecap="round"/>
-      <circle cx="26" cy="132" r="4.5" fill="${noir}"/>
-      <path d="M40 100 C35 70 60 58 95 60 C125 62 150 50 172 64 C188 74 192 92 186 108 C178 124 150 126 120 124 L70 124 C52 124 42 116 40 100 Z" fill="${noir}"/>
-      <path d="M172 70 C190 72 204 86 209 104 C211 114 205 121 196 119 C188 117 182 106 175 98 Z" fill="${noir}"/>
+      <path class="p-queue" d="M44 92 C30 98 24 112 26 130" fill="none" stroke="${NOIR}" stroke-width="3.5" stroke-linecap="round"/>
+      <circle cx="26" cy="132" r="4.5" fill="${NOIR}"/>
+      <path d="M40 100 C35 70 60 58 95 60 C125 62 150 50 172 64 C188 74 192 92 186 108 C178 124 150 126 120 124 L70 124 C52 124 42 116 40 100 Z" fill="${NOIR}"/>
+      <path d="M172 70 C190 72 204 86 209 104 C211 114 205 121 196 119 C188 117 182 106 175 98 Z" fill="${NOIR}"/>
       <path d="M190 80 C198 70 208 66 217 71" fill="none" stroke="${corne}" stroke-width="5" stroke-linecap="round"/>
       <path d="M183 77 C187 65 195 59 204 60" fill="none" stroke="#D8C9AE" stroke-width="4.5" stroke-linecap="round"/>
       <circle cx="194" cy="92" r="2" fill="#4A3836"/>
-      ${patte(58, 'a', noir)}${patte(146, 'b', noir)}
-    </g>
-    <g class="p-torero">
-      <path d="M294 140 L287 188" stroke="#E7A0B4" stroke-width="7" stroke-linecap="round"/>
-      <path d="M303 140 L312 186" stroke="#E7A0B4" stroke-width="7" stroke-linecap="round"/>
-      <ellipse cx="285" cy="191" rx="7" ry="3.4" fill="${noir}"/><ellipse cx="315" cy="189" rx="7" ry="3.4" fill="${noir}"/>
-      <path d="M285 104 L309 104 L311 147 L300 147 L298 124 L295 147 L283 147 Z" fill="${or}"/>
-      <path d="M311 72 L315 98" stroke="${bleu}" stroke-width="7" stroke-linecap="round"/>
-      <path d="M282 68 Q297 62 312 68 L310 106 L284 106 Z" fill="${bleu}"/>
-      <path d="M284 74 L285 104 M310 74 L309 104 M297 66 L297 104" stroke="${or}" stroke-width="2.2"/>
-      <rect x="284" y="101" width="26" height="6" rx="2" fill="${rouge}"/>
-      <circle cx="283" cy="70" r="5.5" fill="${or}"/><circle cx="311" cy="70" r="5.5" fill="${or}"/>
-      <rect x="293" y="57" width="8" height="9" rx="3" fill="${peau}"/>
-      <circle cx="297" cy="51" r="10.5" fill="${peau}"/>
-      <circle cx="307" cy="58" r="3.2" fill="${noir}"/>
-      <path d="M283 50 C279 38 290 33 297 40 C304 33 315 38 311 50 Z" fill="#1B1212"/>
-      <path d="M284 72 Q262 78 244 88" fill="none" stroke="${bleu}" stroke-width="7" stroke-linecap="round"/>
-      <g class="p-capa">
-        <path d="M243 86 C230 84 212 86 198 92 C194 118 196 142 202 164 Q214 157 224 166 Q235 157 246 161 C250 136 248 110 243 86 Z" fill="${rouge}"/>
-        <path d="M214 92 C211 118 212 140 214 160 M230 90 C229 116 231 140 234 160" fill="none" stroke="#7D1520" stroke-width="1.6" opacity=".6"/>
-        <path d="M236 87 L256 85" stroke="#6B4A2A" stroke-width="3" stroke-linecap="round"/>
-      </g>
-      <circle cx="243" cy="89" r="4.2" fill="${peau}"/>
+      ${patte(58, 'a', NOIR)}${patte(146, 'b', NOIR)}
     </g>
   </svg>`;
 }
 
-/* Fait traverser un élément : ratio = largeur/hauteur du dessin, dir 1 = vers la droite */
-function passant(html, ratio, o) {
-  const zone = $('#parade');
-  const H = zone.clientHeight, W = window.innerWidth, w = H * ratio;
-  if (!H) return;
+/* Torero en habit de lumière, tourné vers la gauche (corps centré sur x = 100),
+   la muleta tendue devant lui. Postures par classes : marche, court, pase (muleta levée), desplante (bras levé). */
+function toreroSvg() {
+  const or = '#E2A93B', bleu = '#1D4E9E', rouge = '#B3202E', rose = '#E7A0B4';
+  return `<svg viewBox="0 0 200 210" xmlns="http://www.w3.org/2000/svg">
+    <ellipse cx="101" cy="192" rx="40" ry="5" fill="rgba(40,10,10,.16)"/>
+    <g class="p-torero">
+      <g class="p-jambe-a"><path d="M97 140 L90 188" stroke="${rose}" stroke-width="7" stroke-linecap="round"/><ellipse cx="88" cy="191" rx="7" ry="3.4" fill="${NOIR}"/></g>
+      <g class="p-jambe-b"><path d="M106 140 L115 186" stroke="${rose}" stroke-width="7" stroke-linecap="round"/><ellipse cx="118" cy="189" rx="7" ry="3.4" fill="${NOIR}"/></g>
+      <path d="M88 104 L112 104 L114 147 L103 147 L101 124 L98 147 L86 147 Z" fill="${or}"/>
+      <g class="p-bras-libre"><path d="M114 72 L118 98" stroke="${bleu}" stroke-width="7" stroke-linecap="round"/><circle cx="118" cy="101" r="4" fill="${PEAU}"/></g>
+      <path d="M85 68 Q100 62 115 68 L113 106 L87 106 Z" fill="${bleu}"/>
+      <path d="M87 74 L88 104 M113 74 L112 104 M100 66 L100 104" stroke="${or}" stroke-width="2.2"/>
+      <rect x="87" y="101" width="26" height="6" rx="2" fill="${rouge}"/>
+      <circle cx="86" cy="70" r="5.5" fill="${or}"/><circle cx="114" cy="70" r="5.5" fill="${or}"/>
+      <rect x="96" y="57" width="8" height="9" rx="3" fill="${PEAU}"/>
+      <circle cx="100" cy="51" r="10.5" fill="${PEAU}"/>
+      <circle cx="110" cy="58" r="3.2" fill="${NOIR}"/>
+      <path d="M86 50 C82 38 93 33 100 40 C107 33 118 38 114 50 Z" fill="#1B1212"/>
+      <g class="p-bras-capa">
+        <path d="M87 72 Q65 78 47 88" fill="none" stroke="${bleu}" stroke-width="7" stroke-linecap="round"/>
+        <g class="p-capa">
+          <path d="M46 86 C33 84 15 86 1 92 C-3 118 -1 142 5 164 Q17 157 27 166 Q38 157 49 161 C53 136 51 110 46 86 Z" fill="${rouge}"/>
+          <path d="M17 92 C14 118 15 140 17 160 M33 90 C32 116 34 140 37 160" fill="none" stroke="#7D1520" stroke-width="1.6" opacity=".6"/>
+          <path d="M39 87 L59 85" stroke="#6B4A2A" stroke-width="3" stroke-linecap="round"/>
+        </g>
+        <circle cx="46" cy="89" r="4.2" fill="${PEAU}"/>
+      </g>
+    </g>
+  </svg>`;
+}
+
+const RATIO = { bailaora: 140 / 220, toro: 236 / 210, torero: 200 / 210 };
+const TOUR = [{ transform: 'scaleX(1)' }, { transform: 'scaleX(-1)' }, { transform: 'scaleX(1)' }, { transform: 'scaleX(-1)' }, { transform: 'scaleX(1)' }];
+let paradeGen = 0;
+const melange = a => [...a].sort(() => Math.random() - .5);
+
+/* Une scène : largeur d'écran, hauteur de la bande, sens (1 = de gauche à droite, -1 = miroir).
+   Les positions sont données pour le sens 1, en px, au centre de chaque personnage. */
+function nouvelleScene() {
+  const H = $('#parade').clientHeight / 1.55;
+  return { dir: Math.random() < .5 ? 1 : -1, W: window.innerWidth, H, k: H / 210, gen: paradeGen, total: 0 };
+}
+const largeur = (s, nom) => s.H * RATIO[nom];
+const horsG = w => -w / 2 - 30;
+const horsD = (s, w) => s.W + w / 2 + 30;
+const vitTaureau = s => Math.max(330, s.W / 3.5) / 1000; /* px par ms */
+const vitDanse = s => Math.max(95, s.W / 9) / 1000;
+/* Gestes (muleta, ¡Olé!…) calés sur le départ réel des animations de la scène */
+function at(s, ms, fn) {
+  (s.pret || Promise.resolve()).then(() => setTimeout(() => { if (s.gen === paradeGen) fn(); }, Math.max(0, ms)), () => {});
+}
+
+/* Place un personnage et le fait se déplacer. pts : [ms, x, f, easing?], f = 1 sens du dessin, -1 retourné */
+function acteur(s, html, nom, pts, { z = 1, cls = '' } = {}) {
+  const w = largeur(s, nom);
   const el = document.createElement('div');
-  el.className = 'passant';
+  el.className = 'acteur' + (cls ? ' ' + cls : '');
   el.style.width = w + 'px';
-  el.innerHTML = `<div class="flip"${o.dir < 0 ? ' style="transform:scaleX(-1)"' : ''}><div class="tour">${html}</div></div>${o.ole ? '<span class="ole">¡Olé!</span>' : ''}`;
-  zone.appendChild(el);
-  const from = o.dir > 0 ? -w - 30 : W + 30, to = o.dir > 0 ? W + 30 : -w - 30;
-  const at = f => `translateX(${from + (to - from) * f}px)`;
-  const dur = Math.min(o.max, Math.max(o.min, (W + w) / o.vitesse * 1000));
-  const delay = o.retard || 0;
-  const kf = o.tour
-    ? [{ transform: at(0) }, { transform: at(.46), offset: .44 }, { transform: at(.52), offset: .6 }, { transform: at(1) }]
-    : [{ transform: at(0) }, { transform: at(1) }];
-  const a = el.animate(kf, { duration: dur, delay, easing: 'linear', fill: 'both' });
-  if (o.tour) {
-    /* La vuelta : la danseuse tourne deux fois sur elle-même au milieu de l'écran */
-    el.querySelector('.tour').animate(
-      [{ transform: 'scaleX(1)' }, { transform: 'scaleX(-1)' }, { transform: 'scaleX(1)' }, { transform: 'scaleX(-1)' }, { transform: 'scaleX(1)' }],
-      { duration: dur * .16, delay: delay + dur * .44, easing: 'ease-in-out', fill: 'both' });
-  }
-  if (o.ole) {
-    el.querySelector('.ole').animate(
-      [{ opacity: 0, transform: 'translateY(12px) scale(.6)' }, { opacity: 1, transform: 'translateY(0) scale(1.12)', offset: .2 }, { opacity: 1, transform: 'translateY(-4px) scale(1)', offset: .75 }, { opacity: 0, transform: 'translateY(-16px) scale(1)' }],
-      { duration: 1400, delay: delay + dur * .38, easing: 'ease-out', fill: 'both' });
-  }
+  el.style.zIndex = z;
+  el.innerHTML = `<div class="tour">${html}</div>`;
+  $('#parade').appendChild(el);
+  const kf = pts.map(([ms, x, f, easing]) => {
+    const X = s.dir > 0 ? x : s.W - x, F = s.dir > 0 ? f : -f;
+    const k = { transform: `translateX(${(X - w / 2).toFixed(1)}px) scaleX(${F})`, offset: Math.min(1, Math.max(0, ms / s.total)) };
+    if (easing) k.easing = easing;
+    return k;
+  });
+  if (kf[0].offset > 0) kf.unshift({ transform: kf[0].transform, offset: 0 });
+  if (kf[kf.length - 1].offset < 1) kf.push({ transform: kf[kf.length - 1].transform, offset: 1 });
+  const a = el.animate(kf, { duration: s.total, easing: 'linear', fill: 'both' });
+  if (!s.pret) s.pret = a.ready;
   a.finished.then(() => el.remove(), () => el.remove());
+  return el;
 }
-function passeBailaoras() {
-  const dir = Math.random() < .5 ? 1 : -1;
-  const robes = [...ROBES].sort(() => Math.random() - .5);
-  const n = Math.random() < .45 ? 2 : 1;
-  for (let i = 0; i < n; i++) passant(bailaoraSvg(robes[i]), 140 / 220, { dir, vitesse: 95, min: 7000, max: 13000, tour: true, retard: i * 1300 });
+function bulle(s, texte, x, ms) {
+  at(s, ms, () => {
+    const b = document.createElement('span');
+    b.className = 'bulle';
+    b.textContent = texte;
+    b.style.left = (s.dir > 0 ? x : s.W - x) + 'px';
+    $('#parade').appendChild(b);
+    b.animate([
+      { opacity: 0, transform: 'translateX(-50%) translateY(12px) scale(.6)' },
+      { opacity: 1, transform: 'translateX(-50%) translateY(0) scale(1.12)', offset: .2 },
+      { opacity: 1, transform: 'translateX(-50%) translateY(-4px) scale(1)', offset: .75 },
+      { opacity: 0, transform: 'translateX(-50%) translateY(-16px) scale(1)' }
+    ], { duration: 1500, easing: 'ease-out', fill: 'both' }).finished.then(() => b.remove(), () => b.remove());
+  });
 }
-function passeCorrida() {
-  passant(corridaSvg(), 380 / 210, { dir: Math.random() < .5 ? 1 : -1, vitesse: 230, min: 4500, max: 8000, ole: true });
+
+/* 1. Une ou deux bailaoras traversent en dansant, avec une vuelta au milieu */
+function sceneBailaoras(s) {
+  const wD = largeur(s, 'bailaora'), n = Math.random() < .45 ? 2 : 1, ecart = 1300;
+  const x0 = horsG(wD), x1 = horsD(s, wD), dist = x1 - x0, dur = dist / vitDanse(s);
+  s.total = dur + ecart * (n - 1);
+  melange(ROBES).slice(0, n).forEach((robe, i) => {
+    const t0 = i * ecart;
+    const el = acteur(s, bailaoraSvg(robe), 'bailaora',
+      [[t0, x0, 1], [t0 + dur * .44, x0 + dist * .46, 1], [t0 + dur * .6, x0 + dist * .52, 1], [t0 + dur, x1, 1]], { z: 3 + i });
+    at(s, t0 + dur * .44, () => el.querySelector('.tour').animate(TOUR, { duration: dur * .16, easing: 'ease-in-out' }));
+  });
 }
+
+/* 2. Le taureau charge la muleta d'un torero qui recule en courant */
+function sceneCharge(s) {
+  const wB = largeur(s, 'toro'), wT = largeur(s, 'torero'), v = vitTaureau(s), ecart = 190 * s.k;
+  const b0 = horsG(wB) - ecart, t0 = b0 + ecart;
+  const d = Math.max(horsD(s, wT) - t0, horsD(s, wB) - b0);
+  s.total = d / v;
+  acteur(s, toroSvg(), 'toro', [[0, b0, 1], [s.total, b0 + d, 1]], { z: 1 });
+  acteur(s, toreroSvg(), 'torero', [[0, t0, 1], [s.total, t0 + d, 1]], { z: 2, cls: 'court' });
+  bulle(s, '¡Olé!', s.W * .5, s.total * .45);
+}
+
+/* 3. Les passes : le torero s'arrête au milieu, lève la muleta et fait passer le taureau,
+   qui fait demi-tour hors champ et revient pour une deuxième passe. Puis desplante et ¡Olé! */
+function scenePases(s) {
+  const { W, k } = s, wB = largeur(s, 'toro'), wT = largeur(s, 'torero'), v = vitTaureau(s), vMarche = .12;
+  const c = W * .55, xBG = horsG(wB), xBD = horsD(s, wB), xTD = horsD(s, wT);
+  const tArr = 2200;
+  const t1s = 1900, t1e = t1s + (xBD - xBG) / v;
+  const hit1 = t1s + (c - 165 * k - xBG) / v, out1 = t1s + (c + 120 * k - xBG) / v;
+  const t2s = t1e + 900, t2e = t2s + (xBD - xBG) / v;
+  const hit2 = t2s + (xBD - (c + 165 * k)) / v, out2 = t2s + (xBD - (c - 120 * k)) / v;
+  const tTour = out1 + 450, tDes = out2 + 200, tPart = tDes + 1700, tFin = tPart + (xTD - c) / vMarche;
+  s.total = Math.max(tFin, t2e) + 50;
+  acteur(s, toroSvg(), 'toro',
+    [[t1s, xBG, 1], [t1e, xBD, 1], [t1e + 450, xBD, 1], [t1e + 451, xBD, -1], [t2s, xBD, -1], [t2e, xBG, -1]], { z: 1 });
+  const tor = acteur(s, toreroSvg(), 'torero',
+    [[0, xTD, 1, 'ease-out'], [tArr, c, 1], [tTour, c, 1], [tTour + 1, c, -1], [tPart, c, -1], [tFin, xTD, -1]], { z: 2, cls: 'marche' });
+  at(s, tArr, () => tor.classList.remove('marche'));
+  at(s, hit1 - 380, () => tor.classList.add('pase'));
+  at(s, out1, () => tor.classList.remove('pase'));
+  bulle(s, '¡Olé!', c, out1 - 150);
+  at(s, hit2 - 380, () => tor.classList.add('pase'));
+  at(s, out2, () => tor.classList.remove('pase'));
+  at(s, tDes, () => tor.classList.add('desplante'));
+  bulle(s, '¡Olé!', c, tDes + 100);
+  at(s, tPart, () => { tor.classList.remove('desplante'); tor.classList.add('marche'); });
+}
+
+/* 4. La poursuite : les bailaoras arrivent en dansant, voient le taureau et s'enfuient,
+   le taureau leur court après, et le torero court derrière en agitant la muleta */
+function scenePoursuite(s) {
+  const { W, k } = s, wD = largeur(s, 'bailaora'), wB = largeur(s, 'toro'), wT = largeur(s, 'torero');
+  const vD = vitDanse(s), vB = vitTaureau(s), vF = vB * .92, vT = vB * .82;
+  const n = Math.random() < .5 ? 2 : 1, g = wD * .75;
+  const xStop = W * .45, xDG = horsG(wD), xFin = horsD(s, wD) + (n - 1) * g;
+  const tA = (xStop - xDG) / vD;
+  const danseuses = melange(ROBES).slice(0, n).map((robe, i) => {
+    const xa = xStop - i * g;
+    return { robe, x0: xDG - i * g, xa, tEnd: tA + (xFin - xa) / vF };
+  });
+  /* Le taureau reste assez loin derrière la dernière danseuse pour ne jamais la rattraper */
+  const xB = horsG(wB), bTA = xStop - (n - 1) * g - wD * .3 - 90 * k - 90;
+  const tB0 = tA - (bTA - xB) / vB, tBEnd = tB0 + (horsD(s, wB) - xB) / vB;
+  const xTG = horsG(wT), tT0 = tB0 + 1000, tTEnd = tT0 + (horsD(s, wT) - xTG) / vT;
+  s.total = Math.max(...danseuses.map(dz => dz.tEnd), tBEnd, tTEnd) + 50;
+  danseuses.forEach((dz, i) => {
+    const el = acteur(s, bailaoraSvg(dz.robe), 'bailaora', [[0, dz.x0, 1], [tA, dz.xa, 1], [dz.tEnd, xFin, 1]], { z: 3 + i });
+    at(s, tA - 100, () => el.classList.add('fuite'));
+  });
+  bulle(s, '¡Ay!', xStop, tA - 250);
+  acteur(s, toroSvg(), 'toro', [[Math.max(0, tB0), xB + Math.max(0, -tB0) * vB, 1], [tBEnd, horsD(s, wB), 1]], { z: 2 });
+  acteur(s, toreroSvg(), 'torero', [[tT0, xTG, -1], [tTEnd, horsD(s, wT), -1]], { z: 1, cls: 'court pase' });
+  bulle(s, '¡Eh, toro!', W * .5, tT0 + (W * .5 - xTG) / vT - 400);
+}
+
 function planParade(delai) {
   clearTimeout(paradeT);
   if (!animOn()) return;
   paradeT = setTimeout(() => {
-    if (document.hidden || dlg.open) { planParade(1500); return; } /* on attend que l'écran soit libre */
-    (Math.random() < .55 ? passeBailaoras : passeCorrida)();
-    planParade();
-  }, delai ?? 20000 + Math.random() * 25000);
+    if (document.hidden || dlg.open || !$('#parade').clientHeight) { planParade(1500); return; } /* on attend que l'écran soit libre */
+    const s = nouvelleScene(), r = Math.random();
+    (r < .32 ? sceneBailaoras : r < .62 ? scenePases : r < .8 ? scenePoursuite : sceneCharge)(s);
+    planParade(s.total + 5000 + Math.random() * 8000);
+  }, delai ?? 6000 + Math.random() * 8000);
 }
-function stopParade() { clearTimeout(paradeT); $('#parade').innerHTML = ''; }
+function stopParade() { paradeGen++; clearTimeout(paradeT); $('#parade').innerHTML = ''; }
 
 /* ================= Démarrage ================= */
 function readHash() {
@@ -1986,7 +2114,7 @@ async function boot() {
   if (S.justKeyed && S.data && !me()) { S.justKeyed = false; openWelcome(); }
 }
 boot();
-planParade(5000);
+planParade(4000);
 
 if ('serviceWorker' in navigator && location.protocol === 'https:') {
   window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));

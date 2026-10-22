@@ -24,7 +24,7 @@ L'adresse simple (sans `#cle=…`) est en lecture seule : elle peut circuler lib
 - **Modifs simultanées** : si deux personnes enregistrent en même temps, la seconde est rejouée sur la version à jour, rien n'est écrasé (sauf si les deux modifient la même fiche : la dernière gagne).
 - **Mise à jour** : les éditeurs récupèrent les changements des autres toutes les 45 s, les lecteurs toutes les 3 min (et à chaque retour sur l'onglet).
 - **Tickets de caisse** : *Budget → Scanner un ticket*. Le texte est lu sur le téléphone (Tesseract.js, téléchargé au premier scan) ; un écran liste ensuite chaque article avec son prix, à vérifier. Chaque ligne est pour « Tous » ou pour une ou plusieurs personnes, et le budget répartit ligne par ligne. La photo n'est pas conservée.
-- **Animations** : de temps en temps, des danseuses de flamenco ou une corrida traversent le bas de l'écran. Désactivables par appareil dans *Réglages → Toi* (coupées d'office si le téléphone demande moins d'animations).
+- **Animations** : régulièrement, une petite scène traverse le bas de l'écran : bailaoras qui dansent, torero qui fait passer le taureau sous sa muleta (deux passes puis ¡Olé!), taureau qui charge, ou poursuite des danseuses par le taureau, torero aux trousses. Désactivables par appareil dans *Réglages → Toi* (coupées d'office si le téléphone demande moins d'animations).
 - **Hors ligne** : la dernière version reste consultable ; ajoute la page à l'écran d'accueil pour l'avoir comme une app.
 
 ## Sécurité
