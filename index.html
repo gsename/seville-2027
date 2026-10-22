@@ -254,11 +254,26 @@ fieldset.champ{border:0;padding:0;margin:0}
 .etat{font-size:14.5px}
 .etat--ok{color:var(--verde);font-weight:600} .etat--ko{color:var(--alerta);font-weight:600}
 .boutons{display:flex;gap:8px;flex-wrap:wrap}
-.scan-apercu{display:grid;grid-template-columns:76px 1fr;gap:12px;align-items:center;background:var(--fondo);border-radius:14px;padding:8px}
-.scan-apercu img{width:76px;height:96px;object-fit:cover;border-radius:10px;background:var(--cal)}
-.scan-apercu p{font-size:14.5px}
-.scan-apercu .manque{color:var(--alerta);font-weight:600}
 progress{width:100%;height:10px;accent-color:var(--rojo)}
+
+/* Ticket détaillé */
+.ticket-photo summary{cursor:pointer;font-weight:600;font-size:14.5px;color:var(--cobalto)}
+.ticket-photo img{display:block;width:100%;margin-top:8px;border-radius:12px;border:1px solid var(--linea)}
+.champ-titre{font-weight:600;font-size:14px}
+.arts{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.art{border:1px solid var(--linea);border-radius:14px;padding:8px;display:grid;gap:7px;background:var(--cal)}
+.art-haut{display:grid;grid-template-columns:minmax(0,1fr) 88px auto;gap:6px;align-items:center}
+.art-haut input{min-height:40px;padding:7px 10px}
+.art-prix{text-align:right;font-variant-numeric:tabular-nums}
+.art-qui{display:flex;flex-wrap:wrap;gap:5px}
+.puce{position:relative;display:inline-flex;align-items:center;border:1px solid var(--linea);border-radius:99px;padding:3px 11px;min-height:32px;font-size:13.5px;font-weight:600;cursor:pointer;background:var(--cal);color:var(--tinta-2)}
+.puce:has(input:checked),.puce[aria-pressed=true]{border-color:var(--rojo);background:color-mix(in srgb,var(--rojo) 10%,var(--cal));color:var(--tinta)}
+.puce:focus-within{outline:2px solid var(--rojo);outline-offset:1px}
+.bilan{background:var(--fondo);border-radius:14px;padding:12px 14px;gap:6px;font-size:14.5px}
+.bilan .tot{font-weight:800;font-size:16px}
+.bilan .ecart{color:var(--alerta);font-weight:600}
+.bilan ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:4px 16px}
+.bilan b{font-variant-numeric:tabular-nums}
 
 .toast{position:fixed;left:50%;bottom:max(20px, env(safe-area-inset-bottom));transform:translate(-50%,16px);opacity:0;background:var(--tinta);color:var(--cal);padding:11px 18px;border-radius:14px;transition:opacity .2s,transform .2s;pointer-events:none;z-index:60;max-width:calc(100vw - 32px);font-weight:600;font-size:15px}
 .toast.on{opacity:1;transform:translate(-50%,0)}
@@ -420,7 +435,7 @@ const DEF = {
   flight: { direction: 'aller', airline: '', number: '', from: '', to: '', depart: '', arrive: '', passengers: [], price: null, paidBy: '', url: '', notes: '', secret: '' },
   stay: { name: '', address: '', checkin: '', checkout: '', price: null, paidBy: '', url: '', notes: '', secret: '' },
   activity: { title: '', date: '', time: '', place: '', booking: 'non', price: null, paidBy: '', url: '', notes: '', secret: '' },
-  expense: { label: '', amount: null, paidBy: '', date: '', split: [] }
+  expense: { label: '', amount: null, paidBy: '', date: '', split: [], items: [] }
 };
 const arr = x => Array.isArray(x) ? x.filter(i => i && typeof i === 'object' && i.id) : [];
 const validPhoto = p => typeof p === 'string' && p.length < 400000 && /^data:image\/(jpeg|png|webp);base64,[A-Za-z0-9+/=]+$/.test(p);
@@ -434,7 +449,12 @@ function normalize(d) {
     flights: arr(d.flights).map(x => Object.assign({}, DEF.flight, x)),
     stays: arr(d.stays).map(x => Object.assign({}, DEF.stay, x)),
     activities: arr(d.activities).map(x => Object.assign({}, DEF.activity, x)),
-    expenses: arr(d.expenses).map(x => Object.assign({}, DEF.expense, x)),
+    expenses: arr(d.expenses).map(x => {
+      const o = Object.assign({}, DEF.expense, x);
+      o.items = Array.isArray(o.items) ? o.items.filter(i => i && typeof i === 'object' && num(i.amount) !== null)
+        .map(i => ({ label: String(i.label || ''), amount: num(i.amount), split: Array.isArray(i.split) ? i.split.filter(s => typeof s === 'string') : [] })) : [];
+      return o;
+    }),
     privacy: d.privacy && d.privacy.salt && d.privacy.check ? d.privacy : null,
     updatedAt: d.updatedAt || null,
     updatedBy: d.updatedBy || null
@@ -989,18 +1009,27 @@ function computeBudget(d) {
   d.flights.forEach(f => { const a = num(f.price); if (a) lines.push({ cat: 'Vol', label: `${DIR[f.direction] || 'Vol'}${f.number ? ' ' + f.number : ''}`, amount: a, paidBy: f.paidBy, among: valid(f.passengers), act: 'edit-flight', id: f.id }); });
   d.stays.forEach(s => { const a = num(s.price); if (a) lines.push({ cat: 'Logement', label: s.name || 'Logement', amount: a, paidBy: s.paidBy, among: ids, act: 'edit-stay', id: s.id }); });
   d.activities.forEach(x => { const a = num(x.price); if (a) lines.push({ cat: 'Activité', label: x.title, amount: a, paidBy: x.paidBy, among: ids, act: 'edit-activity', id: x.id }); });
-  d.expenses.forEach(e => { const a = num(e.amount); if (a) lines.push({ cat: 'Dépense', label: e.label || 'Dépense', amount: a, paidBy: e.paidBy, among: valid(e.split), act: 'edit-expense', id: e.id }); });
+  d.expenses.forEach(e => {
+    if (e.items.length) {
+      /* Ticket détaillé : chaque article est réparti entre ses propres personnes */
+      const parts = e.items.map(it => ({ amount: it.amount, among: valid(it.split) }));
+      const a = Math.round(parts.reduce((s, p) => s + p.amount * 100, 0)) / 100;
+      if (a) lines.push({ cat: 'Ticket', label: e.label || 'Ticket', amount: a, paidBy: e.paidBy, among: ids, parts, act: 'edit-expense', id: e.id });
+      return;
+    }
+    const a = num(e.amount);
+    if (a) lines.push({ cat: 'Dépense', label: e.label || 'Dépense', amount: a, paidBy: e.paidBy, among: valid(e.split), act: 'edit-expense', id: e.id });
+  });
   const per = Object.fromEntries(ids.map(i => [i, { share: 0, paid: 0, paidShare: 0 }]));
   let total = 0, paid = 0;
   for (const l of lines) {
-    const c = Math.round(l.amount * 100);
-    total += c;
     const isPaid = ids.includes(l.paidBy);
-    if (isPaid) { paid += c; per[l.paidBy].paid += c; }
-    if (!l.among.length) continue;
-    const base = Math.floor(c / l.among.length);
-    const rem = c - base * l.among.length;
-    l.among.forEach((i, k) => { const part = base + (k < rem ? 1 : 0); per[i].share += part; if (isPaid) per[i].paidShare += part; });
+    for (const p of l.parts || [{ amount: l.amount, among: l.among }]) {
+      const c = Math.round(p.amount * 100);
+      total += c;
+      if (isPaid) { paid += c; per[l.paidBy].paid += c; }
+      splitCents(c, p.among, (i, part) => { per[i].share += part; if (isPaid) per[i].paidShare += part; });
+    }
   }
   const balances = ids.map(i => ({ id: i, ...per[i], bal: per[i].paid - per[i].paidShare }));
   const deb = balances.filter(b => b.bal < 0).map(b => ({ id: b.id, v: -b.bal })).sort((a, b) => b.v - a.v);
@@ -1034,7 +1063,7 @@ function viewBudget(d) {
     : `<p class="muet">Personne ne doit rien à personne pour l’instant.</p>`}</section>`;
   const detail = `<section class="section"><h2>Détail</h2><div class="defile"><table class="tableau">
     <thead><tr><th>Poste</th><th>Payé par</th><th class="n">Montant</th></tr></thead>
-    <tbody>${b.lines.map(l => `<tr${canEdit() ? ` class="cliquable" data-act="${l.act}" data-id="${esc(l.id)}" tabindex="0"` : ''}><td><span class="cat">${l.cat}${l.among.length !== d.travelers.length ? `, partagé entre ${l.among.length}` : ''}</span>${esc(l.label)}</td><td>${esc(tName(d, l.paidBy)) || '<span class="muet">Pas encore payé</span>'}</td><td class="n">${money(l.amount)}</td></tr>`).join('')}</tbody>
+    <tbody>${b.lines.map(l => `<tr${canEdit() ? ` class="cliquable" data-act="${l.act}" data-id="${esc(l.id)}" tabindex="0"` : ''}><td><span class="cat">${l.cat}${l.parts ? `, ${l.parts.length} article${l.parts.length > 1 ? 's' : ''}` : l.among.length !== d.travelers.length ? `, partagé entre ${l.among.length}` : ''}</span>${esc(l.label)}</td><td>${esc(tName(d, l.paidBy)) || '<span class="muet">Pas encore payé</span>'}</td><td class="n">${money(l.amount)}</td></tr>`).join('')}</tbody>
   </table></div></section>`;
   return head + resume + perTable + transfers + detail;
 }
@@ -1089,10 +1118,10 @@ function readForm(form, fields) {
   }
   return v;
 }
-function openForm({ title, fields, values = {}, onSubmit, onDelete, deleteLabel = 'Supprimer', intro = '' }) {
+function openForm({ title, fields, values = {}, onSubmit, onDelete, deleteLabel = 'Supprimer' }) {
   dlg.innerHTML = `<form class="form" novalidate>
     <header><h2>${esc(title)}</h2><button type="button" class="icon-btn" data-close aria-label="Fermer">${icon('x')}</button></header>
-    <div class="champs">${intro}${fields.map(f => fieldHtml(f, values[f.name])).join('')}</div>
+    <div class="champs">${fields.map(f => fieldHtml(f, values[f.name])).join('')}</div>
     <footer>${onDelete ? `<button type="button" class="btn btn--danger" data-delete>${esc(deleteLabel)}</button>` : ''}<span class="spacer"></span><button type="button" class="btn" data-close>Annuler</button><button type="submit" class="btn btn--primary">Enregistrer</button></footer>
   </form>`;
   const form = dlg.querySelector('form');
@@ -1222,16 +1251,16 @@ function activityForm(id, presetDate) {
     onDelete: a ? () => commit(`supprime « ${a.title} »`, dd => removeById(dd.activities, a.id)) : null
   });
 }
-function expenseForm(id, preset, intro) {
+function expenseForm(id) {
   const d = S.data;
   const e = id ? d.expenses.find(x => x.id === id) : null;
   if (id && !e) return;
+  if (e && e.items.length) { ticketForm({ id }); return; }
   const mine = me();
   const today = todayYmd();
-  const v = e ? e : Object.assign({ paidBy: mine ? mine.id : (d.travelers[0] || {}).id, date: tripDays(d).includes(today) ? today : '', split: d.travelers.map(t => t.id) }, preset || {});
+  const v = e ? e : { paidBy: mine ? mine.id : (d.travelers[0] || {}).id, date: tripDays(d).includes(today) ? today : '', split: d.travelers.map(t => t.id) };
   openForm({
     title: e ? 'Modifier la dépense' : 'Ajouter une dépense',
-    intro,
     values: v,
     fields: [
       { name: 'label', label: 'Quoi', required: true, placeholder: 'ex. Tapas, taxi, courses…' },
@@ -1266,68 +1295,107 @@ function loadOcr() {
   });
   return ocrLib;
 }
-/* Réduit et passe en niveaux de gris : plus rapide et souvent plus lisible pour l'OCR */
+/* Prépare la photo : les tickets sont longs et étroits, on garde donc assez de pixels
+   en largeur (côté le plus long ramené à 2600 px), en niveaux de gris un peu contrastés. */
 async function receiptCanvas(file) {
   const url = URL.createObjectURL(file);
   try {
     const img = await new Promise((ok, ko) => { const im = new Image(); im.onload = () => ok(im); im.onerror = () => ko(new Error('Image illisible (essaie en JPEG ou PNG).')); im.src = url; });
-    const k = Math.min(1, 2000 / Math.max(img.naturalWidth, img.naturalHeight));
+    const k = Math.min(1, 2600 / Math.max(img.naturalWidth, img.naturalHeight));
     const c = document.createElement('canvas');
     c.width = Math.round(img.naturalWidth * k);
     c.height = Math.round(img.naturalHeight * k);
     const ctx = c.getContext('2d');
-    ctx.filter = 'grayscale(1) contrast(1.4)';
+    ctx.filter = 'grayscale(1) contrast(1.25)';
     ctx.drawImage(img, 0, 0, c.width, c.height);
     return c;
   } finally {
     URL.revokeObjectURL(url);
   }
 }
+
+/* ----- Analyse du texte lu ----- */
 const plainUp = s => s.normalize('NFD').replace(/[̀-ͯ]/g, '').toUpperCase();
-function amountsIn(line) {
-  const out = [];
-  const re = /(\d{1,3}(?:[.\s]\d{3})+|\d+)\s?[,.]\s?(\d{2})(?!\d)/g;
-  let m;
-  while ((m = re.exec(line))) { const v = parseFloat(m[1].replace(/[.\s]/g, '') + '.' + m[2]); if (v > 0 && v < 100000) out.push(v); }
-  return out;
+/* Confusions classiques de l'OCR dans les nombres : O pour 0, l ou I pour 1 */
+const fixDigits = l => l
+  .replace(/(?<=[\d,.])[oO]|[oO](?=[,.]?\d)/g, '0')
+  .replace(/(?<=\d[,.]?)[lI|](?=\d)|(?<=\d)[lI|](?=[,.]\d)/g, '1');
+const AMT_RE = /(\d{1,3}(?:[.\s]\d{3})+|\d+)\s?[,.]\s?(\d{2})(?!\d)/g;
+function amountMatches(line) {
+  return [...line.matchAll(AMT_RE)].map(m => {
+    const v = parseFloat(m[1].replace(/[.\s]/g, '') + '.' + m[2]);
+    const neg = /-\s?$/.test(line.slice(0, m.index));
+    return { v: neg ? -v : v, index: m.index };
+  }).filter(a => Math.abs(a.v) > 0 && Math.abs(a.v) < 100000);
 }
+const amountsIn = line => amountMatches(line).map(a => a.v).filter(v => v > 0);
+const R_EXCLU = /SUB ?TOTAL|BASE IMP|TOTAL I\.?V\.?A|TOTAL T\.?V\.?A|CUOTA|CAMBIO|ENTREGAD|EFECTIVO|DEVUELT|A DEVOLVER|RENDU|ESPECES|AHORRO|PUNTOS/;
+const R_TOTAL = /TOTAL|IMPORTE|A PAGAR|MONTANT|A PAYER/;
+const R_CARTE = /TARJETA|VISA|MASTERCARD|CARTE|CREDITO|DEBITO|\bCB\b/;
+const R_DATE = /\b\d{1,2}[\/.-]\d{1,2}[\/.-]\d{2,4}\b|\b\d{1,2}:\d{2}\b/;
+const R_PAS_ARTICLE = /TOTAL|IMPORTE|A PAGAR|A PAYER|MONTANT|BASE|I\.?V\.?A|T\.?V\.?A|CUOTA|CAMBIO|ENTREGAD|EFECTIVO|TARJETA|VISA|MASTERCARD|\bCB\b|CIF|NIF|TEL|TLF|FACTURA|TICKET|MESA|CAMARERO|FECHA|HORA|CAJA|ARTICULOS|ARTICLES|UNIDADES|OPERACION|AUTORIZ/;
+const tidyName = s => s.toLowerCase()
+  .replace(/[^\p{L}\p{N}' &.,%/-]+/gu, ' ')
+  .replace(/\s+/g, ' ').trim()
+  .replace(/(^|\s)\p{L}/gu, c => c.toUpperCase());
+
+/* Articles : lignes qui finissent par un prix, avant la ligne du total.
+   Si le nom est sur la ligne du dessus et le prix seul en dessous, on les recolle. */
+function parseItems(lines, up) {
+  const fin = up.findIndex(l => R_TOTAL.test(l) && !/SUB ?TOTAL/.test(l));
+  const items = [];
+  let nomEnAttente = '';
+  for (let i = 0; i < (fin >= 0 ? fin : lines.length); i++) {
+    const l = lines[i];
+    if (R_PAS_ARTICLE.test(up[i]) || R_DATE.test(l)) { nomEnAttente = ''; continue; }
+    const am = amountMatches(l);
+    if (!am.length) { nomEnAttente = (l.match(/\p{L}/gu) || []).length >= 3 ? l : ''; continue; }
+    let nom = l.slice(0, am[0].index)
+      .replace(/^\s*\d+([.,]\d+)?\s*(x|X|×|UD|UDS|KG)?\s+/, '')
+      .replace(/\s+\d+\s*(x|X|×)\s*$/, '')
+      .replace(/[\s.:_–-]+$/, '');
+    if ((nom.match(/\p{L}/gu) || []).length < 2) nom = nomEnAttente;
+    nomEnAttente = '';
+    if (!nom) continue;
+    items.push({ label: tidyName(nom), amount: am[am.length - 1].v, split: [] });
+  }
+  return items;
+}
+
 function parseReceipt(text) {
-  const lines = text.split(/\r?\n/).map(l => l.replace(/\s+/g, ' ').trim()).filter(Boolean);
+  const lines = text.split(/\r?\n/).map(l => fixDigits(l.replace(/\s+/g, ' ').trim())).filter(Boolean);
   const up = lines.map(plainUp);
-  const exclu = /SUB ?TOTAL|BASE IMP|TOTAL I\.?V\.?A|TOTAL T\.?V\.?A|CUOTA|CAMBIO|ENTREGAD|EFECTIVO|DEVUELT|A DEVOLVER|RENDU|ESPECES|DESCUENTO|AHORRO|REMISE|PUNTOS/;
-  const totalRe = /TOTAL|IMPORTE|A PAGAR|MONTANT|A PAYER/;
-  const carteRe = /TARJETA|VISA|MASTERCARD|CARTE|CREDITO|DEBITO|\bCB\b/;
-  const dateRe = /\b\d{1,2}[\/.-]\d{1,2}[\/.-]\d{2,4}\b|\b\d{1,2}:\d{2}\b/;
   const pick = re => {
     const found = [];
     up.forEach((l, i) => {
-      if (!re.test(l) || exclu.test(l)) return;
+      if (!re.test(l) || R_EXCLU.test(l)) return;
       let a = amountsIn(lines[i]);
-      if (!a.length && lines[i + 1] && !dateRe.test(lines[i + 1])) a = amountsIn(lines[i + 1]);
+      if (!a.length && lines[i + 1] && !R_DATE.test(lines[i + 1])) a = amountsIn(lines[i + 1]);
       found.push(...a);
     });
     return found.length ? Math.max(...found) : null;
   };
-  let amount = pick(totalRe) ?? pick(carteRe);
-  if (amount === null) {
-    const all = lines.filter((l, i) => !exclu.test(up[i]) && !dateRe.test(l)).flatMap(amountsIn);
-    amount = all.length ? Math.max(...all) : null;
-  }
+  const items = parseItems(lines, up);
+  const somme = Math.round(items.reduce((s, it) => s + it.amount * 100, 0)) / 100;
+  const tous = lines.filter((l, i) => !R_EXCLU.test(up[i]) && !R_DATE.test(l)).flatMap(amountsIn);
+  /* Si la somme des articles retombe sur un montant du ticket, c'est presque sûrement le total */
+  let amount = somme > 0 && tous.some(v => Math.abs(v - somme) < 0.015) ? somme : null;
+  if (amount === null) amount = pick(R_TOTAL) ?? pick(R_CARTE);
+  if (amount === null && tous.length) amount = Math.max(...tous);
+
   const bruit = /CIF|NIF|N\.I\.F|TEL|TLF|WWW|HTTP|@|C\/|CALLE|AVDA|AVENIDA|FACTURA|TICKET|SIRET|TVA|IVA|\d{4,}/;
-  const nom = lines.slice(0, 6).find((l, i) => (l.match(/[A-Za-zÀ-ÿ]/g) || []).length >= 3 && !bruit.test(up[i]));
+  const nom = lines.slice(0, 6).find((l, i) => (l.match(/\p{L}/gu) || []).length >= 3 && !bruit.test(up[i]));
+  const label = nom ? tidyName(nom.replace(/(^|\s)(S\.?A\.?U?|S\.?L\.?U?|SAS|SARL)\.?(?=\s|$)/gi, ' ')) : '';
+
   let date = '';
   const dm = text.match(/\b(\d{1,2})[\/.-](\d{1,2})[\/.-](\d{4}|\d{2})\b/);
   if (dm) {
     const day = +dm[1], mon = +dm[2], y = dm[3].length === 2 ? 2000 + +dm[3] : +dm[3];
     if (day >= 1 && day <= 31 && mon >= 1 && mon <= 12) date = `${y}-${pad(mon)}-${pad(day)}`;
   }
-  const label = nom ? nom.toLowerCase()
-    .replace(/[^\p{L}\p{N}' &.-]+/gu, ' ')
-    .replace(/(^|\s)(s\.?a\.?u?|s\.?l\.?u?|sas|sarl)\.?(?=\s|$)/g, ' ')
-    .replace(/\s+/g, ' ').trim()
-    .replace(/(^|\s)\p{L}/gu, c => c.toUpperCase()) : '';
-  return { amount, date, label };
+  return { amount, date, label, items };
 }
+
 function scanReceipt() {
   const input = document.createElement('input');
   input.type = 'file';
@@ -1355,22 +1423,18 @@ async function readReceipt(file) {
       logger: m => { if (m.status === 'recognizing text') etat('Lecture du ticket…', m.progress); else if (/load/.test(m.status)) etat('Chargement de l’outil de lecture…', m.progress); }
     });
     if (annule) { worker.terminate(); return; }
+    /* Mode « colonne de texte » : garde mieux les lignes article … prix des tickets */
+    await worker.setParameters({ tessedit_pageseg_mode: '4', preserve_interword_spaces: '1', user_defined_dpi: '300' });
     const { data } = await worker.recognize(canvas);
     worker.terminate();
     worker = null;
     if (annule) return;
     const r = parseReceipt(data.text || '');
-    const d = S.data;
     const preset = { label: r.label ? `Ticket ${r.label}` : 'Ticket de caisse' };
-    if (r.amount) preset.amount = r.amount.toFixed(2);
-    if (r.date && tripDays(d).includes(r.date)) preset.date = r.date;
-    const apercu = canvas.toDataURL('image/jpeg', 0.6);
-    const msg = r.amount
-      ? `<p>Montant lu : <strong>${esc(money(r.amount))}</strong>. Vérifie-le avec le ticket avant d’enregistrer.</p>`
-      : `<p class="manque">Montant introuvable sur le ticket : saisis-le.</p>`;
+    if (r.date && tripDays(S.data).includes(r.date)) preset.date = r.date;
     dlg.removeEventListener('close', onClose);
     dlg.close();
-    expenseForm(null, preset, `<div class="champ scan-apercu"><img src="${apercu}" alt="Photo du ticket">${msg}</div>`);
+    ticketForm({ preset, items: r.items, readTotal: r.amount, photo: canvas.toDataURL('image/jpeg', 0.7) });
   } catch (e) {
     console.error(e);
     if (annule) return;
@@ -1378,6 +1442,124 @@ async function readReceipt(file) {
     if (dlg.open) dlg.close();
     toast(e && e.message && !/^\d/.test(e.message) ? e.message : 'Lecture du ticket impossible.', 'err');
   }
+}
+
+/* ----- Ticket détaillé : une ligne par article, chacune pour tous ou pour certains ----- */
+const fmtSaisie = n => (n === null || n === undefined || n === '') ? '' : Number(n).toFixed(2).replace('.', ',');
+function splitCents(c, among, add) {
+  if (!among.length) return;
+  const base = Math.floor(c / among.length);
+  const rem = c - base * among.length;
+  among.forEach((id, k) => add(id, base + (k < rem ? 1 : 0)));
+}
+function ticketForm({ id, preset = {}, items = [], readTotal = null, photo = '' } = {}) {
+  const d = S.data;
+  const e = id ? d.expenses.find(x => x.id === id) : null;
+  if (id && !e) return;
+  const mine = me();
+  const today = todayYmd();
+  const v = e || Object.assign({ label: '', paidBy: mine ? mine.id : (d.travelers[0] || {}).id, date: tripDays(d).includes(today) ? today : '' }, preset);
+  const depart = e ? e.items : items.length ? items : [{ label: 'Total', amount: readTotal, split: [] }];
+  const champs = [
+    { name: 'label', label: 'Libellé', required: true, placeholder: 'ex. Ticket Mercadona' },
+    { name: 'paidBy', label: 'Payé par', type: 'select', half: true, required: true, options: travelerOptions(d) },
+    { name: 'date', label: 'Jour', type: 'select', half: true, options: dayOptions(d, v.date) }
+  ];
+  const ligne = it => `<li class="art">
+      <div class="art-haut">
+        <input class="art-nom" value="${esc(it.label || '')}" placeholder="Article" aria-label="Article" autocomplete="off">
+        <input class="art-prix" value="${esc(fmtSaisie(it.amount))}" placeholder="0,00" inputmode="decimal" aria-label="Prix en euros" autocomplete="off">
+        <button type="button" class="icon-btn" data-rmart aria-label="Retirer la ligne">${icon('x')}</button>
+      </div>
+      <div class="art-qui" role="group" aria-label="Pour qui">
+        <button type="button" class="puce" data-tous aria-pressed="false">Tous</button>
+        ${d.travelers.map(t => `<label class="puce"><input type="checkbox" class="sr" value="${esc(t.id)}"${(it.split || []).includes(t.id) ? ' checked' : ''}>${esc(t.name)}</label>`).join('')}
+      </div>
+    </li>`;
+
+  dlg.innerHTML = `<form class="form" novalidate>
+    <header><h2>${e ? 'Modifier le ticket' : 'Ticket détaillé'}</h2><button type="button" class="icon-btn" data-close aria-label="Fermer">${icon('x')}</button></header>
+    <div class="champs">
+      ${photo ? `<details class="champ ticket-photo"><summary>Voir la photo du ticket</summary><img src="${photo}" alt="Photo du ticket"></details>` : ''}
+      ${!e ? `<p class="champ aide">Vérifie chaque ligne avec le ticket. Pour chaque article, choisis pour qui il est : « Tous » le partage entre tout le monde.</p>` : ''}
+      ${champs.map(f => fieldHtml(f, v[f.name])).join('')}
+      <div class="champ"><span class="champ-titre">Articles</span><ul class="arts" id="arts">${depart.map(ligne).join('')}</ul>
+        <div class="rang"><button type="button" class="btn btn--petit" id="addArt">${icon('plus')} Ajouter une ligne</button></div></div>
+      <div class="champ bilan" id="bilan" aria-live="polite"></div>
+    </div>
+    <footer>${e ? '<button type="button" class="btn btn--danger" data-delete>Supprimer</button>' : ''}<span class="spacer"></span><button type="button" class="btn" data-close>Annuler</button><button type="submit" class="btn btn--primary">Enregistrer</button></footer>
+  </form>`;
+  const form = dlg.querySelector('form');
+  const list = form.querySelector('#arts');
+
+  const lire = () => [...list.children].map(li => ({
+    label: li.querySelector('.art-nom').value.trim(),
+    amount: num(li.querySelector('.art-prix').value),
+    split: [...li.querySelectorAll('input[type=checkbox]:checked')].map(c => c.value)
+  }));
+  const majTous = li => {
+    const boxes = [...li.querySelectorAll('input[type=checkbox]')];
+    if (boxes.length && boxes.every(b => b.checked)) boxes.forEach(b => { b.checked = false; });
+    li.querySelector('[data-tous]').setAttribute('aria-pressed', String(!boxes.some(b => b.checked)));
+  };
+  const bilan = () => {
+    const ids = d.travelers.map(t => t.id);
+    const parts = Object.fromEntries(ids.map(i => [i, 0]));
+    let tot = 0;
+    for (const it of lire()) {
+      if (it.amount === null) continue;
+      const c = Math.round(it.amount * 100);
+      tot += c;
+      splitCents(c, it.split.length ? it.split : ids, (i, p) => { parts[i] += p; });
+    }
+    const ecart = readTotal ? Math.round(readTotal * 100) - tot : 0;
+    form.querySelector('#bilan').innerHTML = `<p class="tot">Total : ${money(tot / 100)}</p>
+      ${readTotal && Math.abs(ecart) >= 1 ? `<p class="ecart">Le total lu sur le ticket est ${money(readTotal)} (écart de ${money(Math.abs(ecart) / 100)}).</p>
+        <div class="rang"><button type="button" class="btn btn--petit" id="addEcart" data-c="${ecart}">Ajouter l’écart en ligne partagée</button></div>` : ''}
+      <ul>${d.travelers.map(t => `<li><span>${esc(t.name)}</span> <b>${money(parts[t.id] / 100)}</b></li>`).join('')}</ul>`;
+  };
+  [...list.children].forEach(majTous);
+  bilan();
+
+  form.addEventListener('input', bilan);
+  form.addEventListener('change', ev => { const li = ev.target.closest('.art'); if (li) majTous(li); bilan(); });
+  form.addEventListener('click', ev => {
+    const tous = ev.target.closest('[data-tous]');
+    if (tous) { tous.closest('.art').querySelectorAll('input[type=checkbox]').forEach(b => { b.checked = false; }); majTous(tous.closest('.art')); bilan(); return; }
+    const rm = ev.target.closest('[data-rmart]');
+    if (rm) { rm.closest('.art').remove(); bilan(); return; }
+    if (ev.target.closest('#addArt')) {
+      list.insertAdjacentHTML('beforeend', ligne({ label: '', amount: null, split: [] }));
+      majTous(list.lastElementChild);
+      list.lastElementChild.querySelector('.art-nom').focus();
+      return;
+    }
+    const ec = ev.target.closest('#addEcart');
+    if (ec) {
+      list.insertAdjacentHTML('beforeend', ligne({ label: 'Écart avec le total', amount: Number(ec.dataset.c) / 100, split: [] }));
+      majTous(list.lastElementChild);
+      bilan();
+    }
+  });
+  const del = form.querySelector('[data-delete]');
+  if (del) del.addEventListener('click', () => {
+    if (del.dataset.confirm) { commit(`supprime le ticket « ${e.label} »`, dd => removeById(dd.expenses, e.id)); dlg.close(); return; }
+    del.dataset.confirm = '1';
+    del.textContent = 'Confirmer la suppression';
+  });
+  form.addEventListener('submit', ev => {
+    ev.preventDefault();
+    const label = form.elements.label.value.trim();
+    if (!label) { toast('Indique un libellé.', 'err'); return; }
+    const arts = lire().filter(it => it.amount !== null && it.amount !== 0)
+      .map(it => ({ label: it.label || 'Article', amount: it.amount, split: it.split.length === d.travelers.length ? [] : it.split }));
+    const total = Math.round(arts.reduce((s, it) => s + it.amount * 100, 0)) / 100;
+    if (!arts.length || !(total > 0)) { toast('Ajoute au moins une ligne avec un prix.', 'err'); return; }
+    const item = Object.assign({}, e || { id: uid('e') }, { label, paidBy: form.elements.paidBy.value, date: form.elements.date.value, split: [], items: arts, amount: total });
+    commit(`${e ? 'modifie' : 'ajoute'} le ticket « ${label} »`, dd => upsert(dd.expenses, item));
+    dlg.close();
+  });
+  dlg.showModal();
 }
 
 /* ---------- Réglages ---------- */
