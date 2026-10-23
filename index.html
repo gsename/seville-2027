@@ -413,6 +413,118 @@ html.en-jeu{overflow:hidden}
 .bandeau--ole{border-color:var(--albero);background:color-mix(in srgb,var(--albero) 14%,var(--cal))}
 .bandeau--ole b{color:var(--rojo)}
 
+/* Météo sur les cartes du programme */
+.jour-tete > span:nth-child(2){min-width:0;flex:1}
+.meteo{display:inline-flex;align-items:center;gap:4px;flex:none;margin-left:auto;background:var(--fondo);border-radius:12px;padding:4px 8px 4px 4px}
+.meteo-ic{width:28px;height:30px;flex:none}
+.meteo-t{display:flex;flex-direction:column;line-height:1.05;font-variant-numeric:tabular-nums}
+.meteo-t b{font-size:15px}
+.meteo-t small{font-size:12px;color:var(--tinta-2);font-weight:600}
+.meteo-pluie{font-size:11.5px;font-weight:700;color:var(--cobalto)}
+.note-meteo{display:flex;align-items:center;gap:8px;color:var(--tinta-2);font-size:14px;margin:-4px 0 12px}
+.note-meteo .meteo-ic{width:24px;height:26px}
+
+/* Mode Aujourd'hui */
+.aujourdhui{background:var(--cal);border:2px solid var(--rojo);border-radius:22px;padding:16px 18px;margin-bottom:18px;display:grid;gap:12px;box-shadow:var(--sombra)}
+.auj-tete{display:flex;align-items:center;justify-content:space-between;gap:10px}
+.auj-tete h2{font-size:26px;color:var(--rojo)}
+.auj-tete .muet{font-size:14px}
+.auj-prochain{display:grid;gap:4px;justify-items:start;background:var(--fondo);border-radius:16px;padding:12px 14px}
+.auj-label{font-size:12.5px;font-weight:700;color:var(--tinta-2);text-transform:uppercase;letter-spacing:.05em}
+.auj-titre{font-size:19px;line-height:1.25}
+.auj-prochain small{color:var(--tinta-2);font-size:14px}
+.auj-ligne{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.compte{font-family:var(--font-d);font-variation-settings:"SOFT" 100;font-weight:750;font-size:24px;color:var(--rojo)}
+.auj-prochain .btn{margin-top:6px}
+.auj-ensuite{list-style:none;margin:0;padding:0;display:grid;gap:4px;font-size:14.5px}
+.auj-ensuite li{display:flex;gap:10px;align-items:baseline}
+.auj-ensuite .h{font-weight:700;font-variant-numeric:tabular-nums;min-width:3.2em;color:var(--tinta-2)}
+.auj-nuit{display:flex;align-items:center;gap:10px;font-size:14.5px;border-top:1px dashed var(--linea);padding-top:10px;margin:0}
+.auj-nuit > span{flex:1;min-width:0}
+.auj-nuit small{display:block;color:var(--tinta-2)}
+.auj-vide{color:var(--tinta-2)}
+
+/* Carte des lieux */
+.carte-lieux{position:relative;z-index:0;isolation:isolate;height:min(62vh,520px);min-height:320px;border-radius:20px;overflow:hidden;border:1px solid var(--linea);box-shadow:var(--sombra);background:var(--linea)}
+.pin{position:relative;display:grid;place-items:center;width:30px;height:30px;border-radius:50%;background:var(--c);color:#FFFFFF;font:800 13px/1 var(--font-t);border:2.5px solid #FFFFFF;box-shadow:0 3px 8px rgba(0,0,0,.3)}
+.pin::after{content:"";position:absolute;left:50%;bottom:-9px;transform:translateX(-50%);border:6px solid transparent;border-top:7px solid #FFFFFF}
+.legende{list-style:none;margin:12px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:6px 14px;font-size:14px}
+.legende li{display:inline-flex;align-items:center;gap:6px}
+.pin-mini{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--c);color:#FFFFFF;font-size:11px;font-weight:800}
+.leaflet-popup-content{font:14px/1.4 var(--font-t)}
+
+/* Votes sur les idées */
+.vote{display:inline-flex;align-items:center;gap:6px;border:1px solid var(--linea);background:var(--cal);color:var(--tinta-2);border-radius:99px;padding:4px 10px 4px 8px;min-height:36px;cursor:pointer;font-weight:700}
+.vote .ic{width:17px;height:17px}
+.vote.on{border-color:var(--rojo);color:var(--rojo);background:color-mix(in srgb,var(--rojo) 9%,var(--cal))}
+.vote.on .ic{fill:color-mix(in srgb,var(--rojo) 25%,transparent)}
+.votants{display:inline-flex}
+.votants .ini{margin-left:-6px;box-shadow:0 0 0 2px var(--cal)}
+.ini--mini{width:20px;height:20px;font-size:8.5px}
+
+/* Valise */
+.check-liste{list-style:none;margin:0;padding:0;display:grid;gap:6px}
+.check{display:flex;align-items:center;gap:10px;width:100%;text-align:left;background:var(--cal);border:1px solid var(--linea);border-radius:14px;padding:10px 12px;cursor:pointer;font-size:15px;min-height:46px}
+.check .case{width:24px;height:24px;border-radius:8px;border:2px solid var(--linea);display:grid;place-items:center;flex:none;color:transparent;background:var(--cal)}
+.check .case .ic{width:16px;height:16px;stroke-width:3}
+.check.on .case{background:var(--verde);border-color:var(--verde);color:#FFFFFF}
+.check.on > span:last-child{color:var(--tinta-2);text-decoration:line-through}
+.progres{list-style:none;margin:0;padding:0;display:grid;gap:8px}
+.progres li{display:grid;grid-template-columns:auto minmax(70px,auto) 1fr auto;align-items:center;gap:10px;font-size:14.5px}
+.p-nom{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.barre-prog{height:8px;border-radius:99px;background:var(--linea);overflow:hidden}
+.barre-prog i{display:block;height:100%;background:var(--verde);border-radius:99px}
+.valise-commun > li.v-item{align-items:center;gap:10px;padding:10px 12px}
+.valise-commun .check{width:auto;border:0;padding:0;min-height:0;background:none}
+.v-label{flex:1;min-width:0}
+.v-item.fait .v-label{color:var(--tinta-2);text-decoration:line-through}
+.v-qui{display:inline-flex;align-items:center;gap:6px;border:0;background:var(--fondo);border-radius:99px;padding:3px 10px 3px 3px;cursor:pointer;font-weight:600;font-size:13.5px;max-width:45%}
+.v-qui span:last-child{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.v-qui.mien{background:color-mix(in srgb,var(--verde) 14%,var(--cal))}
+.ajout-valise{margin-top:10px}
+
+/* Question du jour */
+.quiz{background:var(--cal);border:1px solid var(--linea);box-shadow:var(--sombra);border-radius:22px;padding:0 18px 18px;margin:14px 0 6px;display:grid;gap:12px;overflow:hidden}
+.quiz::before{content:"";display:block;height:22px;margin:0 -18px;background:var(--tile) 0 0/22px 22px repeat-x;border-bottom:3px solid var(--cobalto)}
+.quiz-sur{font-weight:800;color:var(--cobalto);font-size:13px;text-transform:uppercase;letter-spacing:.06em;margin-bottom:-6px}
+.quiz h2{font-size:22px;line-height:1.25}
+.quiz-choix{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:8px}
+.quiz-btn{text-align:left;border:1.5px solid var(--linea);background:var(--fondo);border-radius:14px;padding:11px 14px;font-weight:600;font-size:15px;cursor:pointer;min-height:48px;color:var(--tinta)}
+.quiz-btn:hover:not(:disabled){border-color:var(--cobalto)}
+.quiz-btn:disabled{cursor:default;opacity:.7}
+.quiz-btn.bonne{opacity:1;border-color:var(--verde);background:color-mix(in srgb,var(--verde) 14%,var(--cal))}
+.quiz-btn.mauvaise{opacity:1;border-color:var(--alerta);background:color-mix(in srgb,var(--alerta) 10%,var(--cal))}
+.quiz-expl{font-size:15px}
+.quiz-expl b{color:var(--rojo)}
+.quiz-qui{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px}
+.quiz-qui li{display:inline-flex;align-items:center;gap:6px;background:var(--fondo);border-radius:99px;padding:3px 10px 3px 3px;font-size:13.5px;font-weight:600}
+.quiz-qui .ic{width:15px;height:15px;stroke-width:3}
+.quiz-qui .bon .ic{color:var(--verde)} .quiz-qui .faux .ic{color:var(--alerta)}
+.bandeau--quiz{display:flex;flex-wrap:wrap;gap:4px 10px;align-items:baseline;width:100%;text-align:left;cursor:pointer;border-color:var(--cobalto);background:color-mix(in srgb,var(--cobalto) 8%,var(--cal));color:var(--tinta);font:inherit;font-size:14.5px}
+.bandeau--quiz b{color:var(--cobalto)}
+
+/* La Liga : podium qui sort sur le côté */
+.liga{position:fixed;right:0;top:40%;z-index:45;display:flex;align-items:flex-start;transform:translateX(230px);transition:transform .45s cubic-bezier(.3,.7,.3,1)}
+.liga.ouverte{transform:translateX(0)}
+.liga[hidden]{display:none}
+.liga-languette{display:flex;flex-direction:column;align-items:center;gap:4px;border:0;background:var(--rojo);color:#FFFFFF;border-radius:14px 0 0 14px;padding:8px 6px 7px 8px;cursor:pointer;box-shadow:-2px 4px 14px rgba(40,10,10,.25);margin-top:14px}
+.liga-languette .ic{width:18px;height:18px}
+.liga-languette .ini{box-shadow:0 0 0 2px #FFFFFF}
+.liga-carte{width:230px;background:var(--cal);border-radius:18px 0 0 18px;box-shadow:-6px 10px 30px rgba(40,10,10,.25);padding:12px 14px 12px;cursor:pointer;overflow:hidden}
+.liga-carte::before{content:"";display:block;height:14px;margin:-12px -14px 8px;background:var(--tile) 0 0/14px 14px repeat-x;border-bottom:2px solid var(--rojo)}
+.liga-titre{font-family:var(--font-d);font-variation-settings:"SOFT" 100;font-weight:800;font-size:20px;color:var(--rojo)}
+.liga-msg{font-weight:800;font-size:14px;color:var(--cobalto);animation:liga-msg 1s ease-in-out 3}
+@keyframes liga-msg{50%{transform:scale(1.08)}}
+.liga-carte ol{list-style:none;margin:8px 0 0;padding:0;display:grid;gap:6px}
+.liga-carte li{display:flex;align-items:center;gap:7px;font-size:14px}
+.liga-carte li.nouveau{animation:liga-msg .8s ease-in-out 4}
+.medaille{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-weight:800;font-size:12px;color:#FFFFFF;flex:none}
+.r1 .medaille{background:var(--albero)} .r2 .medaille{background:#9AA3AE} .r3 .medaille{background:#B5552E}
+.l-nom{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-weight:600}
+.liga-pied{margin-top:8px;font-size:12.5px;color:var(--tinta-2)}
+html.en-jeu .liga{display:none}
+@media print{.liga{display:none!important}}
+
 /* Taureau caché derrière une carte */
 .cache-ici{position:relative;overflow:visible}
 .jour.cache-ici::before,.fiche.cache-ici::before{border-radius:21px 21px 0 0}
@@ -454,6 +566,10 @@ li.cache-ici{overflow:hidden}
   <symbol id="i-lock" viewBox="0 0 24 24"><rect x="3" y="11" width="18" height="11" rx="2"/><path d="M7 11V7a5 5 0 0 1 10 0v4"/></symbol>
   <symbol id="i-ext" viewBox="0 0 24 24"><path d="M15 3h6v6"/><path d="M10 14 21 3"/><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/></symbol>
   <symbol id="i-moon" viewBox="0 0 24 24"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></symbol>
+  <symbol id="i-pouce" viewBox="0 0 24 24"><path d="M7 10v12"/><path d="M15 5.88 14 10h5.83a2 2 0 0 1 1.92 2.56l-2.33 8A2 2 0 0 1 17.5 22H4a2 2 0 0 1-2-2v-8a2 2 0 0 1 2-2h2.76a2 2 0 0 0 1.79-1.11L12 2a3.13 3.13 0 0 1 3 3.88Z"/></symbol>
+  <symbol id="i-route" viewBox="0 0 24 24"><polygon points="3 11 22 2 13 21 11 13 3 11"/></symbol>
+  <symbol id="i-trophee" viewBox="0 0 24 24"><path d="M6 9H4.5a2.5 2.5 0 0 1 0-5H6"/><path d="M18 9h1.5a2.5 2.5 0 0 0 0-5H18"/><path d="M4 22h16"/><path d="M10 14.66V17c0 .55-.47.98-.97 1.21C7.85 18.75 7 20.24 7 22"/><path d="M14 14.66V17c0 .55.47.98.97 1.21C16.15 18.75 17 20.24 17 22"/><path d="M18 2H6v7a6 6 0 0 0 12 0V2Z"/></symbol>
+  <symbol id="i-check" viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></symbol>
   <symbol id="i-camera" viewBox="0 0 24 24"><path d="M14.5 4h-5L7 7H4a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V9a2 2 0 0 0-2-2h-3l-2.5-3z"/><circle cx="12" cy="13" r="3"/></symbol>
 </svg>
 
@@ -542,7 +658,10 @@ const ymdToDate = s => new Date(...ymdParts(s));
 const toYmd = dt => `${dt.getFullYear()}-${pad(dt.getMonth() + 1)}-${pad(dt.getDate())}`;
 const addDays = (s, n) => { const dt = ymdToDate(s); dt.setDate(dt.getDate() + n); return toYmd(dt); };
 const daysBetween = (a, b) => Math.round((Date.UTC(...ymdParts(b)) - Date.UTC(...ymdParts(a))) / 86400000);
-const todayYmd = () => toYmd(new Date());
+/* « Maintenant » : l'heure réelle, ou une heure simulée avec ?maintenant=2027-02-12T10:30 pour prévisualiser le mode Aujourd'hui */
+const MAINTENANT_FORCE = (() => { const m = new URLSearchParams(location.search).get('maintenant'); const t = m ? new Date(m) : null; return t && !isNaN(t) ? t.getTime() - Date.now() : 0; })();
+const maintenant = () => new Date(Date.now() + MAINTENANT_FORCE);
+const todayYmd = () => toYmd(maintenant());
 const FR_LONG = new Intl.DateTimeFormat('fr-FR', { weekday: 'long', day: 'numeric', month: 'long' });
 const FR_SHORT = new Intl.DateTimeFormat('fr-FR', { weekday: 'short', day: 'numeric', month: 'short' });
 const FR_DM = new Intl.DateTimeFormat('fr-FR', { day: 'numeric', month: 'short' });
@@ -597,7 +716,7 @@ const mapsUrl = q => `https://www.google.com/maps/search/?api=1&query=${encodeUR
 const DEF = {
   flight: { direction: 'aller', airline: '', number: '', from: '', to: '', depart: '', arrive: '', passengers: [], price: null, paidBy: '', url: '', notes: '', secret: '' },
   stay: { name: '', address: '', checkin: '', checkout: '', price: null, paidBy: '', url: '', notes: '', secret: '' },
-  activity: { title: '', date: '', time: '', place: '', booking: 'non', price: null, paidBy: '', url: '', notes: '', secret: '' },
+  activity: { title: '', date: '', time: '', place: '', booking: 'non', price: null, paidBy: '', url: '', notes: '', secret: '', votes: [] },
   expense: { label: '', amount: null, paidBy: '', date: '', split: [], items: [] }
 };
 const arr = x => Array.isArray(x) ? x.filter(i => i && typeof i === 'object' && i.id) : [];
@@ -611,7 +730,13 @@ function normalize(d) {
     travelers: arr(d.travelers).map(cleanTraveler),
     flights: arr(d.flights).map(x => Object.assign({}, DEF.flight, x)),
     stays: arr(d.stays).map(x => Object.assign({}, DEF.stay, x)),
-    activities: arr(d.activities).map(x => Object.assign({}, DEF.activity, x)),
+    activities: arr(d.activities).map(x => {
+      const o = Object.assign({}, DEF.activity, x);
+      o.votes = Array.isArray(o.votes) ? [...new Set(o.votes.filter(v => typeof v === 'string'))] : [];
+      return o;
+    }),
+    valise: normValise(d.valise),
+    quiz: normQuiz(d.quiz),
     expenses: arr(d.expenses).map(x => {
       const o = Object.assign({}, DEF.expense, x);
       o.items = Array.isArray(o.items) ? o.items.filter(i => i && typeof i === 'object' && num(i.amount) !== null)
@@ -873,7 +998,7 @@ function privateHtml(x) {
 }
 
 /* ================= Rendu ================= */
-const TABS = [['programme', 'Programme'], ['vols', 'Vols'], ['logement', 'Logement'], ['activites', 'Activités'], ['budget', 'Budget'], ['fiesta', 'Fiesta']];
+const TABS = [['programme', 'Programme'], ['vols', 'Vols'], ['logement', 'Logement'], ['activites', 'Activités'], ['budget', 'Budget'], ['valise', 'Valise'], ['carte', 'Carte'], ['fiesta', 'Fiesta']];
 function render() { renderHero(); renderTabs(); renderMain(); renderFoot(); }
 
 function pillText() {
@@ -969,9 +1094,10 @@ function renderMain() {
   main.setAttribute('aria-labelledby', `tab-${S.tab}`);
   const banner = MODE === 'local'
     ? `<p class="bandeau">Mode local : les modifications restent dans ce navigateur. Une fois la page publiée sur GitHub Pages, elles seront partagées avec tout le groupe.</p>` : '';
-  const views = { programme: viewProgramme, vols: viewVols, logement: viewLogement, activites: viewActivites, budget: viewBudget, fiesta: viewFiesta };
+  const views = { programme: viewProgramme, vols: viewVols, logement: viewLogement, activites: viewActivites, budget: viewBudget, valise: viewValise, carte: viewCarte, fiesta: viewFiesta };
   main.innerHTML = banner + views[S.tab](d);
   placerTaureauCache();
+  if (S.tab === 'carte') initCarte(d);
 }
 
 function renderFoot() {
@@ -1032,7 +1158,7 @@ function dayCard(d, day, isLast, idx, total) {
     ? `<p class="nuit">${icon('moon')}<span>Nuit : ${esc(night.name || 'logement')}</span></p>`
     : `<p class="nuit nuit--manque">${icon('moon')}<span>Pas encore de logement pour cette nuit</span></p>`;
   return `<section class="jour${day === todayYmd() ? ' jour--auj' : ''}" data-cache="jour-${day}" aria-label="${esc(cap(fmtLong(day)))}">
-    <header class="jour-tete"><span class="jour-num" aria-hidden="true"><b>${dt.getDate()}</b><i>${esc(dt.toLocaleDateString('fr-FR', { month: 'short' }))}</i></span><span><h3 class="jour-nom">${esc(cap(dt.toLocaleDateString('fr-FR', { weekday: 'long' })))}</h3><span class="jour-sous">${day === todayYmd() ? 'Aujourd’hui, j' : 'J'}our ${idx + 1} sur ${total}</span></span></header>
+    <header class="jour-tete"><span class="jour-num" aria-hidden="true"><b>${dt.getDate()}</b><i>${esc(dt.toLocaleDateString('fr-FR', { month: 'short' }))}</i></span><span><h3 class="jour-nom">${esc(cap(dt.toLocaleDateString('fr-FR', { weekday: 'long' })))}</h3><span class="jour-sous">${day === todayYmd() ? 'Aujourd’hui, j' : 'J'}our ${idx + 1} sur ${total}</span></span>${meteoJour(day)}</header>
     ${evs.length ? `<ol class="evts">${evs.map(eventHtml).join('')}</ol>` : `<p class="vide">Rien de prévu pour l’instant.</p>`}
     ${nightLine}
     ${canEdit() ? `<button type="button" class="ajout-jour" data-act="add-activity" data-date="${day}">${icon('plus')} Activité</button>` : ''}
@@ -1046,22 +1172,22 @@ function planSelect(d, a) {
 function viewProgramme(d) {
   const days = tripDays(d);
   const pts = openPoints(d);
-  const ideas = d.activities.filter(a => !a.date);
+  const ideas = parVotes(d.activities.filter(a => !a.date));
   const outside = d.activities.filter(a => a.date && !days.includes(a.date));
-  const trouve = bandeauTaureau(d);
+  const trouve = blocAujourdhui(d) + bandeauQuiz(d) + bandeauTaureau(d);
   const todo = trouve + `<section class="reste" aria-labelledby="reste-t"><h2 id="reste-t">Reste à caler</h2>${pts.length
     ? `<ul>${pts.map(p => `<li><button type="button" data-act="tab" data-tab="${p.tab}">${esc(p.txt)}</button></li>`).join('')}</ul>`
     : `<p class="cale">Tout est calé.</p>`}</section>`;
   const grid = days.length
-    ? `<div class="jours">${days.map((day, i) => dayCard(d, day, i === days.length - 1, i, days.length)).join('')}</div>`
+    ? noteMeteo(d) + `<div class="jours">${days.map((day, i) => dayCard(d, day, i === days.length - 1, i, days.length)).join('')}</div>`
     : `<div class="vide-bloc"><p>Indique les dates du voyage dans Réglages.</p></div>`;
-  const idHtml = ideas.length ? `<section class="section"><h2>Idées à caser</h2><p class="intro">Pas encore de jour attribué.</p><ul class="liste">${ideas.map(a => ideaRow(d, a)).join('')}</ul></section>` : '';
+  const idHtml = ideas.length ? `<section class="section"><h2>Idées à caser</h2><p class="intro">Pas encore de jour attribué. Mets un pouce sur celles qui te tentent : les plus votées remontent.</p><ul class="liste">${ideas.map(a => ideaRow(d, a)).join('')}</ul></section>` : '';
   const outHtml = outside.length ? `<section class="section"><h2>Hors des dates du voyage</h2><ul class="liste">${outside.map(a => activityRow(d, a, true)).join('')}</ul></section>` : '';
   return todo + grid + idHtml + outHtml;
 }
 function ideaRow(d, a) {
   return `<li data-cache="${esc(a.id)}"><div class="ligne ligne--sans-h"><div><b>${esc(a.title)}</b>${a.notes ? `<p class="note">${esc(a.notes)}</p>` : ''}</div></div>
-    <div class="cote">${a.booking !== 'non' ? `<span class="badge badge--${a.booking}">${BOOKING[a.booking]}</span>` : ''}${planSelect(d, a)}</div></li>`;
+    <div class="cote">${voteHtml(d, a)}${a.booking !== 'non' ? `<span class="badge badge--${a.booking}">${BOOKING[a.booking]}</span>` : ''}${planSelect(d, a)}</div></li>`;
 }
 
 /* ---------- Vols ---------- */
@@ -1138,7 +1264,7 @@ function viewActivites(d) {
   }
   const outside = d.activities.filter(a => a.date && !days.includes(a.date)).sort((a, b) => a.date.localeCompare(b.date) || byTime(a, b));
   if (outside.length) html += `<h3 class="titre-jour">Autres dates</h3><ul class="liste">${outside.map(a => activityRow(d, a, true)).join('')}</ul>`;
-  const ideas = d.activities.filter(a => !a.date);
+  const ideas = parVotes(d.activities.filter(a => !a.date));
   html += `<h3 class="titre-jour">Idées, sans date</h3>`;
   html += ideas.length ? `<ul class="liste">${ideas.map(a => activityRow(d, a)).join('')}</ul>` : `<p class="vide">Aucune idée en attente.</p>`;
   return html;
@@ -1160,6 +1286,7 @@ function activityRow(d, a, showDate) {
       </div>
     </div>
     <div class="cote">
+      ${!a.date ? voteHtml(d, a) : ''}
       ${a.booking !== 'non' ? `<span class="badge badge--${a.booking}">${BOOKING[a.booking]}</span>` : ''}
       ${price ? `<span class="prix">${money(price)}</span>` : ''}
       ${!a.date ? planSelect(d, a) : ''}
@@ -1928,6 +2055,14 @@ const ACTIONS = {
   'add-expense': () => expenseForm(),
   'scan-receipt': () => scanReceipt(),
   'jeu-muleta': () => jeuMuleta(),
+  vote: b => voter(b.dataset.id),
+  'valise-prendre': b => valisePrendre(b.dataset.id),
+  'valise-ok': b => valiseCocher(b.dataset.id),
+  'valise-suppr': b => valiseSupprimer(b.dataset.id),
+  'valise-ajout': () => valiseAjouter(),
+  'perso-ok': b => persoCocher(b.dataset.k),
+  quiz: b => repondreQuiz(Number(b.dataset.choix)),
+  liga: () => basculerLiga(),
   'jeu-tapas': () => jeuTapas(),
   'jeu-compas': () => jeuCompas(),
   'taureau-cache': b => attraperTaureau(b),
@@ -1940,7 +2075,7 @@ document.addEventListener('click', e => {
   const b = e.target.closest('[data-act]');
   if (!b || b.tagName === 'SELECT') return;
   const fn = ACTIONS[b.dataset.act];
-  if (fn && (canEdit() || ['settings', 'photo', 'tab', 'retry', 'jeu-muleta', 'jeu-tapas', 'jeu-compas', 'taureau-cache', 'secousse-ios', 'fiesta'].includes(b.dataset.act))) fn(b);
+  if (fn && (canEdit() || ['settings', 'photo', 'tab', 'retry', 'jeu-muleta', 'jeu-tapas', 'jeu-compas', 'taureau-cache', 'secousse-ios', 'fiesta', 'vote', 'quiz', 'liga', 'perso-ok', 'valise-prendre', 'valise-ok', 'valise-ajout', 'valise-suppr'].includes(b.dataset.act))) fn(b);
 });
 document.addEventListener('keydown', e => {
   const row = e.target.closest && e.target.closest('tr[data-act]');
@@ -2911,6 +3046,8 @@ function fiesta(texte) {
 function recompenses() {
   const d = S.data;
   if (!d) return;
+  majLiga(false);
+  if (!S.meteoDemandee) chargerMeteo();
   const nb = openPoints(d).length;
   const dern = d.jeux.cache && d.jeux.cache.dernier ? d.jeux.cache.dernier.le : '';
   if (S.nbReste !== undefined && animOn()) {
@@ -3007,6 +3144,8 @@ function viewFiesta(d) {
     ? '<button type="button" class="btn btn--petit" data-act="secousse-ios">Activer sur cet iPhone</button>' : '';
   return `<div class="tete"><h2>Fiesta</h2><button type="button" class="btn" data-act="fiesta">¡Fiesta!</button></div>
     <p class="intro-fiesta">Des petits jeux pour patienter jusqu’au départ. Les records entrent au classement du groupe avec ton prénom (Réglages → Toi).</p>
+    ${quizHtml(d)}
+    <section class="section"><h2>La Liga del viaje</h2><p class="intro">Le classement général : 5, 3 et 1 points pour le podium de chaque jeu, 2 points par taureau trouvé, 1 point par bonne réponse à la question du jour.</p>${ligaTableau(d)}</section>
     <section class="section"><h2>Mejor torero</h2><p class="intro">Record de passes avec la muleta.</p>${podiumHtml(classement(d, 'oles'), 'olés')}</section>
     <section class="section"><h2>Les jeux</h2><div class="jeux-grille">
       ${carte('oles', 'Toréer', 'Garde le doigt sur l’écran (ou la souris) : le taureau suit ta muleta. Chaque passe frôlée vaut un ¡Olé!', 'jeu-muleta')}
@@ -3112,6 +3251,601 @@ function entree() {
   });
 }
 
+/* ================= Météo (Open-Meteo, gratuit, sans compte) ================= */
+/* Prévisions à 16 jours : chaque carte du programme affiche la météo dès qu'elle est connue. */
+const METEO = { jours: {} };
+async function geoVille(nom) {
+  const cle = 'geo-ville:' + nom, c = safeParse(store.get(cle));
+  if (c && c.lat) return c;
+  try {
+    const r = await fetch(`https://geocoding-api.open-meteo.com/v1/search?name=${encodeURIComponent(nom)}&count=1&language=fr`);
+    const j = await r.json();
+    if (j.results && j.results[0]) {
+      const g = { lat: j.results[0].latitude, lon: j.results[0].longitude };
+      store.set(cle, JSON.stringify(g));
+      return g;
+    }
+  } catch { /* hors ligne */ }
+  return { lat: 37.3891, lon: -5.9845 }; /* Séville par défaut */
+}
+async function chargerMeteo() {
+  const d = S.data;
+  if (!d) return;
+  const days = tripDays(d);
+  if (!days.length) return;
+  S.meteoDemandee = true;
+  const avant = daysBetween(todayYmd(), days[0]), apres = daysBetween(todayYmd(), days[days.length - 1]);
+  if (avant > 15 || apres < 0) return;
+  const cle = `meteo:${d.trip.title}:${days[0]}`, c = safeParse(store.get(cle));
+  if (c && Date.now() - c.t < 3 * 3600000) { METEO.jours = c.jours; rafraichirMeteo(); return; }
+  try {
+    const g = await geoVille(d.trip.title);
+    const r = await fetch(`https://api.open-meteo.com/v1/forecast?latitude=${g.lat}&longitude=${g.lon}&daily=weather_code,temperature_2m_max,temperature_2m_min,precipitation_probability_max&timezone=auto&forecast_days=16`);
+    if (!r.ok) return;
+    const j = await r.json(), jours = {};
+    j.daily.time.forEach((t, i) => {
+      jours[t] = { code: j.daily.weather_code[i], max: j.daily.temperature_2m_max[i], min: j.daily.temperature_2m_min[i], pluie: j.daily.precipitation_probability_max ? j.daily.precipitation_probability_max[i] : null };
+    });
+    METEO.jours = jours;
+    store.set(cle, JSON.stringify({ t: Date.now(), jours }));
+    rafraichirMeteo();
+  } catch { /* hors ligne : pas de météo */ }
+}
+const rafraichirMeteo = () => { if (S.tab === 'programme' && !dlg.open) renderMain(); };
+function typeMeteo(c) {
+  if (c === 0) return ['soleil', 'Ensoleillé'];
+  if (c <= 2) return ['eclaircie', 'Éclaircies'];
+  if (c === 3) return ['nuage', 'Couvert'];
+  if (c <= 48) return ['brume', 'Brouillard'];
+  if (c <= 67) return ['pluie', 'Pluie'];
+  if (c <= 77 || c === 85 || c === 86) return ['neige', 'Neige'];
+  if (c <= 82) return ['pluie', 'Averses'];
+  return ['orage', 'Orage'];
+}
+function iconeMeteo(t) {
+  const soleil = (cx, cy, r) => `<circle cx="${cx}" cy="${cy}" r="${r}" fill="#E2A93B"/>` + [0, 45, 90, 135, 180, 225, 270, 315].map(a => { const c = Math.cos(a * Math.PI / 180), s = Math.sin(a * Math.PI / 180); return `<path d="M${(cx + c * (r + 2.5)).toFixed(1)} ${(cy + s * (r + 2.5)).toFixed(1)} L${(cx + c * (r + 5)).toFixed(1)} ${(cy + s * (r + 5)).toFixed(1)}" stroke="#E2A93B" stroke-width="1.8" stroke-linecap="round"/>`; }).join('');
+  const nuage = (fill = '#AEB6C2') => `<path d="M8 22 a5 5 0 0 1 1-9.9 a7 7 0 0 1 13.4 1.9 a4 4 0 0 1 .6 8z" fill="${fill}"/>`;
+  const contenu = {
+    soleil: soleil(14, 14, 6),
+    eclaircie: soleil(11, 10, 5) + nuage('#C7CDD6'),
+    nuage: nuage(),
+    brume: '<path d="M5 11h18M3 16h22M6 21h16" stroke="#AEB6C2" stroke-width="2.4" stroke-linecap="round"/>',
+    pluie: nuage('#9AA5B4') + '<path d="M10 24l-1.5 3M15 24l-1.5 3M20 24l-1.5 3" stroke="#1D4E9E" stroke-width="2" stroke-linecap="round"/>',
+    neige: nuage('#9AA5B4') + '<circle cx="10" cy="25.5" r="1.4" fill="#8DAEF0"/><circle cx="15" cy="26" r="1.4" fill="#8DAEF0"/><circle cx="20" cy="25.5" r="1.4" fill="#8DAEF0"/>',
+    orage: nuage('#7E8896') + '<path d="M15 21l-3 5h3l-2 4 5-6h-3l2-3z" fill="#E2A93B"/>'
+  }[t];
+  return `<svg class="meteo-ic" viewBox="0 0 28 30" aria-hidden="true">${contenu}</svg>`;
+}
+function meteoJour(day) {
+  const m = METEO.jours[day];
+  if (!m || m.max === null || m.max === undefined) return '';
+  const [t, label] = typeMeteo(m.code);
+  return `<span class="meteo" title="${esc(label)}">${iconeMeteo(t)}<span class="meteo-t"><b>${Math.round(m.max)}°</b><small>${Math.round(m.min)}°</small></span>${m.pluie >= 30 ? `<small class="meteo-pluie">${m.pluie} %</small>` : ''}<span class="sr">${esc(label)}, ${Math.round(m.max)} degrés</span></span>`;
+}
+function noteMeteo(d) {
+  const days = tripDays(d);
+  if (days.some(x => METEO.jours[x])) return '';
+  const avant = daysBetween(todayYmd(), days[0]);
+  if (avant <= 15) return '';
+  return `<p class="note-meteo">${iconeMeteo('eclaircie')}La météo de ${esc(d.trip.title)} s’affichera sur chaque jour à partir du ${esc(fmtDM(addDays(days[0], -15)))}.</p>`;
+}
+
+/* ================= Mode « Aujourd'hui » pendant le voyage ================= */
+const itineraire = q => `https://www.google.com/maps/dir/?api=1&destination=${encodeURIComponent(q)}`;
+function destinationEvt(d, e) {
+  if (e.k === 'vol') { const f = d.flights.find(x => x.id === e.id); return f ? f.from : ''; }
+  if (e.k === 'logement') { const s = d.stays.find(x => x.id === e.id); return s ? (s.address || s.name) : ''; }
+  const a = d.activities.find(x => x.id === e.id);
+  return a ? a.place : '';
+}
+function compteTexte(iso) {
+  const diff = Math.round((new Date(iso) - maintenant()) / 60000);
+  if (diff <= 0) return 'maintenant';
+  if (diff < 60) return `dans ${diff} min`;
+  const h = Math.floor(diff / 60), m = diff % 60;
+  return `dans ${h} h${m ? ' ' + pad(m) : ''}`;
+}
+function blocAujourdhui(d) {
+  const days = tripDays(d), today = todayYmd();
+  if (!days.includes(today)) return '';
+  const now = maintenant(), hm = `${pad(now.getHours())}:${pad(now.getMinutes())}`;
+  const avenir = dayEvents(d, today).filter(e => !e.t || e.t >= hm);
+  const prochain = avenir.find(e => e.t) || avenir[0];
+  const ensuite = avenir.filter(e => e !== prochain).slice(0, 3);
+  const nuit = nightStay(d, today);
+  const demainJ = addDays(today, 1), demain = days.includes(demainJ) ? dayEvents(d, demainJ)[0] : null;
+  let html = `<section class="aujourdhui" aria-labelledby="auj-t"><div class="auj-tete"><div><h2 id="auj-t">Aujourd’hui</h2><span class="muet">${esc(cap(fmtLong(today)))}</span></div>${meteoJour(today)}</div>`;
+  if (prochain) {
+    const dest = destinationEvt(d, prochain);
+    let conseil = '';
+    if (prochain.k === 'vol' && prochain.t) {
+      const [h, mi] = prochain.t.split(':').map(Number), t = new Date(2000, 0, 1, h, mi - 120);
+      conseil = `<p class="aide">Sois à l’aéroport vers ${pad(t.getHours())}:${pad(t.getMinutes())}.</p>`;
+    }
+    html += `<div class="auj-prochain"><span class="auj-label">Prochain rendez-vous</span>
+      <b class="auj-titre">${esc(prochain.title)}</b>${prochain.sub ? `<small>${esc(prochain.sub)}</small>` : ''}
+      <div class="auj-ligne">${prochain.t ? `<span class="compte" data-compte="${today}T${prochain.t}">${compteTexte(today + 'T' + prochain.t)}</span><span class="muet">à ${esc(prochain.t)}</span>` : '<span class="compte">dans la journée</span>'}</div>
+      ${conseil}${dest ? `<a class="btn btn--primary btn--petit" href="${esc(itineraire(dest))}" target="_blank" rel="noopener">${icon('route')} Itinéraire</a>` : ''}</div>`;
+  } else {
+    html += `<p class="auj-vide">Plus rien de prévu aujourd’hui.${demain ? ` Demain : <b>${esc(demain.title)}</b>${demain.t ? ' à ' + esc(demain.t) : ''}.` : ''}</p>`;
+  }
+  if (ensuite.length) html += `<ul class="auj-ensuite">${ensuite.map(e => `<li><span class="h">${esc(e.t || '–')}</span><span>${esc(e.title)}</span></li>`).join('')}</ul>`;
+  if (nuit) {
+    html += `<div class="auj-nuit">${icon('moon')}<span>Ce soir : <b>${esc(nuit.name || 'logement')}</b>${nuit.address ? `<small>${esc(nuit.address)}</small>` : ''}</span>${nuit.address ? `<a class="btn btn--petit" href="${esc(itineraire(nuit.address))}" target="_blank" rel="noopener">${icon('route')} Y aller</a>` : ''}</div>`;
+  } else if (today !== days[days.length - 1]) {
+    html += `<p class="auj-nuit nuit--manque">${icon('moon')}<span>Pas encore de logement pour ce soir.</span></p>`;
+  }
+  return html + '</section>';
+}
+/* Comptes à rebours mis à jour en continu ; quand un rendez-vous est passé, on passe au suivant */
+function majComptes() {
+  const els = [...document.querySelectorAll('[data-compte]')];
+  els.forEach(el => { el.textContent = compteTexte(el.dataset.compte); });
+  if (S.tab === 'programme' && !dlg.open && els.some(el => new Date(el.dataset.compte) < new Date(maintenant().getTime() - 60000))) renderMain();
+}
+
+/* ================= Carte de tous les lieux (Leaflet + OpenStreetMap) ================= */
+const COUL_JOURS = ['#B3202E', '#1D4E9E', '#C98A1B', '#2E7D57', '#6B3FA0', '#0F7C8C', '#7D1520'];
+let carteL = null, leafletP = null;
+function chargerLeaflet() {
+  if (window.L) return Promise.resolve();
+  if (!leafletP) leafletP = new Promise((ok, ko) => {
+    const l = document.createElement('link');
+    l.rel = 'stylesheet';
+    l.href = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css';
+    document.head.appendChild(l);
+    const s = document.createElement('script');
+    s.src = 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js';
+    s.onload = ok;
+    s.onerror = () => { leafletP = null; ko(new Error('Carte indisponible : vérifie ta connexion.')); };
+    document.head.appendChild(s);
+  });
+  return leafletP;
+}
+function lieuxCarte(d) {
+  const days = tripDays(d), l = [];
+  d.activities.forEach(a => {
+    if (!a.place) return;
+    const i = days.indexOf(a.date);
+    l.push({ q: a.place, titre: a.title, quand: a.date ? cap(fmtShort(a.date)) + (a.time ? ', ' + a.time : '') : 'Idée, pas encore de jour', c: i >= 0 ? COUL_JOURS[i % 7] : '#8A817F', txt: i >= 0 ? String(i + 1) : '?' });
+  });
+  d.stays.forEach(s => { if (s.address || s.name) l.push({ q: s.address || s.name, titre: s.name || 'Logement', quand: [fmtDT(s.checkin), fmtDT(s.checkout)].filter(Boolean).join(' → '), c: '#E2A93B', txt: 'L' }); });
+  const racine = plainUp(d.trip.title || '').slice(0, 5), aeros = new Set();
+  d.flights.forEach(f => [f.from, f.to].forEach(x => { if (x && racine && plainUp(x).includes(racine)) aeros.add(x); }));
+  aeros.forEach(x => l.push({ q: 'aéroport ' + x.replace(/\(.*?\)/g, '').trim(), titre: x, quand: 'Aéroport', c: '#231B1B', txt: 'A' }));
+  return l;
+}
+/* Géocodage OpenStreetMap (Nominatim), une demande par seconde, mémorisé sur l'appareil */
+const geoFile = [];
+let geoTourne = false;
+/* La recherche est limitée à ~30 km autour de la ville du voyage, pour éviter les homonymes
+   (« Santa Cruz » existe aussi en Bolivie…) */
+function geocoder(q, ville, centre) {
+  const cle = `geo2:${ville}:${q}`, c = safeParse(store.get(cle));
+  if (c) return Promise.resolve(c.lat ? c : null);
+  return new Promise(ok => { geoFile.push({ q, ville, centre, cle, ok }); tournerGeo(); });
+}
+const distanceKm = (a, b) => {
+  const r = Math.PI / 180, dLat = (b.lat - a.lat) * r, dLon = (b.lon - a.lon) * r;
+  const h = Math.sin(dLat / 2) ** 2 + Math.cos(a.lat * r) * Math.cos(b.lat * r) * Math.sin(dLon / 2) ** 2;
+  return 12742 * Math.asin(Math.sqrt(h));
+};
+async function tournerGeo() {
+  if (geoTourne) return;
+  geoTourne = true;
+  while (geoFile.length) {
+    const job = geoFile.shift();
+    try {
+      const racine = plainUp(job.ville).slice(0, 5);
+      const query = racine && plainUp(job.q).includes(racine) ? job.q : `${job.q}, ${job.ville}`;
+      const { lat, lon } = job.centre, z = .3;
+      const r = await fetch(`https://nominatim.openstreetmap.org/search?format=jsonv2&limit=3&accept-language=fr&bounded=1&viewbox=${lon - z},${lat + z},${lon + z},${lat - z}&q=${encodeURIComponent(query)}`);
+      const j = r.ok ? await r.json() : [];
+      const bon = j.map(x => ({ lat: +x.lat, lon: +x.lon })).find(g => distanceKm(g, job.centre) < 40) || null;
+      if (r.ok) store.set(job.cle, JSON.stringify(bon || { rien: 1 }));
+      job.ok(bon);
+    } catch { job.ok(null); }
+    await sleep(1100);
+  }
+  geoTourne = false;
+}
+function viewCarte(d) {
+  const days = tripDays(d);
+  return `<div class="tete"><h2>Carte</h2></div>
+    <div id="carte" class="carte-lieux" role="region" aria-label="Carte des lieux du voyage"></div>
+    <ul class="legende">${days.map((x, i) => `<li><span class="pin-mini" style="--c:${COUL_JOURS[i % 7]}">${i + 1}</span>${esc(cap(fmtShort(x)))}</li>`).join('')}
+      <li><span class="pin-mini" style="--c:#8A817F">?</span>Idées</li><li><span class="pin-mini" style="--c:#E2A93B">L</span>Logement</li><li><span class="pin-mini" style="--c:#231B1B">A</span>Aéroport</li></ul>
+    <p class="aide" id="carteEtat"></p>`;
+}
+async function initCarte(d) {
+  const zone = $('#carte'), etat = $('#carteEtat');
+  if (!zone) return;
+  try { await chargerLeaflet(); } catch (e) { if (etat) etat.textContent = e.message; return; }
+  const centre = await geoVille(d.trip.title);
+  if (!zone.isConnected) return;
+  if (carteL) { carteL.remove(); carteL = null; }
+  const map = carteL = L.map(zone, { scrollWheelZoom: false }).setView([centre.lat, centre.lon], 14);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', { maxZoom: 19, attribution: '&copy; OpenStreetMap' }).addTo(map);
+  const lieux = lieuxCarte(d), pts = [];
+  let faits = 0, trouves = 0;
+  etat.textContent = lieux.length ? `Recherche des lieux… 0/${lieux.length}` : 'Aucun lieu pour l’instant : ajoute un lieu aux activités ou une adresse au logement.';
+  lieux.forEach(lieu => geocoder(lieu.q, d.trip.title, centre).then(g => {
+    faits++;
+    if (map !== carteL) return;
+    if (g) {
+      trouves++;
+      const ic = L.divIcon({ className: '', html: `<span class="pin" style="--c:${lieu.c}">${esc(lieu.txt)}</span>`, iconSize: [30, 38], iconAnchor: [15, 37], popupAnchor: [0, -34] });
+      L.marker([g.lat, g.lon], { icon: ic, title: lieu.titre }).addTo(map)
+        .bindPopup(`<b>${esc(lieu.titre)}</b><br>${esc(lieu.quand)}<br><a href="${esc(itineraire(lieu.q))}" target="_blank" rel="noopener">Itinéraire</a>`);
+      pts.push([g.lat, g.lon]);
+      if (pts.length > 1) map.fitBounds(pts, { padding: [36, 36], maxZoom: 16 }); else map.setView(pts[0], 15);
+    }
+    if (etat.isConnected) etat.textContent = faits < lieux.length ? `Recherche des lieux… ${faits}/${lieux.length}`
+      : trouves < lieux.length ? `${lieux.length - trouves} lieu${lieux.length - trouves > 1 ? 'x' : ''} introuvable${lieux.length - trouves > 1 ? 's' : ''} : précise le nom du lieu dans l’activité.` : '';
+  }));
+}
+
+/* ================= Votes sur les idées ================= */
+const parVotes = l => [...l].sort((a, b) => b.votes.length - a.votes.length);
+function voteHtml(d, a) {
+  const moi = me(), mien = !!(moi && a.votes.includes(moi.id));
+  const qui = a.votes.map(id => d.travelers.findIndex(t => t.id === id)).filter(i => i >= 0).map(i => avatarHtml(d.travelers[i], i, 'ini--mini')).join('');
+  return `<button type="button" class="vote${mien ? ' on' : ''}" data-act="vote" data-id="${esc(a.id)}" aria-pressed="${mien}" aria-label="${mien ? 'Retirer mon pouce' : 'Ça me tente'} : ${esc(a.title)}">${icon('pouce')}<b>${a.votes.length}</b>${qui ? `<span class="votants">${qui}</span>` : ''}</button>`;
+}
+function voter(id) {
+  const moi = me();
+  if (!canEdit()) { toast('Il faut le lien d’édition pour voter.'); return; }
+  if (!moi) { toast('Choisis ton prénom dans Réglages pour voter.'); return; }
+  const a = S.data.activities.find(x => x.id === id);
+  if (!a) return;
+  const on = !a.votes.includes(moi.id);
+  commit(`${on ? 'met un pouce sur' : 'retire son pouce de'} « ${a.title} »`, d => {
+    const x = d.activities.find(y => y.id === id);
+    if (x) { x.votes = x.votes.filter(v => v !== moi.id); if (on) x.votes.push(moi.id); }
+    return d;
+  });
+}
+
+/* ================= Valise ================= */
+const VALISE_DEFAUT = [['v-pharma', 'Trousse à pharmacie'], ['v-solaire', 'Crème solaire'], ['v-batterie', 'Batterie externe'], ['v-enceinte', 'Enceinte'], ['v-cartes', 'Jeu de cartes'], ['v-parapluie', 'Parapluie pliant'], ['v-multiprise', 'Multiprise']];
+function normValise(v) {
+  v = v && typeof v === 'object' ? v : null;
+  const commun = v && Array.isArray(v.commun)
+    ? v.commun.filter(i => i && typeof i === 'object' && i.id && typeof i.label === 'string').map(i => ({ id: String(i.id), label: i.label, par: typeof i.par === 'string' ? i.par : '', ok: !!i.ok }))
+    : VALISE_DEFAUT.map(([id, label]) => ({ id, label, par: '', ok: false }));
+  const perso = {};
+  if (v && v.perso && typeof v.perso === 'object') for (const [k, l] of Object.entries(v.perso)) if (Array.isArray(l)) perso[k] = l.filter(x => typeof x === 'string');
+  return { commun, perso };
+}
+/* César doit avoir passeport ET carte d'identité ; pour les autres, l'un ou l'autre suffit */
+const docsDoubles = t => /^CESAR\b/.test(plainUp(String(t.name || '')).trim());
+function persoListe(t) {
+  const docs = docsDoubles(t) ? [['passeport', 'Passeport valide'], ['cni', 'Carte d’identité valide']] : [['identite', 'Passeport ou carte d’identité valide']];
+  return [...docs,
+    ['embarquement', 'Cartes d’embarquement aller et retour (dans le téléphone)'],
+    ['cb', 'Carte bancaire'],
+    ['ceam', 'Carte européenne d’assurance maladie'],
+    ['chargeur', 'Chargeur de téléphone'],
+    ['liquides', 'Liquides en cabine : 100 ml max, dans un sac transparent'],
+    ['veste', 'Une veste pour le soir (environ 8 °C la nuit en février)'],
+    ['chaussures', 'Chaussures confortables pour marcher'],
+    ['lunettes', 'Lunettes de soleil'],
+    ['especes', 'Un peu d’espèces pour les bars à tapas']];
+}
+function viewValise(d) {
+  const moi = me();
+  let perso = `<p class="bandeau">Choisis ton prénom dans Réglages → Toi pour avoir ta liste à cocher.</p>`;
+  if (moi) {
+    const fait = d.valise.perso[moi.id] || [], l = persoListe(moi), n = l.filter(([k]) => fait.includes(k)).length;
+    perso = `<section class="section"><h2>Ma valise</h2><p class="intro">${n}/${l.length} prêts.${docsDoubles(moi) ? ' Pour toi : <b>passeport et carte d’identité</b>.' : ''}</p>
+      <ul class="check-liste">${l.map(([k, label]) => `<li><button type="button" class="check${fait.includes(k) ? ' on' : ''}" data-act="perso-ok" data-k="${k}" aria-pressed="${fait.includes(k)}"><span class="case">${icon('check')}</span><span>${esc(label)}</span></button></li>`).join('')}</ul></section>`;
+  }
+  const progres = d.travelers.map((t, i) => {
+    const l = persoListe(t), fait = d.valise.perso[t.id] || [], n = l.filter(([k]) => fait.includes(k)).length;
+    return `<li>${avatarHtml(t, i, 'ini--petit')}<span class="p-nom">${esc(t.name)}</span><span class="barre-prog" aria-hidden="true"><i style="width:${Math.round(n / l.length * 100)}%"></i></span><b>${n}/${l.length}</b></li>`;
+  }).join('');
+  const commun = d.valise.commun.map(it => {
+    const i = d.travelers.findIndex(t => t.id === it.par), qui = i >= 0 ? d.travelers[i] : null, mien = !!(qui && moi && qui.id === moi.id);
+    return `<li class="v-item${it.ok ? ' fait' : ''}">
+      <button type="button" class="check${it.ok ? ' on' : ''}" data-act="valise-ok" data-id="${esc(it.id)}" aria-pressed="${it.ok}" aria-label="Dans la valise : ${esc(it.label)}"><span class="case">${icon('check')}</span></button>
+      <span class="v-label">${esc(it.label)}</span>
+      ${qui ? `<button type="button" class="v-qui${mien ? ' mien' : ''}" data-act="valise-prendre" data-id="${esc(it.id)}" title="${mien ? 'Je ne le prends plus' : 'Apporté par ' + esc(qui.name)}">${avatarHtml(qui, i, 'ini--petit')}<span>${esc(qui.name)}</span></button>`
+        : `<button type="button" class="btn btn--petit" data-act="valise-prendre" data-id="${esc(it.id)}">Je prends</button>`}
+      ${canEdit() ? `<button type="button" class="icon-btn" data-act="valise-suppr" data-id="${esc(it.id)}" aria-label="Retirer ${esc(it.label)}">${icon('x')}</button>` : ''}
+    </li>`;
+  }).join('');
+  return `<div class="tete"><h2>Valise</h2></div>${perso}
+    <section class="section"><h2>Où en est chacun</h2><ul class="progres">${progres}</ul></section>
+    <section class="section"><h2>À partager</h2><p class="intro">Un seul exemplaire pour le groupe : dis qui l’apporte, puis coche quand c’est dans la valise. Les prises en Espagne sont les mêmes qu’en France : pas besoin d’adaptateur.</p>
+      <ul class="liste valise-commun">${commun}</ul>
+      ${canEdit() ? `<div class="rang ajout-valise"><input id="valiseIn" placeholder="Ajouter un objet (ex. sèche-cheveux)" aria-label="Objet à ajouter" autocomplete="off"><button type="button" class="btn" data-act="valise-ajout">${icon('plus')} Ajouter</button></div>` : ''}
+    </section>`;
+}
+function peutValise() {
+  if (!canEdit()) { toast('Il faut le lien d’édition pour modifier la valise.'); return null; }
+  const moi = me();
+  if (!moi) { toast('Choisis ton prénom dans Réglages → Toi.'); return null; }
+  return moi;
+}
+function persoCocher(k) {
+  const moi = peutValise();
+  if (!moi) return;
+  const label = (persoListe(moi).find(x => x[0] === k) || [])[1] || k;
+  const on = !(S.data.valise.perso[moi.id] || []).includes(k);
+  commit(`${on ? 'a préparé' : 'a ressorti'} : ${label}`, d => {
+    const l = (d.valise.perso[moi.id] || []).filter(x => x !== k);
+    if (on) l.push(k);
+    d.valise.perso[moi.id] = l;
+    return d;
+  });
+}
+function valisePrendre(id) {
+  const moi = peutValise();
+  if (!moi) return;
+  const it = S.data.valise.commun.find(x => x.id === id);
+  if (!it) return;
+  if (it.par && it.par !== moi.id) { toast(`Déjà pris par ${tName(S.data, it.par)}.`); return; }
+  const prend = it.par !== moi.id;
+  commit(`${prend ? 'apporte' : 'n’apporte plus'} : ${it.label}`, d => { const x = d.valise.commun.find(y => y.id === id); if (x) x.par = prend ? moi.id : ''; return d; });
+}
+function valiseCocher(id) {
+  if (!peutValise()) return;
+  const it = S.data.valise.commun.find(x => x.id === id);
+  if (!it) return;
+  commit(`${it.ok ? 'décoche' : 'coche'} : ${it.label}`, d => { const x = d.valise.commun.find(y => y.id === id); if (x) x.ok = !x.ok; return d; });
+}
+function valiseSupprimer(id) {
+  if (!canEdit()) return;
+  const it = S.data.valise.commun.find(x => x.id === id);
+  if (it) commit(`retire de la valise : ${it.label}`, d => { d.valise.commun = d.valise.commun.filter(y => y.id !== id); return d; });
+}
+function valiseAjouter() {
+  const inp = $('#valiseIn');
+  const label = inp ? inp.value.trim() : '';
+  if (!label || !canEdit()) return;
+  const item = { id: uid('v'), label, par: '', ok: false };
+  commit(`ajoute à la valise : ${label}`, d => { d.valise.commun.push(item); return d; });
+}
+document.addEventListener('keydown', e => { if (e.key === 'Enter' && e.target && e.target.id === 'valiseIn') { e.preventDefault(); valiseAjouter(); } });
+
+/* ================= Question du jour ================= */
+/* Une question par jour sur Séville, la même pour tout le monde. 1 point de Liga par bonne réponse. */
+const QUESTIONS = [
+  ['Avant d’être le clocher de la cathédrale, la Giralda était…', ['Un phare romain', 'Le minaret d’une mosquée', 'Une tour de guet', 'Un moulin'], 1, 'C’était le minaret de la grande mosquée almohade, achevé à la fin du XIIe siècle.'],
+  ['Comment monte-t-on en haut de la Giralda ?', ['Par un ascenseur', 'Par 300 marches', 'Par des rampes', 'Par une échelle'], 2, 'Une suite de rampes, assez larges pour qu’on y monte autrefois à cheval.'],
+  ['Quelle hauteur fait à peu près la Giralda ?', ['60 m', '100 m', '150 m', '200 m'], 1, 'Environ 104 m avec la statue du Giraldillo au sommet.'],
+  ['Que représente le Giraldillo, la girouette au sommet de la Giralda ?', ['La Foi', 'Saint Ferdinand', 'Christophe Colomb', 'Hercule'], 0, 'C’est une statue qui symbolise la Foi triomphante.'],
+  ['La cathédrale de Séville est…', ['La plus vieille d’Europe', 'La plus grande cathédrale gothique du monde', 'Entièrement baroque', 'Construite par les Romains'], 1, 'Elle est souvent présentée comme la plus grande cathédrale gothique du monde.'],
+  ['Quel navigateur célèbre a son tombeau dans la cathédrale ?', ['Magellan', 'Vasco de Gama', 'Christophe Colomb', 'Amerigo Vespucci'], 2, 'Son cercueil est porté par quatre hérauts, symboles des royaumes de Castille, León, Aragon et Navarre.'],
+  ['Comment s’appelle la cour plantée d’orangers de la cathédrale ?', ['Patio de las Doncellas', 'Patio de los Naranjos', 'Patio de las Muñecas', 'Patio del Yeso'], 1, 'Le Patio de los Naranjos est l’ancienne cour des ablutions de la mosquée.'],
+  ['Pour quel roi a été construit le palais mudéjar du Real Alcázar ?', ['Pierre Ier de Castille', 'Philippe II', 'Charles Quint', 'Ferdinand VII'], 0, 'Pierre Ier (Pedro I) le fit construire au XIVe siècle.'],
+  ['Quelle série a tourné au Real Alcázar pour les jardins de Dorne ?', ['The Crown', 'Game of Thrones', 'Narcos', 'La Casa de papel'], 1, 'Le Real Alcázar a servi de décor aux Jardins Aquatiques de Dorne.'],
+  ['Comment s’appelle la grande cour aux arcs et au bassin du Real Alcázar ?', ['Patio de las Doncellas', 'Patio de los Leones', 'Patio de Banderas', 'Patio del Crucero'], 0, 'Le Patio de las Doncellas, la « cour des Demoiselles ». (Le Patio de los Leones est à l’Alhambra.)'],
+  ['Pour quel événement la Plaza de España a-t-elle été construite ?', ['Les JO de 1992', 'L’Exposition ibéro-américaine de 1929', 'La Coupe du monde 1982', 'Le mariage d’un roi'], 1, 'Elle a été bâtie pour l’Exposition ibéro-américaine de 1929.'],
+  ['Qui est l’architecte de la Plaza de España ?', ['Antoni Gaudí', 'Aníbal González', 'Santiago Calatrava', 'Rafael Moneo'], 1, 'Aníbal González, figure du style régionaliste andalou.'],
+  ['Que représentent les bancs en azulejos de la Plaza de España ?', ['Les rois d’Espagne', 'Les saints de Séville', 'Les provinces d’Espagne', 'Les signes du zodiaque'], 2, 'Chaque alcôve en céramique est dédiée à une province espagnole.'],
+  ['Dans quel film Star Wars voit-on la Plaza de España ?', ['Un nouvel espoir', 'L’Attaque des clones', 'Le Retour du Jedi', 'Le Réveil de la Force'], 1, 'Elle joue une ville de la planète Naboo dans l’épisode II.'],
+  ['Quel grand parc borde la Plaza de España ?', ['Le parc María Luisa', 'Le Retiro', 'Le parc Güell', 'Le parc de l’Alamillo'], 0, 'Le parc María Luisa, offert à la ville par l’infante María Luisa Fernanda de Borbón.'],
+  ['Quel fleuve traverse Séville ?', ['Le Tage', 'L’Èbre', 'Le Guadalquivir', 'Le Douro'], 2, 'Le Guadalquivir, navigable jusqu’à Séville.'],
+  ['Séville a une particularité portuaire en Espagne. Laquelle ?', ['Seul port fluvial commercial du pays', 'Plus grand port de pêche', 'Port de croisière n°1', 'Aucun port'], 0, 'C’est le seul port fluvial commercial d’Espagne.'],
+  ['À quoi servait à l’origine la Torre del Oro ?', ['Une prison', 'Une tour de guet défensive', 'Une banque', 'Un phare'], 1, 'Une tour de guet almohade du XIIIe siècle, au bord du fleuve. Elle abrite aujourd’hui un musée naval.'],
+  ['Comment appelle-t-on le pont Isabel II ?', ['Le pont de Triana', 'Le pont d’or', 'Le pont des Soupirs', 'Le pont Royal'], 0, 'Le « puente de Triana », considéré comme le plus vieux pont en fer d’Espagne encore utilisé.'],
+  ['Pour quoi le quartier de Triana est-il réputé ?', ['Les gratte-ciel', 'La céramique et le flamenco', 'Les vignobles', 'Les plages'], 1, 'Céramique, potiers et grandes figures du flamenco.'],
+  ['Comment surnomme-t-on le Metropol Parasol ?', ['Las Setas (les champignons)', 'El Panal (la ruche)', 'La Ola (la vague)', 'El Abanico (l’éventail)'], 0, 'Las Setas, à cause de ses formes de champignons géants.'],
+  ['En quoi est faite la structure du Metropol Parasol ?', ['En acier', 'En verre', 'En bois', 'En béton'], 2, 'C’est l’une des plus grandes structures en bois du monde.'],
+  ['Sur quelle place se trouvent Las Setas ?', ['Plaza Nueva', 'Plaza de la Encarnación', 'Plaza del Salvador', 'Plaza de Cuba'], 1, 'Plaza de la Encarnación, inaugurées en 2011.'],
+  ['Comment s’appelle l’ancien quartier juif aux ruelles étroites ?', ['Triana', 'La Macarena', 'Santa Cruz', 'Nervión'], 2, 'Le barrio de Santa Cruz, juste à côté de l’Alcázar.'],
+  ['Quelle est la grande rue commerçante piétonne du centre ?', ['Calle Sierpes', 'Gran Vía', 'Las Ramblas', 'Calle Larios'], 0, 'Calle Sierpes. (Gran Vía est à Madrid, les Ramblas à Barcelone, Larios à Málaga.)'],
+  ['Séville est la capitale de quelle communauté autonome ?', ['L’Estrémadure', 'La Castille', 'L’Andalousie', 'Murcie'], 2, 'L’Andalousie, la région la plus peuplée d’Espagne.'],
+  ['Combien d’habitants compte à peu près la ville de Séville ?', ['200 000', '680 000', '1,5 million', '3 millions'], 1, 'Environ 680 000, quatrième ville d’Espagne.'],
+  ['Comment s’appelait Séville à l’époque romaine ?', ['Hispalis', 'Gades', 'Corduba', 'Malaca'], 0, 'Hispalis. Gades est Cadix, Corduba Cordoue, Malaca Málaga.'],
+  ['Quel empereur romain est né à Itálica, tout près de Séville ?', ['Néron', 'Trajan', 'Auguste', 'Caligula'], 1, 'Trajan, premier empereur né hors d’Italie.'],
+  ['Que signifie la devise de Séville « NO8DO » ?', ['« Je n’ai pas peur »', '« Elle ne m’a pas abandonné »', '« Jamais la nuit »', '« Huit fois noble »'], 1, 'Le 8 figure un écheveau (« madeja ») : « No madeja do », soit « no me ha dejado ».'],
+  ['Quel roi chrétien a conquis Séville en 1248 ?', ['Alphonse X', 'Ferdinand III', 'Pierre Ier', 'Ferdinand le Catholique'], 1, 'Ferdinand III, dit le Saint, enterré dans la cathédrale.'],
+  ['Quelle dynastie musulmane a construit la Giralda ?', ['Les Omeyyades', 'Les Almohades', 'Les Nasrides', 'Les Abbassides'], 1, 'Les Almohades, à la fin du XIIe siècle.'],
+  ['Comment appelle-t-on l’architecture chrétienne inspirée de l’art islamique ?', ['Plateresque', 'Mudéjar', 'Churrigueresque', 'Isabélin'], 1, 'Le style mudéjar, très présent au Real Alcázar.'],
+  ['D’où vient le mot « azulejo » ?', ['De l’espagnol « azul » (bleu)', 'De l’arabe « az-zulayj » (petite pierre polie)', 'Du latin « azurium »', 'Du portugais « azul »'], 1, 'De l’arabe « az-zulayj ». Rien à voir avec le bleu, malgré les apparences.'],
+  ['De quelle ville est partie l’expédition de Magellan en 1519 ?', ['Lisbonne', 'Séville', 'Barcelone', 'Gênes'], 1, 'De Séville, avant de prendre la mer à Sanlúcar. Elcano revint en 1522 : premier tour du monde.'],
+  ['Quelle institution sévillane avait le monopole du commerce avec les Amériques ?', ['La Casa de Contratación', 'La Casa de Pilatos', 'La Real Maestranza', 'La Lonja de Valencia'], 0, 'La Casa de Contratación, fondée en 1503.'],
+  ['Quel bâtiment conserve les archives de l’Empire espagnol en Amérique ?', ['L’Archivo General de Indias', 'La Biblioteca Colombina', 'Le Palacio de San Telmo', 'La Casa de Pilatos'], 0, 'L’Archivo General de Indias, classé à l’UNESCO avec la cathédrale et l’Alcázar.'],
+  ['Quel peintre est né à Séville en 1599 ?', ['Le Greco', 'Goya', 'Velázquez', 'Picasso'], 2, 'Diego Velázquez, l’auteur des Ménines.'],
+  ['Quel autre grand peintre baroque est sévillan ?', ['Murillo', 'Dalí', 'Miró', 'Sorolla'], 0, 'Bartolomé Esteban Murillo, célèbre pour ses Immaculées.'],
+  ['Où travaille Carmen, l’héroïne de Bizet ?', ['Dans une taverne', 'Dans une manufacture de tabac', 'Dans une arène', 'Dans un couvent'], 1, 'À la Fábrica de Tabacos de Séville, aujourd’hui le siège de l’université.'],
+  ['Quel opéra de Rossini se passe à Séville ?', ['Le Barbier de Séville', 'Guillaume Tell', 'La Pie voleuse', 'Otello'], 0, 'Le Barbier de Séville, avec le célèbre air de Figaro.'],
+  ['Quel séducteur légendaire est sévillan ?', ['Casanova', 'Don Juan', 'Cyrano', 'Valmont'], 1, 'Don Juan Tenorio, héros de Tirso de Molina, de Molière et de Mozart.'],
+  ['En quelle année Séville a-t-elle accueilli l’Exposition universelle ?', ['1972', '1982', '1992', '2002'], 2, 'L’Expo 92, sur l’île de la Cartuja.'],
+  ['Qui a conçu le pont de l’Alamillo, en forme de harpe ?', ['Norman Foster', 'Santiago Calatrava', 'Frank Gehry', 'Renzo Piano'], 1, 'Santiago Calatrava, pour l’Expo 92.'],
+  ['Quelle est la plus haute tour d’Andalousie, à Séville ?', ['Torre Sevilla', 'Torre Picasso', 'Torre Glòries', 'Torre Agbar'], 0, 'La Torre Sevilla, de l’architecte César Pelli (environ 180 m).'],
+  ['Quel est le code de l’aéroport de Séville ?', ['SEV', 'SVQ', 'SVL', 'SLV'], 1, 'SVQ, pour l’aéroport de San Pablo.'],
+  ['Quelle ligne de train à grande vitesse a été la première d’Espagne, en 1992 ?', ['Madrid–Barcelone', 'Madrid–Séville', 'Séville–Cadix', 'Madrid–Valence'], 1, 'L’AVE Madrid–Séville, ouvert pour l’Expo 92.'],
+  ['Combien de lignes de métro compte Séville ?', ['Une', 'Trois', 'Cinq', 'Aucune'], 0, 'Une seule ligne, ouverte en 2009, complétée par un petit tram.'],
+  ['Comment s’appellent les vélos en libre-service de Séville ?', ['Vélib', 'Bicing', 'Sevici', 'BiciMAD'], 2, 'Sevici. Bicing est à Barcelone, BiciMAD à Madrid.'],
+  ['Quelle est la principale gare de Séville ?', ['Atocha', 'Santa Justa', 'Sants', 'Chamartín'], 1, 'Santa Justa. Atocha et Chamartín sont à Madrid, Sants à Barcelone.'],
+  ['Quel est le décalage horaire entre Paris et Séville ?', ['Aucun', '1 h de moins', '1 h de plus', '2 h de moins'], 0, 'Aucun : l’Espagne est à la même heure que la France.'],
+  ['Faut-il un adaptateur pour les prises électriques en Espagne ?', ['Oui, toujours', 'Non, ce sont les mêmes qu’en France', 'Seulement à Séville', 'Seulement pour les téléphones'], 1, 'Mêmes prises qu’en France : pas besoin d’adaptateur.'],
+  ['Quelle température maximale fait-il en moyenne à Séville en février ?', ['Environ 8 °C', 'Environ 18 °C', 'Environ 28 °C', 'Environ 35 °C'], 1, 'Autour de 18 °C l’après-midi, mais les nuits restent fraîches.'],
+  ['À quelle heure dîne-t-on habituellement à Séville ?', ['Vers 18 h', 'Vers 19 h', 'Vers 21 h–22 h', 'Après minuit'], 2, 'Rarement avant 21 h. Les cuisines ouvrent tard.'],
+  ['Qu’est-ce qu’« una caña » ?', ['Un petit verre de bière pression', 'Un verre de vin', 'Un café', 'Un cocktail au rhum'], 0, 'Un petit demi de bière pression, l’allié du tapeo.'],
+  ['De quoi est fait le « tinto de verano » ?', ['Vin rouge et limonade', 'Vin blanc et menthe', 'Bière et citron', 'Sangria sans fruits'], 0, 'Vin rouge allongé de limonade ou de soda au citron, très frais.'],
+  ['Quelle bière est née à Séville en 1904 ?', ['Estrella Galicia', 'Mahou', 'Cruzcampo', 'San Miguel'], 2, 'La Cruzcampo, brassée à Séville.'],
+  ['Le « rebujito », boisson de la Feria, c’est…', ['Manzanilla et soda citron', 'Rhum et coca', 'Vin rouge et orange', 'Bière et gin'], 0, 'De la manzanilla (ou du fino) allongée de soda au citron.'],
+  ['D’où vient la manzanilla, vin blanc sec andalou ?', ['De Rioja', 'De Sanlúcar de Barrameda', 'De Valence', 'De Galice'], 1, 'De Sanlúcar de Barrameda, à l’embouchure du Guadalquivir.'],
+  ['Quelle tapa typiquement sévillane associe épinards et pois chiches ?', ['Espinacas con garbanzos', 'Pisto', 'Fabada', 'Escalivada'], 0, 'Espinacas con garbanzos, au cumin et au paprika.'],
+  ['Qu’est-ce que le « pescaíto frito » ?', ['Du poisson frit', 'Une soupe de poisson', 'Du poisson cru', 'Du poisson fumé'], 0, 'Petits poissons et calamars frits, souvent servis en cornet.'],
+  ['Le « serranito », sandwich star de Séville, contient…', ['Porc, jambon et piment vert', 'Thon et olives', 'Poulet et fromage', 'Chorizo et œuf'], 0, 'Filet de porc, jambon serrano et piment vert frit.'],
+  ['Qu’est-ce qu’un « montadito » ?', ['Une petite tartine ou mini-sandwich', 'Un dessert', 'Une grande salade', 'Un vin doux'], 0, 'Un petit pain garni, idéal pour enchaîner les tapas.'],
+  ['La « pringá » est…', ['Un montadito à la viande de pot-au-feu', 'Une boisson chaude', 'Une danse', 'Un fromage'], 0, 'De la viande effilochée du « puchero », servie en montadito.'],
+  ['Le salmorejo, cousin épais du gazpacho, vient de…', ['Cordoue', 'Valence', 'Bilbao', 'Madrid'], 0, 'De Cordoue, à 45 minutes de Séville en AVE.'],
+  ['Que veut dire « de bellota » pour un jambon ibérique ?', ['Porc nourri aux glands', 'Jambon fumé', 'Jambon de moins d’un an', 'Porc élevé en montagne'], 0, 'Le porc a été engraissé aux glands en liberté : le haut de gamme.'],
+  ['À quoi servent surtout les oranges amères des rues de Séville ?', ['Au jus du matin', 'À la marmelade anglaise', 'Aux parfums uniquement', 'À rien du tout'], 1, 'Elles partent en grande partie au Royaume-Uni pour faire de la marmelade.'],
+  ['Les « yemas de San Leandro » sont…', ['Des douceurs aux jaunes d’œuf faites par des religieuses', 'Des olives farcies', 'Des fleurs', 'Des tapas au fromage'], 0, 'Des confiseries vendues par les sœurs du couvent de San Leandro.'],
+  ['Les « tortas de aceite » d’Inés Rosales sont…', ['Des galettes fines à l’huile d’olive', 'Des tortillas', 'Des crêpes au jambon', 'Des beignets salés'], 0, 'Fines et croustillantes, une recette née près de Séville en 1910.'],
+  ['Quel dessert est typique de la Semaine sainte ?', ['Les torrijas', 'La crème catalane', 'Le flan', 'Les churros'], 0, 'Les torrijas, cousines du pain perdu.'],
+  ['Le petit-déjeuner andalou classique, c’est…', ['Une tostada tomate et huile d’olive', 'Des œufs au bacon', 'Un croissant beurre', 'Du porridge'], 0, 'Une tostada à la tomate râpée et à l’huile d’olive.'],
+  ['De quel instrument de flamenco le cajón est-il originaire ?', ['D’Égypte', 'Du Pérou', 'D’Inde', 'De Cuba'], 1, 'Du Pérou. Paco de Lucía l’a introduit dans le flamenco.'],
+  ['Comment s’appellent les claquements de mains rythmés du flamenco ?', ['Las palmas', 'Los pitos', 'El zapateado', 'El quejío'], 0, 'Les palmas. Le zapateado, ce sont les frappes de pieds.'],
+  ['Comment appelle-t-on la longue traîne de la robe de flamenco ?', ['Bata de cola', 'Mantón', 'Peineta', 'Volante'], 0, 'La bata de cola, que la danseuse fait virevolter d’un coup de pied.'],
+  ['En quelle année le flamenco a-t-il été inscrit au patrimoine immatériel de l’UNESCO ?', ['1992', '2000', '2010', '2020'], 2, 'En 2010.'],
+  ['Comment s’appelle la danse populaire qu’on danse à deux pendant la Feria ?', ['La sevillana', 'La jota', 'La muñeira', 'La sardane'], 0, 'La sevillana, en quatre parties.'],
+  ['Quel célèbre guitariste de flamenco est né à Algésiras ?', ['Paco de Lucía', 'Vicente Amigo', 'Tomatito', 'Manolo Sanlúcar'], 0, 'Paco de Lucía, né à Algésiras en 1947.'],
+  ['Quel duo sévillan a chanté « Macarena » ?', ['Los del Río', 'Los Chunguitos', 'Estopa', 'Las Ketchup'], 0, 'Los del Río, originaires de Dos Hermanas, près de Séville.'],
+  ['De quelle région vient la chanteuse Rosalía ?', ['Andalousie', 'Catalogne', 'Galice', 'Pays basque'], 1, 'Elle est catalane, même si son style puise dans le flamenco.'],
+  ['Comment appelle-t-on le costume brodé du torero ?', ['Traje de luces', 'Traje corto', 'Mantón', 'Capirote'], 0, 'Le « costume de lumières », à cause de ses broderies brillantes.'],
+  ['Comment s’appelle la grande cape rose et jaune du torero ?', ['La muleta', 'Le capote', 'La montera', 'La faja'], 1, 'Le capote. La muleta est la petite étoffe rouge.'],
+  ['Comment s’appelle le chapeau noir du torero ?', ['La montera', 'Le sombrero cordobés', 'La boina', 'La peineta'], 0, 'La montera.'],
+  ['Quelle porte des arènes de la Maestranza est le plus grand honneur pour un torero ?', ['La Puerta del Príncipe', 'La Puerta Grande', 'La Puerta del Sol', 'La Puerta del Perdón'], 0, 'Sortir porté en triomphe par la Puerta del Príncipe.'],
+  ['Comment s’appellent les arènes de Séville ?', ['Las Ventas', 'La Real Maestranza', 'La Monumental', 'El Coso Blanco'], 1, 'La Real Maestranza de Caballería. Las Ventas sont à Madrid.'],
+  ['Quand a lieu la Feria de Séville ?', ['En février', 'Au printemps, après Pâques', 'En été', 'À Noël'], 1, 'Deux semaines après la Semaine sainte, au printemps.'],
+  ['Comment s’appellent les tentes de la Feria où l’on boit et danse ?', ['Las casetas', 'Los chiringuitos', 'Las bodegas', 'Los tablaos'], 0, 'Les casetas, alignées dans le quartier de Los Remedios.'],
+  ['Comment appelle-t-on les pénitents encapuchonnés de la Semaine sainte ?', ['Les nazarenos', 'Les costaleros', 'Les cofrades', 'Les monaguillos'], 0, 'Les nazarenos. Les costaleros portent les chars, cachés dessous.'],
+  ['Comment s’appelle la nuit la plus célèbre de la Semaine sainte à Séville ?', ['La Madrugá', 'La Nochevieja', 'La Verbena', 'La Noche en Blanco'], 0, 'La Madrugá, du jeudi au vendredi saint.'],
+  ['Quelle Vierge est l’une des plus vénérées de Séville ?', ['La Macarena', 'La Pilarica', 'La Moreneta', 'La Almudena'], 0, 'L’Esperanza Macarena, dans sa basilique du quartier de la Macarena.'],
+  ['Que reste-t-il de visible près de la basilique de la Macarena ?', ['Des remparts', 'Un aqueduc', 'Un amphithéâtre', 'Un phare'], 0, 'Un long morceau des anciennes murailles de la ville.'],
+  ['L’Alameda de Hércules est…', ['Une promenade parmi les plus anciennes d’Europe', 'Un stade', 'Un musée', 'Une église'], 0, 'Aménagée en 1574, avec des colonnes surmontées d’Hercule et de Jules César.'],
+  ['Selon la légende, qui a fondé Séville ?', ['Hercule', 'Ulysse', 'Énée', 'Romulus'], 0, 'Hercule, d’après le mythe. Jules César l’aurait ensuite fortifiée.'],
+  ['Où siège le président du gouvernement andalou ?', ['Au palais de San Telmo', 'À l’Alcázar', 'À la Torre del Oro', 'À la Casa de Pilatos'], 0, 'Au palais baroque de San Telmo, au bord du fleuve.'],
+  ['Le Parlement d’Andalousie occupe un ancien…', ['Hôpital', 'Couvent', 'Marché', 'Palais royal'], 0, 'L’ancien hôpital des Cinq Plaies (Cinco Llagas).'],
+  ['La Casa de Pilatos est…', ['Un palais mêlant styles mudéjar et Renaissance', 'Une prison romaine', 'Une gare', 'Un théâtre'], 0, 'Un palais du XVIe siècle, qui a servi de décor à de nombreux films.'],
+  ['Quel poète né à Séville a écrit les « Rimas » ?', ['Gustavo Adolfo Bécquer', 'Federico García Lorca', 'Pablo Neruda', 'Rafael Alberti'], 0, 'Bécquer. Lorca était de Grenade, Neruda chilien, Alberti de Cadix.'],
+  ['Quel poète est né en 1875 au palais de las Dueñas ?', ['Antonio Machado', 'Miguel Hernández', 'Juan Ramón Jiménez', 'Luis de Góngora'], 0, 'Antonio Machado. Le palais appartient à la maison d’Albe.'],
+  ['Quels sont les deux grands clubs de football de Séville ?', ['Sevilla FC et Real Betis', 'Málaga et Cádiz', 'Granada et Almería', 'Recreativo et Córdoba'], 0, 'Le Sevilla FC et le Real Betis, grands rivaux.'],
+  ['Comment s’appelle le stade du Sevilla FC ?', ['Ramón Sánchez-Pizjuán', 'Benito Villamarín', 'La Cartuja', 'Mestalla'], 0, 'Le Ramón Sánchez-Pizjuán. Le Betis joue au Benito Villamarín.'],
+  ['Combien de fois le Sevilla FC a-t-il gagné la Ligue Europa (ou Coupe UEFA) ?', ['2 fois', '4 fois', '7 fois', 'Jamais'], 2, 'Sept fois, un record.'],
+  ['Où se trouve la célèbre Alhambra ?', ['À Séville', 'À Grenade', 'À Cordoue', 'À Malaga'], 1, 'À Grenade, à environ 3 h de route.'],
+  ['Où se trouve la Mezquita, mosquée-cathédrale célèbre ?', ['À Cordoue', 'À Tolède', 'À Séville', 'À Cadix'], 0, 'À Cordoue, à 45 minutes de Séville en train rapide.'],
+  ['Quel grand parc naturel humide se trouve au sud-ouest de Séville ?', ['Doñana', 'Picos de Europa', 'Ordesa', 'Teide'], 0, 'Doñana, refuge de millions d’oiseaux migrateurs.'],
+  ['Quelle ville de la côte, à environ 1 h 30, est l’une des plus anciennes d’Europe ?', ['Cadix', 'Marbella', 'Benidorm', 'Alicante'], 0, 'Cadix, fondée par les Phéniciens il y a environ 3 000 ans.'],
+  ['Quel parc d’attractions se trouve sur l’île de la Cartuja ?', ['Isla Mágica', 'PortAventura', 'Parque Warner', 'Terra Mítica'], 0, 'Isla Mágica, sur l’ancien site de l’Expo 92.'],
+  ['Comment s’appelle la célèbre ruelle couverte de jasmin du quartier Santa Cruz ?', ['Callejón del Agua', 'Calle del Infierno', 'Calle Betis', 'Calle Feria'], 0, 'Le callejón del Agua, longé par le mur des jardins de l’Alcázar.'],
+  ['Que trouve-t-on sous le palais gothique de l’Alcázar ?', ['Les bains de doña María de Padilla', 'Une crypte royale', 'Un trésor pirate', 'Une gare'], 0, 'Des citernes voûtées d’eau de pluie, appelées les bains de doña María de Padilla.'],
+  ['Le Real Alcázar a une particularité royale. Laquelle ?', ['Il sert encore de résidence royale', 'Il a été rasé puis reconstruit en 1990', 'Il n’a jamais eu de roi', 'Il est sous l’eau l’hiver'], 0, 'C’est l’un des plus anciens palais royaux d’Europe encore utilisés par la famille royale.'],
+  ['Comment s’appelle le bar à tapas qui serait le plus ancien de Séville (1670) ?', ['El Rinconcillo', 'Casa Lucio', 'Bodeguita Romero', 'Bar Pinocho'], 0, 'El Rinconcillo, où l’ardoise sert encore de note.'],
+  ['Que veut dire « tapear » ?', ['Aller de bar en bar manger des tapas', 'Danser le flamenco', 'Faire la sieste', 'Applaudir'], 0, 'Le tapeo : une tapa par bar, puis on change de comptoir.'],
+  ['Au bar, qu’est-ce qu’« una ración » ?', ['Une portion plus grande qu’une tapa, à partager', 'Une tapa gratuite', 'Un verre de vin', 'L’addition'], 0, 'Une ración se partage. La « media ración » est entre les deux.'],
+  ['Les churros se trempent traditionnellement dans…', ['Du chocolat chaud épais', 'Du café', 'Du lait froid', 'Du miel'], 0, 'Un chocolat chaud épais, à la cuillère.'],
+  ['Le « duende », dans le flamenco, c’est…', ['Le frisson, l’émotion intense', 'Une chaussure', 'Un instrument', 'Un pas de danse'], 0, 'Ce moment de grâce et d’émotion que Lorca a décrit.']
+];
+/* Ordre des réponses mélangé selon la date : le même pour tout le groupe, différent chaque jour */
+function ordreQuiz(ymd) {
+  let h = 0;
+  for (const ch of ymd) h = (h * 31 + ch.charCodeAt(0)) >>> 0;
+  const o = [0, 1, 2, 3];
+  for (let i = 3; i > 0; i--) { h = (h * 1103515245 + 12345) >>> 0; const j = h % (i + 1); [o[i], o[j]] = [o[j], o[i]]; }
+  return o;
+}
+const questionDu = ymd => { const n = QUESTIONS.length, i = daysBetween('2026-10-01', ymd); return QUESTIONS[((i % n) + n) % n]; };
+function normQuiz(q) {
+  const out = {};
+  if (q && typeof q === 'object') for (const [jour, reps] of Object.entries(q)) {
+    if (!validYmd(jour) || !reps || typeof reps !== 'object') continue;
+    const r = {};
+    for (const [tid, v] of Object.entries(reps)) if (Number.isInteger(v) && v >= 0 && v < 4) r[tid] = v;
+    out[jour] = r;
+  }
+  return out;
+}
+function maReponse(d, jour) {
+  const moi = me();
+  if (moi && d.quiz[jour] && d.quiz[jour][moi.id] !== undefined) return d.quiz[jour][moi.id];
+  const loc = store.get('quiz:' + jour);
+  return loc !== null && loc !== '' ? Number(loc) : undefined;
+}
+function quizHtml(d) {
+  const jour = todayYmd(), [q, choix, bonne, expl] = questionDu(jour), reps = d.quiz[jour] || {};
+  const rep = maReponse(d, jour), fait = rep !== undefined;
+  const autres = d.travelers.map((t, i) => ({ t, i })).filter(x => reps[x.t.id] !== undefined);
+  const qui = fait && autres.length
+    ? `<ul class="quiz-qui">${autres.map(x => `<li class="${reps[x.t.id] === bonne ? 'bon' : 'faux'}">${avatarHtml(x.t, x.i, 'ini--petit')}<span>${esc(x.t.name)}</span>${reps[x.t.id] === bonne ? icon('check') : icon('x')}</li>`).join('')}</ul>`
+    : autres.length ? `<p class="aide">${autres.length} ${autres.length > 1 ? 'personnes ont' : 'personne a'} déjà répondu.</p>` : '';
+  return `<section class="quiz" aria-labelledby="quiz-t"><p class="quiz-sur">La pregunta del día</p><h2 id="quiz-t">${esc(q)}</h2>
+    <div class="quiz-choix">${ordreQuiz(jour).map(i => {
+      const cls = fait ? (i === bonne ? ' bonne' : i === rep ? ' mauvaise' : '') : '';
+      return `<button type="button" class="quiz-btn${cls}" data-act="quiz" data-choix="${i}"${fait ? ' disabled' : ''}>${esc(choix[i])}</button>`;
+    }).join('')}</div>
+    ${fait ? `<p class="quiz-expl"><b>${rep === bonne ? '¡Correcto!' : 'Raté…'}</b> ${esc(expl)}</p>` : '<p class="aide">Une seule réponse par jour. 1 point de Liga si c’est juste.</p>'}
+    ${qui}</section>`;
+}
+function bandeauQuiz(d) {
+  if (maReponse(d, todayYmd()) !== undefined) return '';
+  return `<button type="button" class="bandeau bandeau--quiz" data-act="tab" data-tab="fiesta"><b>La pregunta del día</b><span>Une question sur ${esc(d.trip.title || 'le voyage')} t’attend (1 point de Liga).</span></button>`;
+}
+function repondreQuiz(choix) {
+  const d = S.data, jour = todayYmd();
+  if (!d || maReponse(d, jour) !== undefined || !(choix >= 0 && choix < 4)) return;
+  const bonne = questionDu(jour)[2], moi = me();
+  store.set('quiz:' + jour, String(choix));
+  if (choix === bonne) { bulleLibre('¡Correcto!', window.innerWidth / 2, window.innerHeight * .3, 'grande'); pluieEventails(8); }
+  else bulleLibre('¡Ay, no!', window.innerWidth / 2, window.innerHeight * .3, 'grande');
+  if (moi && canEdit()) {
+    commit('répond à la question du jour', dd => { dd.quiz[jour] = dd.quiz[jour] || {}; if (dd.quiz[jour][moi.id] === undefined) dd.quiz[jour][moi.id] = choix; return dd; });
+  } else {
+    renderMain();
+    toast(moi ? 'Réponse gardée sur cet appareil : il faut le lien d’édition pour les points.' : 'Choisis ton prénom dans Réglages pour marquer des points.');
+  }
+}
+
+/* ================= La Liga : classement général et podium sur le côté ================= */
+function liga(d) {
+  const pts = Object.fromEntries(d.travelers.map(t => [t.id, 0]));
+  for (const jeu of ['oles', 'tapas', 'compas']) classement(d, jeu).slice(0, 3).forEach((x, k) => { pts[x.t.id] += [5, 3, 1][k]; });
+  for (const [id, n] of Object.entries(d.jeux.trouvailles)) if (id in pts) pts[id] += 2 * n;
+  for (const [jour, reps] of Object.entries(d.quiz)) {
+    const bonne = questionDu(jour)[2];
+    for (const [id, v] of Object.entries(reps)) if (id in pts && v === bonne) pts[id] += 1;
+  }
+  return d.travelers.map((t, i) => ({ t, i, v: pts[t.id] })).sort((a, b) => b.v - a.v);
+}
+function ligaTableau(d) {
+  const l = liga(d).filter(x => x.v > 0);
+  if (!l.length) return '<p class="muet">Personne n’a encore de points : joue, trouve le taureau ou réponds à la question du jour !</p>';
+  return `<ol class="mini-classement">${l.map(x => `<li>${avatarHtml(x.t, x.i, 'ini--petit')}<span>${esc(x.t.name)}</span><b>${x.v} pts</b></li>`).join('')}</ol>`;
+}
+let ligaEl = null, ligaT = 0;
+function ouvrirLiga(ms) {
+  if (!ligaEl || ligaEl.hidden) return;
+  ligaEl.classList.add('ouverte');
+  clearTimeout(ligaT);
+  ligaT = setTimeout(fermerLiga, ms);
+}
+function fermerLiga() { if (ligaEl) ligaEl.classList.remove('ouverte'); clearTimeout(ligaT); }
+function basculerLiga() { if (ligaEl && ligaEl.classList.contains('ouverte')) fermerLiga(); else ouvrirLiga(9000); }
+/* Appelée à chaque mise à jour des données : ressort le podium si le classement a bougé */
+function majLiga(auChargement) {
+  const d = S.data;
+  if (!d) return;
+  const avec = liga(d).filter(x => x.v > 0);
+  if (!avec.length) { if (ligaEl) ligaEl.hidden = true; return; }
+  if (!ligaEl) {
+    ligaEl = document.createElement('aside');
+    ligaEl.className = 'liga';
+    ligaEl.setAttribute('aria-label', 'La Liga del viaje');
+    document.body.appendChild(ligaEl);
+    ligaEl.addEventListener('click', e => {
+      if (e.target.closest('.liga-languette')) basculerLiga();
+      else if (e.target.closest('.liga-carte')) { fermerLiga(); setTab('fiesta'); }
+    });
+  }
+  ligaEl.hidden = false;
+  const sig = avec.map(x => x.t.id + ':' + x.v).join(','), chef = avec[0].t.id;
+  const change = S.ligaSig !== undefined && sig !== S.ligaSig;
+  let msg = '';
+  if (change) msg = S.ligaChef && chef !== S.ligaChef ? '¡Nuevo líder!' : 'Le classement a bougé';
+  else if (auChargement) { const avant = store.get('liga-chef'); if (avant && avant !== chef) msg = '¡Nuevo líder!'; }
+  const moi = me(), l = liga(d), rang = moi ? l.findIndex(x => x.t.id === moi.id) : -1;
+  let pied = '';
+  if (rang === 0 && l[0].v > 0) pied = 'Tu mènes la Liga !';
+  else if (rang > 0) { const devant = l[rang - 1]; pied = `Tu es ${rang + 1}e, à ${devant.v - l[rang].v + 1} pt${devant.v - l[rang].v + 1 > 1 ? 's' : ''} de doubler ${devant.t.name}.`; }
+  const chefT = avec[0];
+  ligaEl.innerHTML = `<button type="button" class="liga-languette" aria-label="Ouvrir la Liga">${icon('trophee')}${avatarHtml(chefT.t, chefT.i, 'ini--mini')}</button>
+    <div class="liga-carte" role="button" tabindex="0" aria-label="Voir la Liga dans l’onglet Fiesta">
+      <p class="liga-titre">La Liga</p>${msg ? `<p class="liga-msg">${esc(msg)}</p>` : ''}
+      <ol>${avec.slice(0, 3).map((x, k) => `<li class="r${k + 1}${msg && k === 0 ? ' nouveau' : ''}"><span class="medaille">${k + 1}</span>${avatarHtml(x.t, x.i, 'ini--petit')}<span class="l-nom">${esc(x.t.name)}</span><b>${x.v}</b></li>`).join('')}</ol>
+      ${pied ? `<p class="liga-pied">${esc(pied)}</p>` : ''}</div>`;
+  S.ligaSig = sig;
+  S.ligaChef = chef;
+  if (auChargement || change) { store.set('liga-chef', chef); ouvrirLiga(msg ? 7500 : 6000); }
+}
+
 /* ================= Démarrage ================= */
 function readHash() {
   if (!location.hash || location.hash.length < 2) return;
@@ -3148,7 +3882,9 @@ async function boot() {
 }
 boot();
 majCurseur();
-entree().then(() => planParade(3500));
+entree().then(() => { planParade(3500); majLiga(true); });
+chargerMeteo();
+setInterval(majComptes, 20000);
 
 if ('serviceWorker' in navigator && location.protocol === 'https:') {
   window.addEventListener('load', () => navigator.serviceWorker.register('sw.js').catch(() => {}));
