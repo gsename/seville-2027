@@ -39,6 +39,7 @@
       "url": "",
       "notes": "Entrées à horaire fixe, souvent complètes : réserver tôt.",
       "secret": "",
+      "votes": [],
       "id": "a-alcazar"
     },
     {
@@ -52,6 +53,7 @@
       "url": "",
       "notes": "On monte à la Giralda par des rampes, pas des escaliers.",
       "secret": "",
+      "votes": [],
       "id": "a-catedral"
     },
     {
@@ -65,6 +67,7 @@
       "url": "",
       "notes": "",
       "secret": "",
+      "votes": [],
       "id": "a-plaza"
     },
     {
@@ -78,6 +81,7 @@
       "url": "",
       "notes": "Le belvédère au coucher du soleil.",
       "secret": "",
+      "votes": [],
       "id": "a-setas"
     },
     {
@@ -91,6 +95,7 @@
       "url": "",
       "notes": "",
       "secret": "",
+      "votes": [],
       "id": "a-santacruz"
     },
     {
@@ -104,6 +109,7 @@
       "url": "",
       "notes": "Traverser le pont Isabel II, céramique et tapas.",
       "secret": "",
+      "votes": [],
       "id": "a-triana"
     },
     {
@@ -117,6 +123,7 @@
       "url": "",
       "notes": "Tablao ou peña, à choisir.",
       "secret": "",
+      "votes": [],
       "id": "a-flamenco"
     },
     {
@@ -130,9 +137,62 @@
       "url": "",
       "notes": "Le plus vieux bar de la ville (1670).",
       "secret": "",
+      "votes": [],
       "id": "a-rinconcillo"
     }
   ],
+  "valise": {
+    "commun": [
+      {
+        "id": "v-pharma",
+        "label": "Trousse à pharmacie",
+        "par": "",
+        "ok": false
+      },
+      {
+        "id": "v-solaire",
+        "label": "Crème solaire",
+        "par": "",
+        "ok": false
+      },
+      {
+        "id": "v-batterie",
+        "label": "Batterie externe",
+        "par": "",
+        "ok": false
+      },
+      {
+        "id": "v-enceinte",
+        "label": "Enceinte",
+        "par": "",
+        "ok": false
+      },
+      {
+        "id": "v-cartes",
+        "label": "Jeu de cartes",
+        "par": "",
+        "ok": false
+      },
+      {
+        "id": "v-parapluie",
+        "label": "Parapluie pliant",
+        "par": "",
+        "ok": false
+      },
+      {
+        "id": "v-multiprise",
+        "label": "Multiprise",
+        "par": "",
+        "ok": false
+      }
+    ],
+    "perso": {}
+  },
+  "quiz": {
+    "2027-02-12": {
+      "t1": 2
+    }
+  },
   "expenses": [],
   "jeux": {
     "oles": {
@@ -151,6 +211,6 @@
     "salt": "SoEwdsmB8Gbd9JpN3HVRyg==",
     "check": "v1:1MN2Fi/SJi6mWdK/:6ve3PYstgINffV+xJz6d7kG1"
   },
-  "updatedAt": "2026-10-22T16:09:00.879Z",
+  "updatedAt": "2026-10-23T07:35:37.095Z",
   "updatedBy": "Grégoire"
 }
