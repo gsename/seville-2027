@@ -67,7 +67,20 @@
       "id": "fy5yb19af8"
     }
   ],
-  "stays": [],
+  "stays": [
+    {
+      "name": "Magnifique",
+      "address": "",
+      "checkin": "2027-02-11T15:00",
+      "checkout": "2027-02-14T11:00",
+      "price": null,
+      "paidBy": "",
+      "url": "",
+      "notes": "",
+      "secret": "",
+      "id": "syphv6dbmc"
+    }
+  ],
   "activities": [
     {
       "title": "Real Alcázar",
@@ -252,6 +265,6 @@
     "salt": "SoEwdsmB8Gbd9JpN3HVRyg==",
     "check": "v1:1MN2Fi/SJi6mWdK/:6ve3PYstgINffV+xJz6d7kG1"
   },
-  "updatedAt": "2026-11-07T19:34:25.195Z",
+  "updatedAt": "2026-11-07T19:34:50.520Z",
   "updatedBy": "PAAAAAAAUL"
 }
