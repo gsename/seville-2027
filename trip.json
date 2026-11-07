@@ -69,13 +69,13 @@
   ],
   "stays": [
     {
-      "name": "Magnifique",
-      "address": "",
+      "name": "Magno Apartments San Gil",
+      "address": "116 Calle San Luis, Old town, Seville, 41003, Spain",
       "checkin": "2027-02-11T15:00",
       "checkout": "2027-02-14T11:00",
-      "price": null,
-      "paidBy": "",
-      "url": "",
+      "price": 409,
+      "paidBy": "t3",
+      "url": "https://www.booking.com/Share-EeWfK4I",
       "notes": "",
       "secret": "",
       "id": "syphv6dbmc"
@@ -265,6 +265,6 @@
     "salt": "SoEwdsmB8Gbd9JpN3HVRyg==",
     "check": "v1:1MN2Fi/SJi6mWdK/:6ve3PYstgINffV+xJz6d7kG1"
   },
-  "updatedAt": "2026-11-07T19:34:50.520Z",
+  "updatedAt": "2026-11-07T19:35:53.686Z",
   "updatedBy": "PAAAAAAAUL"
 }
