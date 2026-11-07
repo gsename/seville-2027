@@ -25,7 +25,28 @@
       "name": "CESAAAAAAAAR"
     }
   ],
-  "flights": [],
+  "flights": [
+    {
+      "direction": "aller",
+      "airline": "Transavia",
+      "number": "TO4600",
+      "from": "Paris - Orly (ORY)",
+      "to": "Séville (SVQ)",
+      "depart": "2027-02-11T06:10",
+      "arrive": "2027-02-11T08:30",
+      "passengers": [
+        "t1",
+        "t2",
+        "t3"
+      ],
+      "price": 281,
+      "paidBy": "t3",
+      "url": "",
+      "notes": "",
+      "secret": "",
+      "id": "fwswidlrg7"
+    }
+  ],
   "stays": [],
   "activities": [
     {
@@ -211,6 +232,6 @@
     "salt": "SoEwdsmB8Gbd9JpN3HVRyg==",
     "check": "v1:1MN2Fi/SJi6mWdK/:6ve3PYstgINffV+xJz6d7kG1"
   },
-  "updatedAt": "2026-10-23T07:35:37.095Z",
-  "updatedBy": "Grégoire"
+  "updatedAt": "2026-11-07T19:33:21.628Z",
+  "updatedBy": "PAAAAAAAUL"
 }
