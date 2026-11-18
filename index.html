@@ -364,7 +364,7 @@ html.en-jeu{overflow:hidden}
 .jeu-score{font-weight:800;font-size:20px;color:var(--rojo);font-variant-numeric:tabular-nums}
 .jeu-temps{font-weight:700;color:var(--tinta-2);font-variant-numeric:tabular-nums;min-width:3ch;text-align:right}
 .jeu-x{border:0;background:var(--fondo);border-radius:50%;width:40px;height:40px;display:grid;place-items:center;cursor:pointer;color:var(--tinta)}
-.jeu-aide{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 56px);transform:translateX(-50%);width:min(440px,calc(100% - 32px));margin:0;padding:12px 16px;border-radius:14px;background:var(--cal);color:var(--tinta);font-weight:600;text-align:center;box-shadow:var(--sombra);animation:jeu-aide 5s ease forwards;pointer-events:none}
+.jeu-aide{position:absolute;left:50%;bottom:calc(env(safe-area-inset-bottom,0px) + 56px);transform:translateX(-50%);width:min(440px,calc(100% - 32px));margin:0;padding:12px 16px;border-radius:14px;background:var(--cal);color:var(--tinta);font-weight:600;text-align:center;box-shadow:var(--sombra);animation:jeu-aide 5s ease forwards;pointer-events:none;z-index:4}
 @keyframes jeu-aide{0%,80%{opacity:1}100%{opacity:0}}
 .jeu-fin{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);width:min(360px,calc(100% - 32px));background:var(--cal);border-radius:24px;padding:22px 20px;text-align:center;display:grid;gap:8px;box-shadow:0 24px 70px rgba(40,10,10,.35);z-index:6}
 .jeu-fin::before{content:"";display:block;height:20px;margin:-22px -20px 6px;border-radius:24px 24px 0 0;background:var(--tile) 0 0/20px 20px repeat-x;border-bottom:3px solid var(--rojo)}
@@ -386,6 +386,14 @@ html.en-jeu{overflow:hidden}
 .compas-anneau.fort{border-color:var(--rojo)}
 .compas-retour{position:absolute;left:50%;top:calc(max(10px,env(safe-area-inset-top)) + 170px);margin:0;transform:translateX(-50%);font-family:var(--font-d);font-variation-settings:"SOFT" 100;font-weight:800;font-size:40px;opacity:0;text-shadow:0 2px 0 #FFFFFF}
 .compas-retour.ok{color:var(--verde)} .compas-retour.ko{color:var(--rojo)}
+.taupes{position:absolute;left:50%;top:calc(50% + 24px);transform:translate(-50%,-50%);width:min(calc(100vw - 24px),calc(100vh - 200px),520px);display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px;padding:10px;border-radius:24px;background:#E8B25C;border:4px solid #C98A1B}
+/* Le bas arrondi du trou suit celui de l'ellipse : la taupe semble sortir de la terre */
+.trou{position:relative;aspect-ratio:1;overflow:hidden;cursor:pointer;border-radius:0 0 50% 50%/0 0 18% 18%}
+.trou::before{content:"";position:absolute;left:0;right:0;bottom:0;height:36%;border-radius:50%;background:#3A2418}
+.taupe{position:absolute;left:16%;right:16%;bottom:3%;height:80%;transform:translateY(125%);transition:transform .13s ease-out}
+.taupe svg{display:block;width:100%;height:100%;overflow:hidden}
+.trou.sort .taupe{transform:translateY(0)}
+.trou.touche .taupe{transform:translateY(55%) scaleY(.75)}
 .eventail{position:absolute;top:0;will-change:transform;filter:drop-shadow(0 4px 6px rgba(40,10,10,.25))}
 
 /* Onglet Fiesta */
@@ -2091,6 +2099,7 @@ const ACTIONS = {
   liga: () => basculerLiga(),
   'jeu-tapas': () => jeuTapas(),
   'jeu-compas': () => jeuCompas(),
+  'jeu-taupe': () => jeuTaupe(),
   'taureau-cache': b => attraperTaureau(b),
   'secousse-ios': () => activerSecousse(),
   fiesta: () => fiesta('¡Fiesta!'),
@@ -2101,7 +2110,7 @@ document.addEventListener('click', e => {
   const b = e.target.closest('[data-act]');
   if (!b || b.tagName === 'SELECT') return;
   const fn = ACTIONS[b.dataset.act];
-  if (fn && (canEdit() || ['settings', 'photo', 'tab', 'retry', 'jeu-muleta', 'jeu-tapas', 'jeu-compas', 'taureau-cache', 'secousse-ios', 'fiesta', 'vote', 'quiz', 'liga', 'perso-ok', 'valise-prendre', 'valise-ok', 'valise-ajout', 'valise-suppr'].includes(b.dataset.act))) fn(b);
+  if (fn && (canEdit() || ['settings', 'photo', 'tab', 'retry', 'jeu-muleta', 'jeu-tapas', 'jeu-compas', 'jeu-taupe', 'taureau-cache', 'secousse-ios', 'fiesta', 'vote', 'quiz', 'liga', 'perso-ok', 'valise-prendre', 'valise-ok', 'valise-ajout', 'valise-suppr'].includes(b.dataset.act))) fn(b);
 });
 document.addEventListener('keydown', e => {
   const row = e.target.closest && e.target.closest('tr[data-act]');
@@ -2609,15 +2618,15 @@ function lanceScene(fn, opts) {
 }
 
 /* ================= Jeux ================= */
-const UNITES = { oles: 'olés', tapas: 'points', compas: 'points' };
-const NOMS_JEUX = { oles: 'Toréer', tapas: 'Attrape la tapa', compas: 'Castañuelas' };
+const UNITES = { oles: 'olés', tapas: 'points', compas: 'points', taupe: 'points' };
+const NOMS_JEUX = { oles: 'Toréer', tapas: 'Attrape la tapa', compas: 'Castañuelas', taupe: 'Tape-taupe' };
 const scoresPropres = o => Object.fromEntries(Object.entries(o && typeof o === 'object' ? o : {})
   .filter(([, v]) => Number.isFinite(+v) && +v > 0).map(([k, v]) => [k, Math.round(+v)]));
 function normJeux(j) {
   j = j && typeof j === 'object' ? j : {};
   const c = j.cache && typeof j.cache === 'object' && typeof j.cache.cible === 'string' ? j.cache : null;
   return {
-    oles: scoresPropres(j.oles), tapas: scoresPropres(j.tapas), compas: scoresPropres(j.compas), trouvailles: scoresPropres(j.trouvailles),
+    oles: scoresPropres(j.oles), tapas: scoresPropres(j.tapas), compas: scoresPropres(j.compas), taupe: scoresPropres(j.taupe), trouvailles: scoresPropres(j.trouvailles),
     cache: c ? { cible: c.cible, depuis: String(c.depuis || ''), dernier: c.dernier && typeof c.dernier === 'object' ? { par: String(c.dernier.par || ''), le: String(c.dernier.le || '') } : null } : null
   };
 }
@@ -2943,6 +2952,84 @@ function jeuCompas() {
   requestAnimationFrame(pas);
 }
 
+/* --- Jeu 4 : Tape-taupe --- */
+const TAUPES = {
+  taupe: { pts: 1, poil: '#6B4A32', ventre: '#8A6646', chapeau: '#1B1212' },
+  doree: { pts: 3, poil: '#D9A03A', ventre: '#F0C768', chapeau: '#B3202E' },
+  bailaora: { pts: -2 }
+};
+function taupeSvg(t) {
+  return `<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+    <path d="M16 100 C12 58 28 30 50 30 C72 30 88 58 84 100 Z" fill="${t.poil}"/>
+    <ellipse cx="50" cy="84" rx="21" ry="20" fill="${t.ventre}"/>
+    <circle cx="37" cy="50" r="6.5" fill="#FBF7F0"/><circle cx="63" cy="50" r="6.5" fill="#FBF7F0"/>
+    <circle cx="38" cy="51" r="3.2" fill="#1E1515"/><circle cx="62" cy="51" r="3.2" fill="#1E1515"/>
+    <ellipse cx="50" cy="65" rx="13" ry="9" fill="#E7A0B4"/><ellipse cx="50" cy="61" rx="5" ry="3.5" fill="#7D1520"/>
+    <path d="M45 73 H55 V80 H45 Z" fill="#FBF7F0"/><path d="M50 73 V80" stroke="#D8C9AE" stroke-width="1"/>
+    <path d="M27 37 C22 20 40 12 50 23 C60 12 78 20 73 37 C60 29 40 29 27 37 Z" fill="${t.chapeau}"/>
+  </svg>`;
+}
+function jeuTaupe() {
+  if (!S.data) return;
+  audio();
+  const j = ouvrirJeu('Tape-taupe', 'Tape les taupes dès qu’elles sortent : 1 point, 3 pour la dorée. Épargne la bailaora : −2 points.');
+  const duree = 30000;
+  j.el.insertAdjacentHTML('beforeend', `<div class="taupes">${'<div class="trou"><div class="taupe"></div></div>'.repeat(9)}</div>`);
+  const trous = [...j.el.querySelectorAll('.trou')].map(el => ({ el, type: '', fin: 0, libre: 0 }));
+  const debut = performance.now();
+  let score = 0, prochain = debut + 500, dernier = null, fini = false;
+  const cacher = (h, now) => {
+    h.el.classList.remove('sort', 'touche');
+    h.el.dataset.type = '';
+    h.type = '';
+    h.libre = now + 220;
+  };
+  function sortir(now, avance) {
+    const libres = trous.filter(h => !h.type && now >= h.libre && h !== dernier);
+    if (!libres.length || trous.filter(h => h.type).length > avance * 3) return;
+    const h = auHasard(libres), r = Math.random();
+    h.type = r < .14 ? 'doree' : r < .34 ? 'bailaora' : 'taupe';
+    h.fin = now + (1150 - 600 * avance) * (h.type === 'doree' ? .7 : 1);
+    h.el.dataset.type = h.type;
+    h.el.firstElementChild.innerHTML = h.type === 'bailaora'
+      ? bailaoraSvg(auHasard(ROBES)).replace('viewBox="0 0 140 220"', 'viewBox="15 4 110 110"')
+      : taupeSvg(TAUPES[h.type]);
+    h.el.classList.add('sort');
+    dernier = h;
+  }
+  j.el.addEventListener('pointerdown', e => {
+    const el = e.target.closest('.trou'), h = trous.find(x => x.el === el);
+    if (fini || !h || !TAUPES[h.type]) return;
+    const { pts } = TAUPES[h.type], r = el.getBoundingClientRect();
+    score = Math.max(0, score + pts);
+    j.score(score);
+    son('clac');
+    bulleLibre(pts > 0 ? '+' + pts : '−' + -pts, r.left + r.width / 2, r.top, pts > 0 ? 'plus' : 'plaf');
+    h.type = 'frappe';
+    h.fin = performance.now() + 170;
+    el.classList.add('touche');
+  });
+  function pas(now) {
+    if (!j.actif) return;
+    const reste = duree - (now - debut);
+    j.temps(reste);
+    trous.forEach(h => { if (h.type && now >= h.fin) cacher(h, now); });
+    if (reste <= 0) {
+      fini = true;
+      trous.forEach(h => cacher(h, now));
+      j.resultat(score, 'points', 'taupe', jeuTaupe);
+      return;
+    }
+    if (now >= prochain) {
+      const avance = 1 - reste / duree;
+      sortir(now, avance);
+      prochain = now + 800 - 420 * avance;
+    }
+    requestAnimationFrame(pas);
+  }
+  requestAnimationFrame(pas);
+}
+
 /* ================= Taureau caché ================= */
 /* Un petit taureau se cache derrière une carte (un jour, un vol, un logement, une activité).
    Le premier qui le touche gagne un ¡Olé! affiché à tout le groupe ; il se recache ailleurs 4 h plus tard. */
@@ -3177,6 +3264,7 @@ function viewFiesta(d) {
       ${carte('oles', 'Toréer', 'Garde le doigt sur l’écran (ou la souris) : le taureau suit ta muleta. Chaque passe frôlée vaut un ¡Olé!', 'jeu-muleta')}
       ${carte('tapas', 'Attrape la tapa', 'Le camarero trébuche et les tapas volent. Touche-les avant qu’elles tombent : jamón 3 pts, pescaíto 2, aceituna 1.', 'jeu-tapas')}
       ${carte('compas', 'Castañuelas', 'Tape en rythme avec les palmas. Si tu tiens le compás, la bailaora danse de plus en plus vite.', 'jeu-compas')}
+      ${carte('taupe', 'Tape-taupe', 'Tape les taupes toreras dès qu’elles sortent : 1 point, 3 pour la dorée. Épargne la bailaora : −2 points.', 'jeu-taupe')}
     </div></section>
     <section class="section"><h2>Le taureau caché</h2><p class="intro">${etatCache}</p>
       ${trouv.length ? `<ol class="mini-classement">${trouv.map(x => `<li>${avatarHtml(x.t, x.i, 'ini--petit')}<span>${esc(x.t.name)}</span><b>${x.v} fois</b></li>`).join('')}</ol>` : ''}</section>
@@ -3813,7 +3901,7 @@ function repondreQuiz(choix) {
 /* ================= La Liga : classement général et podium sur le côté ================= */
 function liga(d) {
   const pts = Object.fromEntries(d.travelers.map(t => [t.id, 0]));
-  for (const jeu of ['oles', 'tapas', 'compas']) classement(d, jeu).slice(0, 3).forEach((x, k) => { pts[x.t.id] += [5, 3, 1][k]; });
+  for (const jeu of ['oles', 'tapas', 'compas', 'taupe']) classement(d, jeu).slice(0, 3).forEach((x, k) => { pts[x.t.id] += [5, 3, 1][k]; });
   for (const [id, n] of Object.entries(d.jeux.trouvailles)) if (id in pts) pts[id] += 2 * n;
   for (const [jour, reps] of Object.entries(d.quiz)) {
     const bonne = questionDu(jour)[2];
