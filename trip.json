@@ -242,6 +242,15 @@
     ],
     "perso": {}
   },
+  "remboursements": [
+    {
+      "id": "rnnbtrg8b5",
+      "from": "t1",
+      "to": "t3",
+      "cents": 19592,
+      "le": "2026-11-18T11:06:44.057Z"
+    }
+  ],
   "quiz": {
     "2027-02-12": {
       "t1": 2
@@ -269,6 +278,6 @@
     "salt": "SoEwdsmB8Gbd9JpN3HVRyg==",
     "check": "v1:1MN2Fi/SJi6mWdK/:6ve3PYstgINffV+xJz6d7kG1"
   },
-  "updatedAt": "2026-11-14T12:49:38.152Z",
-  "updatedBy": "CAAAAAAMS"
+  "updatedAt": "2026-11-18T11:06:44.057Z",
+  "updatedBy": "Grégoire"
 }
