@@ -283,7 +283,8 @@
       "t1": 14
     },
     "compas": {
-      "t2": 14
+      "t2": 14,
+      "t1": 33
     },
     "trouvailles": {},
     "cache": {
@@ -296,6 +297,6 @@
     "salt": "SoEwdsmB8Gbd9JpN3HVRyg==",
     "check": "v1:1MN2Fi/SJi6mWdK/:6ve3PYstgINffV+xJz6d7kG1"
   },
-  "updatedAt": "2026-11-18T15:21:47.401Z",
+  "updatedAt": "2026-11-18T15:22:23.507Z",
   "updatedBy": "Grégoire"
 }
