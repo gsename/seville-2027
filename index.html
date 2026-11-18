@@ -218,7 +218,7 @@ button.evt:hover .h{background:var(--cal)}
 .tableau tr.cliquable:hover td{background:var(--fondo)}
 .pos{color:var(--verde);font-weight:700} .neg{color:var(--alerta);font-weight:700}
 .virements{list-style:none;padding:0;margin:0;display:grid;gap:8px}
-.virements li{border-radius:14px;padding:11px 16px}
+.virements li{border-radius:14px;padding:11px 16px;display:flex;align-items:center;justify-content:space-between;gap:8px 12px;flex-wrap:wrap}
 .defile{overflow-x:auto;border-radius:20px}
 
 .pied{max-width:1080px;margin:0 auto;padding:0 18px 28px;color:var(--tinta-2);font-size:13.5px}
@@ -736,6 +736,7 @@ function normalize(d) {
       return o;
     }),
     valise: normValise(d.valise),
+    remboursements: normRemb(d.remboursements),
     quiz: normQuiz(d.quiz),
     expenses: arr(d.expenses).map(x => {
       const o = Object.assign({}, DEF.expense, x);
@@ -1325,7 +1326,11 @@ function computeBudget(d) {
       splitCents(c, p.among, (i, part) => { per[i].share += part; if (isPaid) per[i].paidShare += part; });
     }
   }
-  const balances = ids.map(i => ({ id: i, ...per[i], bal: per[i].paid - per[i].paidShare }));
+  /* Un remboursement enregistré réduit la dette : les virements restants sont recalculés à partir du solde */
+  const rembs = d.remboursements.filter(r => ids.includes(r.from) && ids.includes(r.to));
+  const net = Object.fromEntries(ids.map(i => [i, 0]));
+  rembs.forEach(r => { net[r.from] += r.cents; net[r.to] -= r.cents; });
+  const balances = ids.map(i => ({ id: i, ...per[i], bal: per[i].paid - per[i].paidShare + net[i] }));
   const deb = balances.filter(b => b.bal < 0).map(b => ({ id: b.id, v: -b.bal })).sort((a, b) => b.v - a.v);
   const cre = balances.filter(b => b.bal > 0).map(b => ({ id: b.id, v: b.bal })).sort((a, b) => b.v - a.v);
   const transfers = [];
@@ -1337,29 +1342,48 @@ function computeBudget(d) {
     if (!deb[i].v) i++;
     if (!cre[j].v) j++;
   }
-  return { lines, total, paid, balances, transfers };
+  return { lines, total, paid, balances, transfers, rembs };
+}
+function normRemb(l) {
+  return arr(l).filter(r => typeof r.from === 'string' && typeof r.to === 'string' && r.from !== r.to && Number.isInteger(r.cents) && r.cents > 0)
+    .map(r => ({ id: String(r.id), from: r.from, to: r.to, cents: r.cents, le: String(r.le || '') }));
+}
+function rembourser(from, to, v) {
+  commit(`indique que ${tName(S.data, from)} a remboursé ${money(v / 100)} à ${tName(S.data, to)}`, dd => {
+    /* Si quelqu'un l'a déjà signalé entre-temps, ce virement n'existe plus : rien à ajouter */
+    const encore = computeBudget(dd).transfers.some(x => x.from === from && x.to === to && x.v === v);
+    if (encore) dd.remboursements.push({ id: uid('r'), from, to, cents: v, le: new Date().toISOString() });
+    return dd;
+  });
+}
+function annulerRemb(id) {
+  commit('annule un remboursement', dd => { dd.remboursements = dd.remboursements.filter(r => r.id !== id); return dd; });
 }
 function viewBudget(d) {
   const b = computeBudget(d);
   const n = d.travelers.length || 1;
   const head = `<div class="tete"><h2>Budget</h2>${canEdit() ? `<div class="boutons"><button type="button" class="btn" data-act="scan-receipt">${icon('camera')} Scanner un ticket</button><button type="button" class="btn btn--primary" data-act="add-expense">${icon('plus')} Ajouter une dépense</button></div>` : ''}</div>`;
-  if (!b.lines.length) return head + `<div class="vide-bloc"><p>Aucun montant pour l’instant. Les prix des vols, du logement et des activités s’additionnent ici, avec les dépenses sur place.</p></div>`;
+  if (!b.lines.length && !b.rembs.length) return head + `<div class="vide-bloc"><p>Aucun montant pour l’instant. Les prix des vols, du logement et des activités s’additionnent ici, avec les dépenses sur place.</p></div>`;
   const eur = c => money(c / 100);
   const signed = c => c === 0 ? '0 €' : (c > 0 ? '+' : '−') + eur(Math.abs(c));
   const resume = `<p class="resume">Total prévu : <strong>${eur(b.total)}</strong>, soit environ ${eur(b.total / n)} par personne.</p>
     <p class="muet" style="margin-top:4px">Déjà payé : ${eur(b.paid)}${b.total > b.paid ? `, reste ${eur(b.total - b.paid)} à régler` : ''}.</p>`;
-  const perTable = `<section class="section"><h2>Par personne</h2><p class="intro">Le solde ne compte que ce qui est déjà payé.</p><div class="defile"><table class="tableau">
+  const perTable = `<section class="section"><h2>Par personne</h2><p class="intro">Le solde compte ce qui est déjà payé et les remboursements faits.</p><div class="defile"><table class="tableau">
     <thead><tr><th>Voyageur</th><th class="n">Sa part</th><th class="n">A avancé</th><th class="n">Solde</th></tr></thead>
     <tbody>${b.balances.map((x, i) => `<tr><td><span class="qui">${avatarHtml(d.travelers[i], i, 'ini--petit')}${esc(tName(d, x.id))}</span></td><td class="n">${eur(x.share)}</td><td class="n">${eur(x.paid)}</td><td class="n ${x.bal > 0 ? 'pos' : x.bal < 0 ? 'neg' : ''}">${signed(x.bal)}</td></tr>`).join('')}</tbody>
   </table></div></section>`;
   const transfers = `<section class="section"><h2>Pour équilibrer</h2>${b.transfers.length
-    ? `<ul class="virements">${b.transfers.map(t => `<li><strong>${esc(tName(d, t.from))}</strong> rembourse ${eur(t.v)} à <strong>${esc(tName(d, t.to))}</strong>.</li>`).join('')}</ul>`
+    ? `<ul class="virements">${b.transfers.map(t => `<li><span><strong>${esc(tName(d, t.from))}</strong> rembourse ${eur(t.v)} à <strong>${esc(tName(d, t.to))}</strong>.</span>${canEdit() ? `<button type="button" class="btn btn--petit" data-act="rembourser" data-from="${esc(t.from)}" data-to="${esc(t.to)}" data-v="${t.v}">${icon('check')} C’est remboursé</button>` : ''}</li>`).join('')}</ul>`
     : `<p class="muet">Personne ne doit rien à personne pour l’instant.</p>`}</section>`;
+  const faits = b.rembs.length ? `<section class="section"><h2>Déjà remboursé</h2><ul class="virements">${b.rembs.map(r => {
+    const le = new Date(r.le);
+    return `<li><span><strong>${esc(tName(d, r.from))}</strong> a remboursé ${eur(r.cents)} à <strong>${esc(tName(d, r.to))}</strong>${isNaN(le) ? '' : `, le ${esc(FR_DM.format(le))}`}</span>${canEdit() ? `<button type="button" class="btn btn--petit" data-act="annuler-remb" data-id="${esc(r.id)}">Annuler</button>` : ''}</li>`;
+  }).join('')}</ul></section>` : '';
   const detail = `<section class="section"><h2>Détail</h2><div class="defile"><table class="tableau">
     <thead><tr><th>Poste</th><th>Payé par</th><th class="n">Montant</th></tr></thead>
     <tbody>${b.lines.map(l => `<tr${canEdit() ? ` class="cliquable" data-act="${l.act}" data-id="${esc(l.id)}" tabindex="0"` : ''}><td><span class="cat">${l.cat}${l.parts ? `, ${l.parts.length} article${l.parts.length > 1 ? 's' : ''}` : l.among.length !== d.travelers.length ? `, partagé entre ${l.among.length}` : ''}</span>${esc(l.label)}</td><td>${esc(tName(d, l.paidBy)) || '<span class="muet">Pas encore payé</span>'}</td><td class="n">${money(l.amount)}</td></tr>`).join('')}</tbody>
   </table></div></section>`;
-  return head + resume + perTable + transfers + detail;
+  return head + resume + perTable + transfers + faits + detail;
 }
 
 function emptyBlock(msg, act, label) {
@@ -2054,6 +2078,8 @@ const ACTIONS = {
   'edit-activity': b => activityForm(b.dataset.id),
   'add-expense': () => expenseForm(),
   'scan-receipt': () => scanReceipt(),
+  rembourser: b => rembourser(b.dataset.from, b.dataset.to, Number(b.dataset.v)),
+  'annuler-remb': b => annulerRemb(b.dataset.id),
   'jeu-muleta': () => jeuMuleta(),
   vote: b => voter(b.dataset.id),
   'valise-prendre': b => valisePrendre(b.dataset.id),
