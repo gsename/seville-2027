@@ -277,7 +277,9 @@
       "t4": 8,
       "t2": 29
     },
-    "tapas": {},
+    "tapas": {
+      "t2": 8
+    },
     "compas": {},
     "trouvailles": {},
     "cache": {
@@ -290,6 +292,6 @@
     "salt": "SoEwdsmB8Gbd9JpN3HVRyg==",
     "check": "v1:1MN2Fi/SJi6mWdK/:6ve3PYstgINffV+xJz6d7kG1"
   },
-  "updatedAt": "2026-11-18T15:15:13.178Z",
+  "updatedAt": "2026-11-18T15:15:52.124Z",
   "updatedBy": "CAAAAAAMS"
 }
